@@ -1,0 +1,4 @@
+cloudflared
+tunnel.log
+public_url.txt
+.tunnel.pid

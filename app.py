@@ -412,6 +412,19 @@ JS = r"""
 })();
 """
 
+EXTRA_CSS = r"""
+.skip{position:absolute;left:-9999px;top:0;z-index:99;padding:12px 18px;background:var(--gold);color:#0a0a0e;font-size:12px}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media print{
+  header,footer,.fab,#top,#panel,#cur,#scan,.bgfx,.grain{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  h1,h2,.price{color:#000}
+  .cell,.plan,.quote,.tbl,.wk{border:1px solid #bbb;background:#fff;color:#000}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
+}
+"""
+
 HEADBOOT = r"""
 (function(){var R=document.documentElement,L=localStorage;
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
@@ -451,6 +464,7 @@ ROOMS = [
     ("/kolaborasi","28","Kolaborasi","Peluang kerja sama jangka panjang."),
     ("/status","29","Status","Kondisi node dan riwayat kejadian."),
     ("/dokumentasi","30","Dokumentasi","Struktur berkas dan rute aplikasi."),
+    ("/cari","31","Cari","Pencarian cepat antar ruang."),
 ]
 
 PRIMARY = ["/","/layanan","/harga","/keamanan","/roadmap","/kontak"]
@@ -510,6 +524,12 @@ def shell(active, title, desc, body):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#07070a">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="canonical" href="__CAN__">
+<meta property="og:image" content="/icon.svg">
+<meta name="twitter:card" content="summary_large_image">
 <title>__T__ — ALFILIATOR</title>
 <meta name="description" content="__D__">
 <meta property="og:title" content="__T__ — ALFILIATOR">
@@ -520,13 +540,14 @@ def shell(active, title, desc, body):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Sora:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>__CSS__</style>
+<style>__CSS__</style><style>__CSS2__</style>
 </head><body>
+<a class="skip" href="#main">Lompat ke isi</a>
 <div id="prog"></div><div id="cur"></div><div id="scan"></div>
 <div class="bgfx"><div class="orb o1" data-px=".10"></div><div class="orb o2" data-px="-.13"></div><div class="orb o3" data-px=".07"></div><div class="mesh"></div></div>
 <div class="grain"></div>
 __NAV__
-<main>__BODY__</main>
+<main id="main">__BODY__</main>
 <footer><div class="wrap fg">
   <div>&copy; 2026 ALFILIATOR — Atelier Digital</div>
   <div class="mono">NODE v5 · 30 RUANG</div>
@@ -536,7 +557,7 @@ __NAV__
 <script>__JS__</script>
 </body></html>""".replace("__T__", html.escape(title)).replace("__D__", html.escape(desc)) \
    .replace("__HB__", HEADBOOT).replace("__CSS__", CSS).replace("__NAV__", nav(active)) \
-   .replace("__BODY__", body).replace("__WA__", WA).replace("__JS__", JS)
+   .replace("__BODY__", body).replace("__WA__", WA).replace("__CSS2__", EXTRA_CSS).replace("__CAN__", BASE + active).replace("__JS__", JS)
 
 def page(active, title, desc, body):
     return shell(active, title, desc, body)
@@ -1125,8 +1146,43 @@ B["/dokumentasi"] = """
 </div></section>
 """
 
+
+B["/cari"] = """
+<div class="wrap pghead"><div class="kick">31 \u00b7 Cari</div>
+<h1>Temukan <em>ruang</em>.</h1>
+<p class="lead">Ketik kata kunci: harga, garansi, iOS, keamanan, kontrak.</p>
+<input id="q" type="search" placeholder="Kata kunci..." autocomplete="off"
+ style="width:100%;max-width:460px;margin-top:18px;padding:13px 16px;background:var(--panel);
+ border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:13.5px">
+<div id="out" class="rooms" style="margin-top:24px"></div></div>
+<section><div class="wrap"><p id="hint" style="font-size:12.4px;color:var(--dim)">Mulai mengetik untuk menyaring 31 ruang.</p></div></section>
+<script>
+(function(){
+  var idx=[],out=document.getElementById('out'),q=document.getElementById('q'),hint=document.getElementById('hint');
+  fetch('/index.json').then(function(r){return r.json()}).then(function(d){idx=d}).catch(function(){});
+  function run(){
+    var t=q.value.toLowerCase().trim();
+    out.innerHTML='';
+    if(!t){hint.textContent='Mulai mengetik untuk menyaring 31 ruang.';return}
+    var hit=idx.filter(function(x){return (x.t+' '+x.d+' '+x.k).toLowerCase().indexOf(t)>-1}).slice(0,12);
+    hint.textContent=hit.length+' ruang cocok';
+    hit.forEach(function(x){
+      var a=document.createElement('a');a.className='room';a.href=x.u;
+      a.innerHTML='<span class="no">'+x.u+'</span><h3>'+x.t+'</h3><p>'+x.d+'</p>';
+      out.appendChild(a);
+    });
+  }
+  q.addEventListener('input',run);
+})();
+</script>
+"""
+
 PAGES = {u: (t, d, B[u]) for u, _n, t, d in ROOMS}
 BUILT = {u: page(u, t, d, B[u]) for u, (t, d, _b) in PAGES.items()}
+
+import re as _re
+SEARCH_INDEX = [{"u": u, "t": t, "d": d,
+  "k": " ".join(_re.findall(r"<h[23]>(.*?)</h[23]>", B[u]))} for u, _n, t, d in ROOMS]
 
 ROBOTS = "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % BASE
 SITEMAP = ('<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -1173,6 +1229,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
         path = self.path.split("?")[0].rstrip("/") or "/"
         if path in BUILT: self._send(200, BUILT[path])
         elif path == "/health": self._send(200, '{"status":"online","rooms":30}', "application/json")
+        elif path == "/index.json":
+            import json as _j
+            self._send(200, _j.dumps(SEARCH_INDEX, ensure_ascii=False), "application/json")
         elif path == "/robots.txt": self._send(200, ROBOTS, "text/plain; charset=utf-8")
         elif path == "/sitemap.xml": self._send(200, SITEMAP, "application/xml; charset=utf-8")
         elif path == "/favicon.ico": self._send(204, "")
