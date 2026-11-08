@@ -612,13 +612,13 @@ B["/layanan"] = """
 <h1>Tujuh disiplin <em>yang ditangani</em>.</h1>
 <p class="lead">Setiap pekerjaan punya batas cakupan tertulis. Harga di bawah adalah titik mulai; spesifikasi akhir menyesuaikan kompleksitas.</p></div>
 <section><div class="wrap"><div class="grid">
-  <div class="cell rv"><div class="ic"><i class="fas fa-window-maximize"></i></div><h3>Landing Page</h3><p>Halaman promosi fokus untuk iklan berbayar dan closing cepat.</p><span class="from">mulai Rp 850.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fas fa-building"></i></div><h3>Company Profile</h3><p>Profil bisnis profesional, katalog layanan, formulir lead.</p><span class="from">mulai Rp 2.400.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fas fa-cart-shopping"></i></div><h3>Toko Online</h3><p>Katalog, keranjang, checkout, integrasi payment gateway.</p><span class="from">mulai Rp 4.500.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fas fa-diagram-project"></i></div><h3>Sistem Custom</h3><p>Dashboard, multi-peran, laporan, dan API internal.</p><span class="from">mulai Rp 9.500.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fas fa-mobile-screen-button"></i></div><h3>Aplikasi Mobile</h3><p>Android dan iOS, native maupun cross-platform.</p><span class="from">mulai Rp 6.500.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fab fa-telegram"></i></div><h3>Bot &amp; Automation</h3><p>WhatsApp/Telegram, auto-reply, notifikasi, sinkronisasi.</p><span class="from">mulai Rp 1.750.000</span></div>
-  <div class="cell rv"><div class="ic"><i class="fas fa-shield-halved"></i></div><h3>Security Audit</h3><p>Pemindaian celah, pengerasan server, laporan prioritas.</p><span class="from">mulai Rp 2.500.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-window-maximize"></i></div><h3>Landing Page</h3><p>Halaman promosi fokus untuk iklan berbayar dan closing cepat.</p><span class="from">mulai Rp 1.750.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-building"></i></div><h3>Company Profile</h3><p>Profil bisnis profesional, katalog layanan, formulir lead.</p><span class="from">mulai Rp 4.500.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-cart-shopping"></i></div><h3>Toko Online</h3><p>Katalog, keranjang, checkout, integrasi payment gateway.</p><span class="from">mulai Rp 8.500.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-diagram-project"></i></div><h3>Sistem Custom</h3><p>Dashboard, multi-peran, laporan, dan API internal.</p><span class="from">mulai Rp 24.000.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-mobile-screen-button"></i></div><h3>Aplikasi Mobile</h3><p>Android dan iOS, native maupun cross-platform.</p><span class="from">mulai Rp 15.000.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fab fa-telegram"></i></div><h3>Bot &amp; Automation</h3><p>WhatsApp/Telegram, auto-reply, notifikasi, sinkronisasi.</p><span class="from">mulai Rp 3.500.000</span></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-shield-halved"></i></div><h3>Security Audit</h3><p>Pemindaian celah, pengerasan server, laporan prioritas.</p><span class="from">mulai Rp 5.000.000</span></div>
 </div></div></section>
 <section><div class="wrap"><div class="cta rv"><h2>Butuh kombinasi?</h2>
 <p>Banyak proyek menggabungkan web dan bot sekaligus. Sebutkan semuanya, saya susun satu penawaran utuh.</p>
@@ -627,42 +627,128 @@ B["/layanan"] = """
 
 B["/harga"] = """
 <div class="wrap pghead"><div class="kick">03 · Tarif</div>
-<h1>Harga terbuka, <em>durasi jujur</em>.</h1>
-<p class="lead">Estimasi sudah memuat desain, revisi terjadwal, dan pengujian. Pembayaran 50 persen di awal, 50 persen saat serah terima.</p></div>
-<section><div class="wrap">
+<h1>Harga penuh, <em>tanpa nego buta</em>.</h1>
+<p class="lead">Tarif di bawah mengikuti harga pasar untuk pekerjaan dengan standar atelier: brief tertulis, pengujian, keamanan, dan garansi. Pembayaran 50 persen di awal, 50 persen saat serah terima.</p>
+<nav class="tags" style="margin-top:20px">
+  <span><a href="#web">Web</a></span><span><a href="#mobile">Mobile</a></span>
+  <span><a href="#rawat">Perawatan</a></span><span><a href="#tambah">Tambahan</a></span>
+  <span><a href="#hitung">Hitung Sendiri</a></span><span><a href="#syarat-harga">Ketentuan</a></span>
+</nav></div>
+
+<section id="web"><div class="wrap">
+  <h2 class="rv">Web</h2><div class="hr rv"></div>
   <div class="plans rv">
-    <div class="plan"><h3>Starter</h3><div class="price">Rp 850.000<small>sekali bayar</small></div><div class="eta"><i class="far fa-clock"></i> 4–6 hari</div>
-      <ul><li><i class="fas fa-check"></i>1 halaman</li><li><i class="fas fa-check"></i>Responsif</li><li><i class="fas fa-check"></i>Form kontak</li><li><i class="fas fa-check"></i>SEO dasar</li><li><i class="fas fa-check"></i>1x revisi</li><li class="off"><i class="fas fa-minus"></i>CMS</li></ul>
+    <div class="plan"><h3>Starter</h3><div class="price">Rp 1.750.000<small>sekali bayar</small></div><div class="eta"><i class="far fa-clock"></i> 5–7 hari</div>
+      <ul><li><i class="fas fa-check"></i>1 halaman landing</li><li><i class="fas fa-check"></i>Desain custom ringan</li><li><i class="fas fa-check"></i>Responsif + uji perangkat</li><li><i class="fas fa-check"></i>SEO dasar + sitemap</li><li><i class="fas fa-check"></i>1x revisi</li><li class="off"><i class="fas fa-minus"></i>CMS</li></ul>
       <a href="__WA__?text=Paket__Starter" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
-    <div class="plan hot"><span class="tag">DIMINATI</span><h3>Bisnis</h3><div class="price">Rp 3.500.000<small>sekali bayar</small></div><div class="eta"><i class="far fa-clock"></i> 12–18 hari</div>
-      <ul><li><i class="fas fa-check"></i>8 halaman</li><li><i class="fas fa-check"></i>Desain custom</li><li><i class="fas fa-check"></i>CMS</li><li><i class="fas fa-check"></i>Hosting + SSL</li><li><i class="fas fa-check"></i>Analytics</li><li><i class="fas fa-check"></i>2x revisi</li></ul>
+    <div class="plan hot"><span class="tag">PALING DIPILIH</span><h3>Bisnis</h3><div class="price">Rp 6.500.000<small>sekali bayar</small></div><div class="eta"><i class="far fa-clock"></i> 14–20 hari</div>
+      <ul><li><i class="fas fa-check"></i>Hingga 10 halaman</li><li><i class="fas fa-check"></i>Desain custom penuh</li><li><i class="fas fa-check"></i>CMS artikel &amp; katalog</li><li><i class="fas fa-check"></i>Hosting + SSL tahun pertama</li><li><i class="fas fa-check"></i>Analytics + pemantauan uptime</li><li><i class="fas fa-check"></i>2x revisi + garansi 30 hari</li></ul>
       <a href="__WA__?text=Paket__Bisnis" class="btn solid" target="_blank" rel="noopener">Ambil</a></div>
-    <div class="plan"><h3>Enterprise</h3><div class="price">Rp 9.500.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 30–45 hari</div>
-      <ul><li><i class="fas fa-check"></i>Sistem custom</li><li><i class="fas fa-check"></i>Multi-peran</li><li><i class="fas fa-check"></i>API internal</li><li><i class="fas fa-check"></i>Dashboard</li><li><i class="fas fa-check"></i>Deploy VPS</li><li><i class="fas fa-check"></i>Garansi 60 hari</li></ul>
+    <div class="plan"><h3>Enterprise</h3><div class="price">Rp 24.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 35–50 hari</div>
+      <ul><li><i class="fas fa-check"></i>Sistem / web app custom</li><li><i class="fas fa-check"></i>Multi-peran &amp; audit akses</li><li><i class="fas fa-check"></i>API + basis data terindeks</li><li><i class="fas fa-check"></i>Uji beban &amp; pengerasan</li><li><i class="fas fa-check"></i>Deploy VPS + CI</li><li><i class="fas fa-check"></i>Garansi 60 hari + dokumentasi</li></ul>
       <a href="__WA__?text=Paket__Enterprise" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
   </div>
-  <h3 class="rv" style="letter-spacing:.2em;font-size:11px;color:var(--gold);text-transform:uppercase;margin:34px 0 14px">Mobile — Android dan iOS dibedakan</h3>
+</div></section>
+
+<section id="mobile"><div class="wrap">
+  <h2 class="rv">Mobile — Android dan iOS dipisah</h2>
+  <p class="lead rv" style="margin-bottom:26px">iOS lebih tinggi karena Apple Developer 99 dolar per tahun, build wajib lewat Xcode, dan review App Store jauh lebih ketat.</p>
   <div class="plans rv">
-    <div class="plan"><h3>Android</h3><div class="price">Rp 6.500.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 21–28 hari</div>
-      <ul><li><i class="fas fa-check"></i>Kotlin / Flutter</li><li><i class="fas fa-check"></i>UI custom</li><li><i class="fas fa-check"></i>Integrasi API</li><li><i class="fas fa-check"></i>Build + signing</li><li><i class="fas fa-check"></i>Pendampingan Play Store</li></ul>
+    <div class="plan"><h3>Android</h3><div class="price">Rp 15.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 25–32 hari</div>
+      <ul><li><i class="fas fa-check"></i>Kotlin / Flutter</li><li><i class="fas fa-check"></i>UI custom + uji perangkat</li><li><i class="fas fa-check"></i>Integrasi API</li><li><i class="fas fa-check"></i>Build, signing, Play Console</li><li><i class="fas fa-check"></i>Garansi 30 hari</li></ul>
       <a href="__WA__?text=Aplikasi__Android" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
-    <div class="plan"><h3>iPhone / iOS</h3><div class="price">Rp 12.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 30–40 hari</div>
-      <ul><li><i class="fas fa-check"></i>Swift / Flutter</li><li><i class="fas fa-check"></i>UI sesuai HIG</li><li><i class="fas fa-check"></i>Integrasi API</li><li><i class="fas fa-check"></i>TestFlight</li><li><i class="fas fa-check"></i>Pendampingan App Store</li></ul>
+    <div class="plan"><h3>iPhone / iOS</h3><div class="price">Rp 26.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 35–45 hari</div>
+      <ul><li><i class="fas fa-check"></i>Swift / Flutter</li><li><i class="fas fa-check"></i>UI sesuai HIG Apple</li><li><i class="fas fa-check"></i>Integrasi API</li><li><i class="fas fa-check"></i>TestFlight + pendampingan review</li><li><i class="fas fa-check"></i>Garansi 30 hari</li></ul>
       <a href="__WA__?text=Aplikasi__iOS" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
-    <div class="plan"><h3>Cross-Platform</h3><div class="price">Rp 18.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 40–55 hari</div>
-      <ul><li><i class="fas fa-check"></i>Satu basis Flutter</li><li><i class="fas fa-check"></i>Dua build</li><li><i class="fas fa-check"></i>Desain adaptif</li><li><i class="fas fa-check"></i>Dua store</li><li><i class="fas fa-check"></i>Garansi 45 hari</li></ul>
+    <div class="plan hot"><span class="tag">EFISIEN</span><h3>Cross-Platform</h3><div class="price">Rp 38.000.000<small>mulai dari</small></div><div class="eta"><i class="far fa-clock"></i> 45–60 hari</div>
+      <ul><li><i class="fas fa-check"></i>Satu basis Flutter</li><li><i class="fas fa-check"></i>Dua build platform</li><li><i class="fas fa-check"></i>Desain adaptif per sistem</li><li><i class="fas fa-check"></i>Dua store + pendampingan</li><li><i class="fas fa-check"></i>Garansi 45 hari</li></ul>
       <a href="__WA__?text=Cross-platform" class="btn solid" target="_blank" rel="noopener">Ambil</a></div>
   </div>
-  <table class="tbl rv" style="margin-top:26px"><tr><th>Tambahan</th><th>Tarif</th></tr>
-    <tr><td>Bot WhatsApp / Telegram</td><td>Rp 1.750.000</td></tr>
-    <tr><td>Audit keamanan + pengerasan</td><td>Rp 2.500.000</td></tr>
-    <tr><td>Payment gateway</td><td>Rp 1.250.000</td></tr>
-    <tr><td>Desain UI/UX Figma</td><td>Rp 1.500.000</td></tr>
-    <tr><td>SEO lanjutan</td><td>Rp 1.000.000</td></tr>
-    <tr><td>Maintenance bulanan</td><td>Rp 400.000</td></tr>
-  </table>
-  <p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim);border-left:1px solid var(--gold);padding-left:16px">Di luar paket: Play Console 25 dolar sekali, Apple Developer 99 dolar per tahun, domain dan hosting untuk paket Starter. Fitur berat dihitung terpisah.</p>
 </div></section>
+
+<section id="rawat"><div class="wrap">
+  <h2 class="rv">Perawatan bulanan</h2>
+  <p class="lead rv" style="margin-bottom:26px">Perangkat lunak tanpa perawatan akan menua. Semua paket mencakup cadangan harian dan pembaruan keamanan mingguan.</p>
+  <div class="plans rv">
+    <div class="plan"><h3>Dasar</h3><div class="price">Rp 750.000<small>per bulan</small></div>
+      <ul><li><i class="fas fa-check"></i>Cadangan harian</li><li><i class="fas fa-check"></i>Pembaruan keamanan</li><li><i class="fas fa-check"></i>1 jam kerja/bulan</li></ul>
+      <a href="__WA__?text=Rawatan__Dasar" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
+    <div class="plan"><h3>Prioritas</h3><div class="price">Rp 1.500.000<small>per bulan</small></div>
+      <ul><li><i class="fas fa-check"></i>Semua isi paket Dasar</li><li><i class="fas fa-check"></i>Tanggap 12 jam</li><li><i class="fas fa-check"></i>4 jam kerja/bulan</li></ul>
+      <a href="__WA__?text=Rawatan__Prioritas" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
+    <div class="plan"><h3>Khusus</h3><div class="price">Rp 3.000.000<small>per bulan</small></div>
+      <ul><li><i class="fas fa-check"></i>Semua isi paket Prioritas</li><li><i class="fas fa-check"></i>Tanggap 4 jam</li><li><i class="fas fa-check"></i>10 jam kerja/bulan</li></ul>
+      <a href="__WA__?text=Rawatan__Khusus" class="btn ghost" target="_blank" rel="noopener">Ambil</a></div>
+  </div>
+  <p class="rv" style="margin-top:18px;font-size:12.5px;color:var(--gold)">Tarif harian untuk pekerjaan lepas: Rp 850.000/hari, minimum 3 hari.</p>
+</div></section>
+
+<section id="tambah"><div class="wrap">
+  <h2 class="rv">Tambahan</h2><div class="hr rv"></div>
+  <table class="tbl rv"><tr><th>Layanan</th><th>Tarif</th></tr>
+    <tr><td>Bot WhatsApp / Telegram</td><td>Rp 3.500.000</td></tr>
+    <tr><td>Audit keamanan + pengerasan</td><td>Rp 5.000.000</td></tr>
+    <tr><td>Integrasi payment gateway</td><td>Rp 2.750.000</td></tr>
+    <tr><td>Desain UI/UX di Figma</td><td>Rp 3.250.000</td></tr>
+    <tr><td>SEO on-page lanjutan</td><td>Rp 2.500.000</td></tr>
+    <tr><td>Multi-bahasa (ID / EN)</td><td>Rp 4.000.000</td></tr>
+    <tr><td>Migrasi data lama</td><td>Rp 3.000.000</td></tr>
+    <tr><td>Pelatihan admin</td><td>Rp 1.250.000</td></tr>
+  </table>
+</div></section>
+
+<section id="hitung"><div class="wrap">
+  <h2 class="rv">Hitung sendiri</h2>
+  <p class="lead rv" style="margin-bottom:24px">Centang yang dibutuhkan. Angka muncul langsung, lalu kirim sebagai brief.</p>
+  <div class="grid rv" id="hitung-box">
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="1750000" data-n="Landing page"> Landing page</h3><p>1 halaman fokus konversi.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="6500000" data-n="Company profile"> Company profile</h3><p>Hingga 10 halaman + CMS.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="8500000" data-n="Toko online"> Toko online</h3><p>Katalog, keranjang, checkout.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="24000000" data-n="Sistem custom"> Sistem custom</h3><p>Dashboard dan multi-peran.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="15000000" data-n="Aplikasi Android"> Aplikasi Android</h3><p>Native atau Flutter.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="26000000" data-n="Aplikasi iOS"> Aplikasi iOS</h3><p>Swift atau Flutter.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="3500000" data-n="Bot automation"> Bot automation</h3><p>WhatsApp / Telegram.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="5000000" data-n="Audit keamanan"> Audit keamanan</h3><p>Pemindaian dan pengerasan.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="2750000" data-n="Payment gateway"> Payment gateway</h3><p>Midtrans / Xendit.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="3250000" data-n="Desain UI/UX"> Desain UI/UX</h3><p>Figma, sebelum kode.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="1500000" data-n="Rawatan prioritas"> Rawatan 1 bulan</h3><p>Paket Prioritas.</p></label>
+    <label class="cell"><h3><input type="checkbox" class="hit" data-p="1250000" data-n="Pelatihan admin"> Pelatihan admin</h3><p>Sesi penggunaan.</p></label>
+  </div>
+  <div class="cta rv" style="margin-top:24px">
+    <h2 id="total" style="color:var(--gold2)">Rp 0</h2>
+    <p id="rincian" style="font-size:12px">Belum ada item dipilih. Angka adalah estimasi awal, bukan penawaran final.</p>
+    <div class="row"><a id="kirim" href="__WA__?text=Halo__estimasi__saya" class="btn solid" target="_blank" rel="noopener">Kirim sebagai Brief</a><a href="/kontak" class="btn ghost">Kanal Lain</a></div>
+  </div>
+</div></section>
+
+<section id="syarat-harga"><div class="wrap">
+  <h2 class="rv">Ketentuan harga</h2><div class="hr rv"></div>
+  <table class="tbl rv">
+    <tr><th>Hal</th><th>Ketentuan</th></tr>
+    <tr><td>DP</td><td>50 persen saat surat pesanan ditandatangani</td></tr>
+    <tr><td>Pelunasan</td><td>Sebelum serah terima kode dan kredensial</td></tr>
+    <tr><td>Pajak</td><td>Belum termasuk PPN bila diperlukan</td></tr>
+    <tr><td>Biaya pihak ketiga</td><td>Domain, hosting, Play Console, Apple Developer ditanggung klien</td></tr>
+    <tr><td>Perubahan lingkup</td><td>Dihitung per jam atau lewat surat pesanan baru</td></tr>
+    <tr><td>Percepatan</td><td>Tambah 25 persen dari nilai proyek per pemangkasan sepertiga durasi</td></tr>
+  </table>
+</div></section>
+
+<script>
+(function(){
+  var b=document.getElementById('hitung-box'),t=document.getElementById('total'),
+      r=document.getElementById('rincian'),k=document.getElementById('kirim');
+  function f(n){return 'Rp '+n.toLocaleString('id-ID')}
+  function upd(){
+    var s=0,it=[];
+    b.querySelectorAll('.hit:checked').forEach(function(c){s+=+c.dataset.p;it.push(c.dataset.n)});
+    t.textContent=f(s);
+    r.textContent=it.length?it.join(' + ')+' — estimasi awal, bukan penawaran final.':'Belum ada item dipilih.';
+    k.href='__WA__?text='+encodeURIComponent('Halo, estimasi saya: '+it.join(', ')+' (total '+f(s)+')');
+  }
+  b.addEventListener('change',upd);
+})();
+</script>
 """
 
 B["/portofolio"] = """
@@ -826,16 +912,18 @@ B["/mulai"] = """
 B["/matriks"] = """
 <div class="wrap pghead"><div class="kick">12 · Matriks</div>
 <h1>Bandingkan <em>baris demi baris</em>.</h1>
-<p class="lead">Supaya tidak ada yang tersembunyi di balik kata "menyesuaikan".</p></div>
+<p class="lead">Supaya tidak ada yang tersembunyi di balik kata menyesuaikan.</p></div>
 <section><div class="wrap"><table class="tbl rv">
   <tr><th>Isi</th><th>Starter</th><th>Bisnis</th><th>Enterprise</th></tr>
-  <tr><td>Jumlah halaman</td><td>1</td><td>8</td><td>tanpa batas wajar</td></tr>
-  <tr><td>Desain custom</td><td>template</td><td>ya</td><td>ya</td></tr>
+  <tr><td>Harga</td><td>Rp 1.750.000</td><td>Rp 6.500.000</td><td>mulai Rp 24.000.000</td></tr>
+  <tr><td>Jumlah halaman</td><td>1</td><td>10</td><td>tanpa batas wajar</td></tr>
+  <tr><td>Desain custom</td><td>ringan</td><td>penuh</td><td>penuh + sistem desain</td></tr>
   <tr><td>CMS</td><td>tidak</td><td>ya</td><td>ya</td></tr>
   <tr><td>Login pengguna</td><td>tidak</td><td>opsional</td><td>ya</td></tr>
   <tr><td>Multi-peran</td><td>tidak</td><td>tidak</td><td>ya</td></tr>
   <tr><td>API internal</td><td>tidak</td><td>tidak</td><td>ya</td></tr>
-  <tr><td>Hosting + SSL</td><td>setup saja</td><td>1 tahun</td><td>1 tahun</td></tr>
+  <tr><td>Uji beban</td><td>tidak</td><td>dasar</td><td>penuh</td></tr>
+  <tr><td>Hosting + SSL</td><td>setup saja</td><td>1 tahun</td><td>1 tahun + CI</td></tr>
   <tr><td>Revisi</td><td>1x</td><td>2x</td><td>sesuai kontrak</td></tr>
   <tr><td>Garansi</td><td>30 hari</td><td>30 hari</td><td>60 hari</td></tr>
   <tr><td>Dokumentasi</td><td>tidak</td><td>ringkas</td><td>lengkap</td></tr>
