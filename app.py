@@ -3,15 +3,25 @@
 #  ALFILIATOR // ATELIER NODE v5 — 30 ruang, tema, roadmap
 #  python app.py   |   PORT=8888
 # ==========================================================
-import os, time, html, http.server, socketserver
+import os, re, time, html, json, secrets, threading, http.server, socketserver
 from collections import defaultdict, deque
 
 PORT = int(os.environ.get("PORT", "8888"))
 HOST = os.environ.get("HOST", "0.0.0.0")
 WA   = "https://wa.me/6281292442362"
 BASE = "http://localhost:%d" % PORT
-RATE_LIMIT, RATE_WINDOW = 90, 60
+RATE_LIMIT, RATE_WINDOW = 90, 60     # jendela panjang
+BURST_LIMIT, BURST_WINDOW = 18, 10   # jendela pendek
+MAX_PATH = 120
+MAX_CONCURRENT = 64
 _hits = defaultdict(deque)
+_burst = defaultdict(deque)
+_sem = threading.Semaphore(MAX_CONCURRENT)
+BAD_UA = ("sqlmap", "nikto", "masscan", "zgrab", "nmap", "curl/7.4")
+SEC_TXT = ("Contact: mailto:support@alfiliator.id\n"
+           "Expires: 2027-12-31T23:59:00.000Z\n"
+           "Preferred-Languages: id, en\n"
+           "Canonical: %s/.well-known/security.txt\n" % BASE)
 
 CSS = r"""
 :root{
@@ -31,6 +41,14 @@ html[data-theme="rose"]{--gold:#f0799c;--gold2:#ffc3d4;--glow:rgba(240,121,156,.
   --line:rgba(240,121,156,.18)}
 html[data-theme="mono"]{--gold:#cfcfcf;--gold2:#ffffff;--glow:rgba(207,207,207,.35);
   --line:rgba(207,207,207,.18)}
+html[data-theme="indigo"]{--gold:#7d8cff;--gold2:#c9d0ff;--glow:rgba(125,140,255,.4);--line:rgba(125,140,255,.18)}
+html[data-theme="toska"]{--gold:#3fd6c4;--gold2:#a8f2e8;--glow:rgba(63,214,196,.4);--line:rgba(63,214,196,.18)}
+html[data-theme="kuning"]{--gold:#f0c04a;--gold2:#ffe6a6;--glow:rgba(240,192,74,.4);--line:rgba(240,192,74,.18)}
+html[data-theme="merah"]{--gold:#f0685f;--gold2:#ffb3ad;--glow:rgba(240,104,95,.4);--line:rgba(240,104,95,.18)}
+html[data-theme="langit"]{--gold:#5cb8f5;--gold2:#b6e2ff;--glow:rgba(92,184,245,.4);--line:rgba(92,184,245,.18)}
+html[data-theme="limau"]{--gold:#a8e05a;--gold2:#dcf7b0;--glow:rgba(168,224,90,.4);--line:rgba(168,224,90,.18)}
+html[data-theme="magenta"]{--gold:#ef6ad4;--gold2:#ffc2f2;--glow:rgba(239,106,212,.4);--line:rgba(239,106,212,.18)}
+html[data-theme="baja"]{--gold:#9fb0c4;--gold2:#dbe6f0;--glow:rgba(159,176,196,.38);--line:rgba(159,176,196,.18)}
 html[data-fs="s"]{--fs:.94}
 html[data-fs="l"]{--fs:1.1}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -407,6 +425,44 @@ JS = r"""
   },{threshold:.15,rootMargin:'0px 0px -40px'});
   document.querySelectorAll('.rv,.wk').forEach(function(el){io.observe(el)});
 
+  /* ---- bunyi antarmuka ---- */
+  var snd = localStorage.getItem('alf.sound') !== 'off';
+  var ACX = null;
+  function actx(){ if(!ACX){ var C = window.AudioContext || window.webkitAudioContext; if(!C) return null; ACX = new C(); } return ACX; }
+  function tone(f, d, type, vol){
+    if(!snd) return; var c = actx(); if(!c) return;
+    try{
+      var o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
+      o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.045, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + d + 0.03);
+    }catch(e){}
+  }
+  function sHover(){ tone(1180, 0.06, 'triangle', 0.022); }
+  function sClick(){ tone(520, 0.09, 'sine', 0.05); setTimeout(function(){ tone(780, 0.1, 'sine', 0.04); }, 70); }
+  function sGood(){ tone(660, 0.12, 'sine', 0.05); setTimeout(function(){ tone(990, 0.16, 'sine', 0.045); }, 90); }
+  if(matchMedia('(pointer:fine)').matches && !reduce){
+    var hv = 0;
+    document.querySelectorAll('a,button,summary,.cell,.room').forEach(function(el){
+      el.addEventListener('pointerenter', function(){ var n=Date.now(); if(n-hv<70) return; hv=n; sHover(); });
+    });
+  }
+  document.querySelectorAll('a,button,summary').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if(el.classList.contains('fab') || el.classList.contains('btn')) sGood(); else sClick();
+    });
+  });
+  document.querySelectorAll('.seg button[data-sd]').forEach(function(b){
+    b.addEventListener('click', function(){
+      snd = b.dataset.sd === 'on';
+      localStorage.setItem('alf.sound', b.dataset.sd);
+      document.querySelectorAll('.seg button[data-sd]').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+      if(snd) sGood();
+    });
+  });
+
   var ds=document.querySelectorAll('details');
   ds.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ds.forEach(function(o){if(o!==d)o.close()})})});
 })();
@@ -423,6 +479,50 @@ EXTRA_CSS = r"""
   .cell,.plan,.quote,.tbl,.wk{border:1px solid #bbb;background:#fff;color:#000}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
 }
+"""
+
+EXTRA_CSS += r"""
+.showcase{display:grid;gap:40px;justify-items:center;padding:8px 0 12px;grid-template-columns:1fr}
+@media(min-width:760px){.showcase{grid-template-columns:1fr 1fr}}
+.dev{perspective:1100px;width:min(240px,68vw);position:relative}
+.dev::after{content:"";position:absolute;inset:-16% -22%;z-index:-1;border-radius:50%;
+  background:radial-gradient(circle,var(--glow),transparent 68%);filter:blur(26px);opacity:.5}
+.dev-in{position:relative;transform-style:preserve-3d;border-radius:36px;padding:9px;
+  background:linear-gradient(160deg,#3a3f4b,#141821 55%,#0a0d13);
+  box-shadow:0 44px 80px -34px rgba(0,0,0,.92),0 0 0 1px rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,255,255,.05);
+  animation:sway 7.5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotateY(-15deg) rotateX(7deg) translateY(0)}
+  50%{transform:rotateY(15deg) rotateX(-5deg) translateY(-10px)}}
+.scr{position:relative;border-radius:27px;overflow:hidden;aspect-ratio:9/19.5;
+  background:linear-gradient(168deg,#f2fbff,#c9e8ff 34%,#ffd8ec 68%,#fff4d9)}
+.scr::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.85) 0%,transparent 34%,transparent 62%,rgba(255,255,255,.5) 100%);
+  mix-blend-mode:screen;opacity:.55}
+.dtop{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 16px;font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:#1b2430;z-index:3}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:74px;height:20px;
+  border-radius:99px;background:#0b0f16;z-index:4}
+.punch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:11px;height:11px;
+  border-radius:50%;background:#0b0f16;z-index:4}
+.dbody{padding:56px 14px 14px;display:grid;gap:9px}
+.dhero{height:62px;border-radius:13px;background:linear-gradient(120deg,#7fd0ff,#c9a6ff 60%,#ffc4e0);
+  box-shadow:0 8px 20px -8px rgba(60,120,200,.5)}
+.drow{display:flex;gap:7px}
+.dcard{flex:1;height:44px;border-radius:10px;background:rgba(255,255,255,.78);
+  box-shadow:0 4px 12px -6px rgba(40,70,110,.4)}
+.dline{height:7px;border-radius:99px;background:rgba(27,36,48,.16)}
+.dline.s{width:58%}
+.dbtn{height:34px;border-radius:10px;margin-top:2px;
+  background:linear-gradient(120deg,#1b2430,#3b4a60)}
+.dbar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:88px;height:4px;
+  border-radius:99px;background:rgba(27,36,48,.32);z-index:3}
+.side{position:absolute;right:-2px;top:88px;width:3px;height:52px;border-radius:2px;
+  background:linear-gradient(#5a6272,#2a303c)}
+.side.v{top:150px;height:34px}
+.devlab{text-align:center;margin-top:16px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.24em;color:var(--gold)}
+@media(prefers-reduced-motion:reduce){.dev-in{animation:none;transform:none}}
 """
 
 HEADBOOT = r"""
@@ -496,6 +596,14 @@ def nav(active):
     <button data-t="zamrud" style="background:#3fdb9a" aria-label="Zamrud"></button>
     <button data-t="rose" style="background:#f0799c" aria-label="Rose"></button>
     <button data-t="mono" style="background:#cfcfcf" aria-label="Mono"></button>
+    <button data-t="indigo" style="background:#7d8cff" aria-label="Indigo"></button>
+    <button data-t="toska" style="background:#3fd6c4" aria-label="Toska"></button>
+    <button data-t="kuning" style="background:#f0c04a" aria-label="Kuning"></button>
+    <button data-t="merah" style="background:#f0685f" aria-label="Merah"></button>
+    <button data-t="langit" style="background:#5cb8f5" aria-label="Langit"></button>
+    <button data-t="limau" style="background:#a8e05a" aria-label="Limau"></button>
+    <button data-t="magenta" style="background:#ef6ad4" aria-label="Magenta"></button>
+    <button data-t="baja" style="background:#9fb0c4" aria-label="Baja"></button>
   </div>
   <h3>Ukuran huruf</h3>
   <div class="seg">
@@ -512,6 +620,11 @@ def nav(active):
   <div class="seg">
     <button data-gr="on" aria-pressed="true">Aktif</button>
     <button data-gr="off" aria-pressed="false">Mati</button>
+  </div>
+  <h3>Bunyi antarmuka</h3>
+  <div class="seg">
+    <button data-sd="on" aria-pressed="true">Aktif</button>
+    <button data-sd="off" aria-pressed="false">Mati</button>
   </div>
   <h3>Kembalikan</h3>
   <div class="seg"><button id="preset">Setel ulang semua</button></div>
@@ -535,7 +648,7 @@ def shell(active, title, desc, body):
 <meta property="og:title" content="__T__ — ALFILIATOR">
 <meta property="og:description" content="__D__">
 <meta property="og:type" content="website">
-<script>__HB__</script>
+<script nonce="__NONCE__">__HB__</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Sora:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
@@ -554,7 +667,7 @@ __NAV__
 </div></footer>
 <a class="fab" href="__WA__?text=Halo__ALFILIATOR" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <button id="top" aria-label="Atas"><i class="fas fa-arrow-up"></i></button>
-<script>__JS__</script>
+<script nonce="__NONCE__">__JS__</script>
 </body></html>""".replace("__T__", html.escape(title)).replace("__D__", html.escape(desc)) \
    .replace("__HB__", HEADBOOT).replace("__CSS__", CSS).replace("__NAV__", nav(active)) \
    .replace("__BODY__", body).replace("__WA__", WA).replace("__CSS2__", EXTRA_CSS).replace("__CAN__", BASE + active).replace("__JS__", JS)
@@ -951,7 +1064,44 @@ B["/web"] = """
 B["/mobile"] = """
 <div class="wrap pghead"><div class="kick">14 · Teknologi Mobile</div>
 <h1>Android dan iOS, <em>dua jalur berbeda</em>.</h1>
-<p class="lead">Native dipakai bila butuh performa dan akses perangkat. Cross-platform dipakai bila anggaran dan waktu lebih ketat.</p></div>
+<p class="lead">Native dipakai bila butuh performa dan akses perangkat. Cross-platform dipakai bila anggaran dan waktu lebih ketat.</p>
+<div class="showcase rv">
+  <div class="dev">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="punch"></div>
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+        <div class="dbar"></div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">ANDROID</div>
+  </div>
+  <div class="dev">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="island"></div>
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+        <div class="dbar"></div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">iOS</div>
+  </div>
+</div>
+</div>
 <section><div class="wrap"><div class="grid">
   <div class="cell rv"><div class="ic"><i class="fab fa-android"></i></div><h3>Kotlin</h3><p>Native Android, akses penuh ke API sistem.</p></div>
   <div class="cell rv"><div class="ic"><i class="fab fa-apple"></i></div><h3>Swift</h3><p>Native iOS, sesuai panduan antarmuka Apple.</p></div>
@@ -1244,7 +1394,7 @@ B["/cari"] = """
  border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:13.5px">
 <div id="out" class="rooms" style="margin-top:24px"></div></div>
 <section><div class="wrap"><p id="hint" style="font-size:12.4px;color:var(--dim)">Mulai mengetik untuk menyaring 31 ruang.</p></div></section>
-<script>
+<script nonce="__NONCE__">
 (function(){
   var idx=[],out=document.getElementById('out'),q=document.getElementById('q'),hint=document.getElementById('hint');
   fetch('/index.json').then(function(r){return r.json()}).then(function(d){idx=d}).catch(function(){});
@@ -1279,14 +1429,23 @@ SITEMAP = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            + "</urlset>")
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    server_version = "AlfiliatorAtelier/5.0"
+    server_version = "Atelier/5.1"
     sys_version = ""
+    protocol_version = "HTTP/1.1"
+    timeout = 15
 
     def _rl(self):
-        ip = self.client_address[0]; now = time.time(); q = _hits[ip]
+        ip = self.client_address[0]
+        ua = (self.headers.get("User-Agent") or "").lower()
+        slow = any(b in ua for b in BAD_UA)
+        now = time.time()
+        q = _hits[ip]
         while q and now - q[0] > RATE_WINDOW: q.popleft()
-        if len(q) >= RATE_LIMIT: return False
-        q.append(now); return True
+        if len(q) >= (RATE_LIMIT // 3 if slow else RATE_LIMIT): return False
+        b = _burst[ip]
+        while b and now - b[0] > BURST_WINDOW: b.popleft()
+        if len(b) >= BURST_LIMIT: return False
+        q.append(now); b.append(now); return True
 
     def _send(self, code, body, ctype="text/html; charset=utf-8", extra=None):
         data = body.encode("utf-8")
@@ -1299,27 +1458,52 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
         self.send_header("Permissions-Policy", "geolocation=(), camera=(), microphone=()")
         self.send_header("Cross-Origin-Opener-Policy", "same-origin")
+        self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+        self.send_header("X-Permitted-Cross-Domain-Policies", "none")
+        self.send_header("X-Download-Options", "noopen")
+        self.send_header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
         self.send_header("Content-Security-Policy",
-            "default-src 'self'; "
+            "default-src 'none'; "
+            "script-src 'nonce-%s'; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-            "img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; "
-            "form-action 'self'; base-uri 'self'; frame-ancestors 'self'")
+            "img-src 'self' data: https:; "
+            "connect-src 'self'; manifest-src 'self'; "
+            "form-action 'self'; base-uri 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+            % getattr(self, "nonce", ""))
         if extra:
             for k, v in extra.items(): self.send_header(k, v)
         self.end_headers()
         if self.command != "HEAD": self.wfile.write(data)
 
+    def _method_ok(self):
+        if self.command not in ("GET", "HEAD"):
+            self._send(405, "Metode tidak diizinkan",
+                       extra={"Allow": "GET, HEAD"}); return False
+        return True
+
     def do_GET(self):
+        self.nonce = secrets.token_urlsafe(16)
+        if not self._method_ok(): return
+        raw = self.path.split("?", 1)[0]
+        if len(raw) > MAX_PATH:
+            self._send(414, "Jalur terlalu panjang"); return
+        if ".." in raw or "//" in raw.strip("/"):
+            self._send(400, "Jalur tidak sah"); return
+        if not re.fullmatch(r"/[A-Za-z0-9\-/\.]*", raw):
+            self._send(400, "Karakter jalur tidak sah"); return
         if not self._rl():
             self._send(429, "<h1 style='font-family:monospace;color:#d4af7a;background:#07070a;padding:44px'>429 // TERLALU BANYAK</h1>",
                        extra={"Retry-After": str(RATE_WINDOW)}); return
-        path = self.path.split("?")[0].rstrip("/") or "/"
-        if path in BUILT: self._send(200, BUILT[path])
+        path = raw.rstrip("/").lower() or "/"
+        if path in BUILT:
+            self._send(200, BUILT[path].replace("__NONCE__", self.nonce))
         elif path == "/health": self._send(200, '{"status":"online","rooms":30}', "application/json")
         elif path == "/index.json":
             import json as _j
             self._send(200, _j.dumps(SEARCH_INDEX, ensure_ascii=False), "application/json")
+        elif path == "/.well-known/security.txt":
+            self._send(200, SEC_TXT, "text/plain; charset=utf-8")
         elif path == "/robots.txt": self._send(200, ROBOTS, "text/plain; charset=utf-8")
         elif path == "/sitemap.xml": self._send(200, SITEMAP, "application/xml; charset=utf-8")
         elif path == "/favicon.ico": self._send(204, "")
@@ -1327,7 +1511,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self._send(404, page("/", "Tidak Ditemukan", "Halaman tidak ada.",
                 "<div class='wrap pghead'><div class='kick'>404</div><h1>Ruang <em>tidak ada</em>.</h1>"
                 "<p class='lead'>Tautan mungkin salah atau sudah dipindahkan.</p>"
-                "<div style='margin-top:28px'><a href='/' class='btn solid'>Kembali ke Beranda</a></div></div>"))
+                "<div style='margin-top:28px'><a href='/' class='btn solid'>Kembali ke Beranda</a></div></div>").replace("__NONCE__", self.nonce))
 
     do_HEAD = do_GET
 
@@ -1338,6 +1522,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
 class Server(socketserver.ThreadingTCPServer):
     allow_reuse_address = True
     daemon_threads = True
+    request_queue_size = 128
+
+    def process_request(self, request, client_address):
+        _sem.acquire()
+        try:
+            super().process_request(request, client_address)
+        except Exception:
+            _sem.release(); raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            _sem.release()
 
 
 if __name__ == "__main__":

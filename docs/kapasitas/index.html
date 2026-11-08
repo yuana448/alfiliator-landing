@@ -14,7 +14,7 @@
 <meta property="og:title" content="Kapasitas — ALFILIATOR">
 <meta property="og:description" content="Berapa proyek berjalan bersamaan.">
 <meta property="og:type" content="website">
-<script>
+<script nonce="__NONCE__">
 (function(){var R=document.documentElement,L=localStorage;
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
  R.setAttribute('data-fs',L.getItem('alf.fs')||'m');
@@ -43,6 +43,14 @@ html[data-theme="rose"]{--gold:#f0799c;--gold2:#ffc3d4;--glow:rgba(240,121,156,.
   --line:rgba(240,121,156,.18)}
 html[data-theme="mono"]{--gold:#cfcfcf;--gold2:#ffffff;--glow:rgba(207,207,207,.35);
   --line:rgba(207,207,207,.18)}
+html[data-theme="indigo"]{--gold:#7d8cff;--gold2:#c9d0ff;--glow:rgba(125,140,255,.4);--line:rgba(125,140,255,.18)}
+html[data-theme="toska"]{--gold:#3fd6c4;--gold2:#a8f2e8;--glow:rgba(63,214,196,.4);--line:rgba(63,214,196,.18)}
+html[data-theme="kuning"]{--gold:#f0c04a;--gold2:#ffe6a6;--glow:rgba(240,192,74,.4);--line:rgba(240,192,74,.18)}
+html[data-theme="merah"]{--gold:#f0685f;--gold2:#ffb3ad;--glow:rgba(240,104,95,.4);--line:rgba(240,104,95,.18)}
+html[data-theme="langit"]{--gold:#5cb8f5;--gold2:#b6e2ff;--glow:rgba(92,184,245,.4);--line:rgba(92,184,245,.18)}
+html[data-theme="limau"]{--gold:#a8e05a;--gold2:#dcf7b0;--glow:rgba(168,224,90,.4);--line:rgba(168,224,90,.18)}
+html[data-theme="magenta"]{--gold:#ef6ad4;--gold2:#ffc2f2;--glow:rgba(239,106,212,.4);--line:rgba(239,106,212,.18)}
+html[data-theme="baja"]{--gold:#9fb0c4;--gold2:#dbe6f0;--glow:rgba(159,176,196,.38);--line:rgba(159,176,196,.18)}
 html[data-fs="s"]{--fs:.94}
 html[data-fs="l"]{--fs:1.1}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -339,6 +347,48 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
   .cell,.plan,.quote,.tbl,.wk{border:1px solid #bbb;background:#fff;color:#000}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
 }
+
+.showcase{display:grid;gap:40px;justify-items:center;padding:8px 0 12px;grid-template-columns:1fr}
+@media(min-width:760px){.showcase{grid-template-columns:1fr 1fr}}
+.dev{perspective:1100px;width:min(240px,68vw);position:relative}
+.dev::after{content:"";position:absolute;inset:-16% -22%;z-index:-1;border-radius:50%;
+  background:radial-gradient(circle,var(--glow),transparent 68%);filter:blur(26px);opacity:.5}
+.dev-in{position:relative;transform-style:preserve-3d;border-radius:36px;padding:9px;
+  background:linear-gradient(160deg,#3a3f4b,#141821 55%,#0a0d13);
+  box-shadow:0 44px 80px -34px rgba(0,0,0,.92),0 0 0 1px rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,255,255,.05);
+  animation:sway 7.5s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotateY(-15deg) rotateX(7deg) translateY(0)}
+  50%{transform:rotateY(15deg) rotateX(-5deg) translateY(-10px)}}
+.scr{position:relative;border-radius:27px;overflow:hidden;aspect-ratio:9/19.5;
+  background:linear-gradient(168deg,#f2fbff,#c9e8ff 34%,#ffd8ec 68%,#fff4d9)}
+.scr::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.85) 0%,transparent 34%,transparent 62%,rgba(255,255,255,.5) 100%);
+  mix-blend-mode:screen;opacity:.55}
+.dtop{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 16px;font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:#1b2430;z-index:3}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:74px;height:20px;
+  border-radius:99px;background:#0b0f16;z-index:4}
+.punch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:11px;height:11px;
+  border-radius:50%;background:#0b0f16;z-index:4}
+.dbody{padding:56px 14px 14px;display:grid;gap:9px}
+.dhero{height:62px;border-radius:13px;background:linear-gradient(120deg,#7fd0ff,#c9a6ff 60%,#ffc4e0);
+  box-shadow:0 8px 20px -8px rgba(60,120,200,.5)}
+.drow{display:flex;gap:7px}
+.dcard{flex:1;height:44px;border-radius:10px;background:rgba(255,255,255,.78);
+  box-shadow:0 4px 12px -6px rgba(40,70,110,.4)}
+.dline{height:7px;border-radius:99px;background:rgba(27,36,48,.16)}
+.dline.s{width:58%}
+.dbtn{height:34px;border-radius:10px;margin-top:2px;
+  background:linear-gradient(120deg,#1b2430,#3b4a60)}
+.dbar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:88px;height:4px;
+  border-radius:99px;background:rgba(27,36,48,.32);z-index:3}
+.side{position:absolute;right:-2px;top:88px;width:3px;height:52px;border-radius:2px;
+  background:linear-gradient(#5a6272,#2a303c)}
+.side.v{top:150px;height:34px}
+.devlab{text-align:center;margin-top:16px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:.24em;color:var(--gold)}
+@media(prefers-reduced-motion:reduce){.dev-in{animation:none;transform:none}}
 </style>
 </head><body>
 <a class="skip" href="#main">Lompat ke isi</a>
@@ -368,6 +418,14 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
     <button data-t="zamrud" style="background:#3fdb9a" aria-label="Zamrud"></button>
     <button data-t="rose" style="background:#f0799c" aria-label="Rose"></button>
     <button data-t="mono" style="background:#cfcfcf" aria-label="Mono"></button>
+    <button data-t="indigo" style="background:#7d8cff" aria-label="Indigo"></button>
+    <button data-t="toska" style="background:#3fd6c4" aria-label="Toska"></button>
+    <button data-t="kuning" style="background:#f0c04a" aria-label="Kuning"></button>
+    <button data-t="merah" style="background:#f0685f" aria-label="Merah"></button>
+    <button data-t="langit" style="background:#5cb8f5" aria-label="Langit"></button>
+    <button data-t="limau" style="background:#a8e05a" aria-label="Limau"></button>
+    <button data-t="magenta" style="background:#ef6ad4" aria-label="Magenta"></button>
+    <button data-t="baja" style="background:#9fb0c4" aria-label="Baja"></button>
   </div>
   <h3>Ukuran huruf</h3>
   <div class="seg">
@@ -384,6 +442,11 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
   <div class="seg">
     <button data-gr="on" aria-pressed="true">Aktif</button>
     <button data-gr="off" aria-pressed="false">Mati</button>
+  </div>
+  <h3>Bunyi antarmuka</h3>
+  <div class="seg">
+    <button data-sd="on" aria-pressed="true">Aktif</button>
+    <button data-sd="off" aria-pressed="false">Mati</button>
   </div>
   <h3>Kembalikan</h3>
   <div class="seg"><button id="preset">Setel ulang semua</button></div>
@@ -409,7 +472,7 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
 </div></footer>
 <a class="fab" href="https://wa.me/6281292442362?text=Halo__ALFILIATOR" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <button id="top" aria-label="Atas"><i class="fas fa-arrow-up"></i></button>
-<script>
+<script nonce="__NONCE__">
 (function(){
   var R=document.documentElement, reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   var prog=document.getElementById('prog'),hdr=document.getElementById('hdr'),top=document.getElementById('top'),raf=0;
@@ -497,6 +560,44 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
     });
   },{threshold:.15,rootMargin:'0px 0px -40px'});
   document.querySelectorAll('.rv,.wk').forEach(function(el){io.observe(el)});
+
+  /* ---- bunyi antarmuka ---- */
+  var snd = localStorage.getItem('alf.sound') !== 'off';
+  var ACX = null;
+  function actx(){ if(!ACX){ var C = window.AudioContext || window.webkitAudioContext; if(!C) return null; ACX = new C(); } return ACX; }
+  function tone(f, d, type, vol){
+    if(!snd) return; var c = actx(); if(!c) return;
+    try{
+      var o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
+      o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.045, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + d + 0.03);
+    }catch(e){}
+  }
+  function sHover(){ tone(1180, 0.06, 'triangle', 0.022); }
+  function sClick(){ tone(520, 0.09, 'sine', 0.05); setTimeout(function(){ tone(780, 0.1, 'sine', 0.04); }, 70); }
+  function sGood(){ tone(660, 0.12, 'sine', 0.05); setTimeout(function(){ tone(990, 0.16, 'sine', 0.045); }, 90); }
+  if(matchMedia('(pointer:fine)').matches && !reduce){
+    var hv = 0;
+    document.querySelectorAll('a,button,summary,.cell,.room').forEach(function(el){
+      el.addEventListener('pointerenter', function(){ var n=Date.now(); if(n-hv<70) return; hv=n; sHover(); });
+    });
+  }
+  document.querySelectorAll('a,button,summary').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if(el.classList.contains('fab') || el.classList.contains('btn')) sGood(); else sClick();
+    });
+  });
+  document.querySelectorAll('.seg button[data-sd]').forEach(function(b){
+    b.addEventListener('click', function(){
+      snd = b.dataset.sd === 'on';
+      localStorage.setItem('alf.sound', b.dataset.sd);
+      document.querySelectorAll('.seg button[data-sd]').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+      if(snd) sGood();
+    });
+  });
 
   var ds=document.querySelectorAll('details');
   ds.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ds.forEach(function(o){if(o!==d)o.close()})})});
