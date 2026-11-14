@@ -2,3 +2,8 @@ cloudflared
 tunnel.log
 public_url.txt
 .tunnel.pid
+__pycache__/
+*.pyc
+.server.pid
+server.log
+_backup_*/

@@ -1,0 +1,4 @@
+Contact: mailto:support@alfiliator.id
+Expires: 2027-12-31T23:59:00.000Z
+Preferred-Languages: id, en
+Canonical: https://yuana448.github.io/alfiliator-landing/.well-known/security.txt
