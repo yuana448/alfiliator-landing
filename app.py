@@ -463,6 +463,67 @@ JS = r"""
     });
   });
 
+
+  function wire(a, k){
+    document.querySelectorAll('#panel [data-' + a + ']').forEach(function(b){
+      b.addEventListener('click', function(){
+        R.setAttribute('data-' + a, b.dataset[a]);
+        localStorage.setItem('alf.' + k, b.dataset[a]);
+        document.querySelectorAll('#panel [data-' + a + ']').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+      });
+    });
+  }
+  wire('wd','wide'); wire('rd','rad'); wire('dn','dense'); wire('cn','con'); wire('tr','tr');
+
+  /* bahasa & mata uang */
+  var LGS=[['id','Indonesia'],['en','English'],['ms','Melayu'],['zh','中文'],['ja','日本語'],['ar','العربية']];
+  var CRS=[['IDR','Rupiah'],['USD','Dolar AS'],['EUR','Euro'],['SGD','Dolar SG']];
+  var UN={rb:1e3,jt:1e6,miliar:1e9}, sL=document.getElementById('lang'), sC=document.getElementById('cur');
+  if(sL) LGS.forEach(function(o){ var e=document.createElement('option'); e.value=o[0]; e.textContent=o[1]; sL.appendChild(e); });
+  if(sC) CRS.forEach(function(o){ var e=document.createElement('option'); e.value=o[0]; e.textContent=o[1]; sC.appendChild(e); });
+  var TR={en:{'Beranda':'Home','Layanan':'Services','Harga':'Pricing','Portofolio':'Portfolio','Proses':'Process','Keamanan':'Security','Ketentuan':'Terms','Tanya':'FAQ','Kontak':'Contact','Mulai':'Start','Matriks':'Comparison','Teknologi Web':'Web Tech','Teknologi Mobile':'Mobile Tech','Integrasi':'Integrations','Infrastruktur':'Infrastructure','Perawatan':'Maintenance','Garansi':'Warranty','Legal':'Legal','Privasi':'Privacy','Syarat':'Terms of Use','Catatan':'Notes','Glosarium':'Glossary','Roadmap Celah':'Gap Roadmap','Kapasitas':'Capacity','Mitra':'Partners','Kolaborasi':'Collaboration','Status':'Status','Dokumentasi':'Docs','Cari':'Search','Proyek Selesai':'Projects Delivered','Klien Kembali':'Returning Clients','Respon':'Response','Kirim Brief':'Send Brief','Lihat Tarif':'See Rates','Konsultasi':'Consult','Formulir':'Form','Perangkat lunak yang dibuat ':'Software built ','benda mahal':'expensive things'},
+  ms:{'Beranda':'Utama','Layanan':'Perkhidmatan','Harga':'Harga','Portofolio':'Portfolio','Proses':'Proses','Keamanan':'Keselamatan','Ketentuan':'Terma','Tanya':'Soalan','Kontak':'Hubungi','Mulai':'Mula','Matriks':'Perbandingan','Teknologi Web':'Teknologi Web','Teknologi Mobile':'Teknologi Mudah Alih','Integrasi':'Integrasi','Infrastruktur':'Infrastruktur','Perawatan':'Penyelenggaraan','Garansi':'Jaminan','Legal':'Perundangan','Privasi':'Privasi','Syarat':'Syarat Guna','Catatan':'Nota','Glosarium':'Glosari','Roadmap Celah':'Peta Jurang','Kapasitas':'Kapasiti','Mitra':'Rakan','Kolaborasi':'Kerjasama','Status':'Status','Dokumentasi':'Dokumentasi','Cari':'Cari','Proyek Selesai':'Projek Siap','Klien Kembali':'Klien Berulang','Respon':'Respons','Kirim Brief':'Hantar Brief','Lihat Tarif':'Lihat Kadar','Konsultasi':'Rundingan','Formulir':'Borang','Perangkat lunak yang dibuat ':'Perisian yang dibina ','benda mahal':'barang mahal'},
+  zh:{'Beranda':'首页','Layanan':'服务','Harga':'价格','Portofolio':'作品','Proses':'流程','Keamanan':'安全','Ketentuan':'条款','Tanya':'常见问题','Kontak':'联系','Mulai':'开始','Matriks':'对比','Teknologi Web':'Web 技术','Teknologi Mobile':'移动技术','Integrasi':'集成','Infrastruktur':'基础设施','Perawatan':'维护','Garansi':'保修','Legal':'法律','Privasi':'隐私','Syarat':'使用条款','Catatan':'笔记','Glosarium':'术语表','Roadmap Celah':'差距路线图','Kapasitas':'产能','Mitra':'合作伙伴','Kolaborasi':'合作','Status':'状态','Dokumentasi':'文档','Cari':'搜索','Proyek Selesai':'完成项目','Klien Kembali':'回头客','Respon':'响应','Kirim Brief':'发送简报','Lihat Tarif':'查看费率','Konsultasi':'咨询','Formulir':'表单','Perangkat lunak yang dibuat ':'像昂贵物件一样打造的软件','benda mahal':'昂贵物件'},
+  ja:{'Beranda':'ホーム','Layanan':'サービス','Harga':'料金','Portofolio':'実績','Proses':'進め方','Keamanan':'セキュリティ','Ketentuan':'規約','Tanya':'よくある質問','Kontak':'お問い合わせ','Mulai':'はじめる','Matriks':'比較','Teknologi Web':'Web技術','Teknologi Mobile':'モバイル技術','Integrasi':'連携','Infrastruktur':'インフラ','Perawatan':'保守','Garansi':'保証','Legal':'法務','Privasi':'プライバシー','Syarat':'利用規約','Catatan':'記録','Glosarium':'用語集','Roadmap Celah':'改善ロードマップ','Kapasitas':'対応枠','Mitra':'パートナー','Kolaborasi':'協業','Status':'稼働状況','Dokumentasi':'ドキュメント','Cari':'検索','Proyek Selesai':'完了案件','Klien Kembali':'リピート顧客','Respon':'返信','Kirim Brief':'ブリーフを送る','Lihat Tarif':'料金を見る','Konsultasi':'相談','Formulir':'フォーム','Perangkat lunak yang dibuat ':'高級品のように作られたソフトウェア','benda mahal':'高級品'},
+  ar:{'Beranda':'الرئيسية','Layanan':'الخدمات','Harga':'الأسعار','Portofolio':'الأعمال','Proses':'سير العمل','Keamanan':'الأمان','Ketentuan':'الشروط','Tanya':'الأسئلة','Kontak':'اتصل','Mulai':'ابدأ','Matriks':'المقارنة','Teknologi Web':'تقنيات الويب','Teknologi Mobile':'تقنيات الجوال','Integrasi':'التكامل','Infrastruktur':'البنية التحتية','Perawatan':'الصيانة','Garansi':'الضمان','Legal':'القانوني','Privasi':'الخصوصية','Syarat':'شروط الاستخدام','Catatan':'ملاحظات','Glosarium':'المصطلحات','Roadmap Celah':'خطة الثغرات','Kapasitas':'الطاقة','Mitra':'الشركاء','Kolaborasi':'التعاون','Status':'الحالة','Dokumentasi':'الوثائق','Cari':'بحث','Proyek Selesai':'مشاريع منجزة','Klien Kembali':'عملاء عائدون','Respon':'الاستجابة','Kirim Brief':'أرسل موجزاً','Lihat Tarif':'انظر الأسعار','Konsultasi':'استشارة','Formulir':'نموذج','Perangkat lunak yang dibuat ':'برمجيات تُصنع كأنها قطعة فاخرة','benda mahal':'قطعة فاخرة'}};
+  var TX=[], PR=[];
+  (function walk(n){
+    if(n.nodeType===3){ var v=n.nodeValue; if(v && v.trim()){ n.__o=v; TX.push(n);
+      if(/Rp\.?\s?[\d.,]+\s?(miliar|jt|rb)?/i.test(v)){ n.__p=v; PR.push(n); } } return; }
+    if(n.nodeType!==1) return; var t=n.tagName;
+    if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT') return;
+    if(n.id==='panel') return;
+    for(var i=0;i<n.childNodes.length;i++) walk(n.childNodes[i]);
+  })(document.body);
+  function aL(){ var p=(navigator.language||'id').slice(0,2); return LGS.some(function(x){return x[0]===p}) ? p : 'id'; }
+  function aC(){ var z=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+    if(/Jakarta|Makassar|Jayapura|Pontianak/.test(z)) return 'IDR';
+    if(/Europe\//.test(z)) return 'EUR'; if(/Singapore|Kuala/.test(z)) return 'SGD'; return 'USD'; }
+  function fmt(v){ var r=+(localStorage.getItem('alf.rate')||16300);
+    var x = CURV==='IDR' ? v : (CURV==='USD' ? v/r : (CURV==='EUR' ? v/r/1.08 : v/r*1.35));
+    if(CURV==='IDR') return 'Rp ' + Math.round(x).toLocaleString('id-ID');
+    return (CURV==='USD'?'$':CURV==='EUR'?'€':'S$') + Math.round(x).toLocaleString('en-US'); }
+  var LNG='id', CURV='IDR';
+  function paint(){
+    var mp = TR[LNG] || {};
+    TX.forEach(function(n){ var k=n.__o.trim(), tr=mp[k]; n.nodeValue = tr ? n.__o.replace(k,tr) : n.__o; });
+    PR.forEach(function(n){ n.nodeValue = n.__p.replace(/Rp\.?\s?([\d.,]+)\s?(miliar|jt|rb)?/gi, function(_, d, u){
+      return fmt(parseFloat(d.replace(/\./g,'').replace(',','.')) * (UN[(u||'').toLowerCase()]||1)); }); });
+    R.lang = LNG; R.dir = LNG === 'ar' ? 'rtl' : 'ltr';
+  }
+  function save(){ localStorage.setItem('alf.lang', LNG); localStorage.setItem('alf.cur', CURV); }
+  if(sL){ sL.value = localStorage.getItem('alf.lang') || 'id'; sL.addEventListener('change', function(){ LNG = sL.value; paint(); save(); }); }
+  if(sC){ sC.value = localStorage.getItem('alf.cur') || 'IDR'; sC.addEventListener('change', function(){ CURV = sC.value; paint(); save(); }); }
+  var la=document.getElementById('langauto'), ca=document.getElementById('curauto');
+  if(la) la.addEventListener('click', function(){ LNG = aL(); if(sL) sL.value = LNG; paint(); save(); });
+  if(ca) ca.addEventListener('click', function(){ CURV = aC(); if(sC) sC.value = CURV; paint(); save(); });
+  var rt=document.getElementById('rate');
+  if(rt){ rt.value = localStorage.getItem('alf.rate') || 16300;
+    rt.addEventListener('change', function(){ localStorage.setItem('alf.rate', +rt.value || 16300); paint(); }); }
+  LNG = localStorage.getItem('alf.lang') || 'id';
+  CURV = localStorage.getItem('alf.cur') || 'IDR';
+  paint();
+
   var ds=document.querySelectorAll('details');
   ds.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ds.forEach(function(o){if(o!==d)o.close()})})});
 })();
@@ -525,12 +586,180 @@ EXTRA_CSS += r"""
 @media(prefers-reduced-motion:reduce){.dev-in{animation:none;transform:none}}
 """
 
+EXTRA_CSS += r"""
+html{--rad:0px}
+html[data-rd="n"]{--rad:2px}html[data-rd="b"]{--rad:14px}
+.btn,.cell,.plan,.room,.tbl,.iconbtn,.seg button,.sw button,details,.cta,.wk,.quote,.step,.sel,.inp,.plan .tag{border-radius:var(--rad)}
+html[data-wd="s"] .wrap{width:min(860px,100% - 44px)}
+html[data-wd="l"] .wrap{width:min(1440px,100% - 30px)}
+html[data-dn="r"] body{line-height:1.5}
+html[data-dn="r"] .cell,html[data-dn="r"] .plan,html[data-dn="r"] .room{padding:16px 15px}
+html[data-dn="r"] h1,html[data-dn="r"] h2{margin-bottom:10px}
+html[data-dn="l"] .cell,html[data-dn="l"] .plan,html[data-dn="l"] .room{padding:34px 28px}
+html[data-cn="t"]{--muted:#cdc8be;--dim:#a09b91}
+html[data-cn="t"] .lead{color:var(--ink)}
+html[data-tr="t"] .cell,html[data-tr="t"] .plan,html[data-tr="t"] .room,html[data-tr="t"] .quote,html[data-tr="t"] .stat{opacity:.84;backdrop-filter:blur(7px)}
+html[data-theme="kertas"]{--bg:#f6f3ec;--panel:#fffdf8;--panel2:#efe9dd;--ink:#14130f;--muted:#5c574d;--dim:#8b857a;--gold:#a8792c;--gold2:#7d5a1d;--glow:rgba(168,121,44,.3);--line:rgba(20,19,15,.16);--line2:rgba(20,19,15,.09)}
+html[data-theme="kapur"]{--bg:#eef3f7;--panel:#fbfdff;--panel2:#e2eaf1;--ink:#0f1519;--muted:#54606a;--dim:#83919c;--gold:#3b7fa6;--gold2:#255d7d;--glow:rgba(59,127,166,.3);--line:rgba(15,21,25,.16);--line2:rgba(15,21,25,.09)}
+html[data-theme="senja"]{--gold:#ff8a4c;--gold2:#ffc39a;--glow:rgba(255,138,76,.4);--line:rgba(255,138,76,.18)}
+html[data-theme="anggur"]{--gold:#b4527a;--gold2:#eaa6c1;--glow:rgba(180,82,122,.4);--line:rgba(180,82,122,.18)}
+html[data-theme="kertas"] header{background:rgba(246,243,236,.72)}
+html[data-theme="kapur"] header{background:rgba(238,243,247,.72)}
+html[data-theme="kertas"] header.stuck,html[data-theme="kapur"] header.stuck{background:var(--bg)}
+html[data-theme="kertas"] #drawer,html[data-theme="kapur"] #drawer{background:var(--bg)}
+html[data-theme="kertas"] #panel,html[data-theme="kapur"] #panel{background:var(--panel)}
+.sel,.inp{width:100%;padding:9px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-family:inherit;font-size:11.5px}
+@media(max-width:639px){
+  .wk{padding-right:50px}
+  .wk .st{position:static;display:inline-block;margin:0 0 8px;padding:2px 8px}
+  .wk .arrow{right:14px;bottom:12px}
+  .tbl{display:block;overflow-x:auto}
+  .tbl th,.tbl td{white-space:nowrap}
+}
+"""
+
+EXTRA_CSS += r"""
+#rp{position:fixed;right:16px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:75;
+  height:46px;padding:0 16px;display:flex;gap:8px;align-items:center;border:0;border-radius:99px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0e;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  box-shadow:0 12px 30px -12px var(--glow);animation:rpulse 2.4s infinite;transition:transform .2s}
+#rp:hover{transform:scale(1.05)}
+#rp b{font-size:13px;line-height:1}
+@keyframes rpulse{0%{box-shadow:0 0 0 0 var(--glow),0 12px 30px -12px var(--glow)}
+  65%{box-shadow:0 0 0 15px transparent,0 12px 30px -12px var(--glow)}
+  100%{box-shadow:0 0 0 0 transparent,0 12px 30px -12px var(--glow)}}
+#rpp{position:fixed;right:12px;bottom:calc(136px + env(safe-area-inset-bottom));z-index:76;
+  width:min(340px,calc(100vw - 24px));max-height:min(66vh,560px);display:none;flex-direction:column;
+  border:1px solid var(--line);background:rgba(9,9,14,.975);backdrop-filter:blur(22px);
+  border-radius:calc(var(--rad) + 5px);overflow:hidden;box-shadow:0 26px 64px -20px #000}
+#rpp.open{display:flex}
+#rph{padding:12px 14px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;
+  align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--gold)}
+#rph em{font-style:normal;color:var(--dim);font-size:8.5px;letter-spacing:.08em}
+#rpx{cursor:pointer;color:var(--dim)}
+.rmode{display:flex;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line2)}
+.rmode[hidden]{display:none}
+.rmode select,.rmode input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:10.5px;padding:6px 7px;border-radius:6px}
+#rpb{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px;font-size:12.2px;line-height:1.55}
+.rpm{max-width:88%;padding:9px 12px;border-radius:calc(var(--rad) + 3px);background:var(--panel2);border:1px solid var(--line2)}
+.rpm.me{align-self:flex-end;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0e;
+  border-color:transparent;font-weight:500}
+.rpm a{color:var(--gold2);text-decoration:underline}
+.rpm.me a{color:#0a0a0e}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.chip{font-size:10.5px;border:1px solid var(--line);background:none;color:var(--muted);
+  padding:5px 10px;border-radius:99px;cursor:pointer;font:inherit}
+.chip:hover{color:var(--gold2);border-color:var(--gold)}
+.rthink{font-size:10.5px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+#rpf{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line2)}
+#rpi{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);
+  padding:9px 11px;font:inherit;font-size:12px;border-radius:calc(var(--rad) + 2px)}
+#rps{width:42px;border:1px solid var(--gold);background:none;color:var(--gold);cursor:pointer;
+  border-radius:calc(var(--rad) + 2px);font-size:14px}
+#nfilter{width:100%;padding:10px 12px;background:var(--panel2);border:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:12.4px;margin-bottom:10px;border-radius:var(--rad)}
+.pk{position:absolute;left:8px;width:4px;height:14px;border-radius:2px;
+  background:var(--gold2);box-shadow:0 0 12px var(--glow);animation:pk 8s linear infinite}
+@keyframes pk{0%{top:-14px;opacity:0}6%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+@media print{#rp,#rpp{display:none!important}}
+"""
+
+EXTRA_CSS += r"""
+#rp{position:fixed;right:16px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:75;
+  height:46px;padding:0 16px;display:flex;gap:8px;align-items:center;border:0;border-radius:99px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0e;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+  box-shadow:0 12px 30px -12px var(--glow);animation:rpulse 2.4s infinite;transition:transform .2s}
+#rp:hover{transform:scale(1.05)}
+#rp b{font-size:13px;line-height:1}
+@keyframes rpulse{0%{box-shadow:0 0 0 0 var(--glow),0 12px 30px -12px var(--glow)}
+  65%{box-shadow:0 0 0 15px transparent,0 12px 30px -12px var(--glow)}
+  100%{box-shadow:0 0 0 0 transparent,0 12px 30px -12px var(--glow)}}
+#rpp{position:fixed;right:12px;bottom:calc(136px + env(safe-area-inset-bottom));z-index:76;
+  width:min(340px,calc(100vw - 24px));max-height:min(66vh,560px);display:none;flex-direction:column;
+  border:1px solid var(--line);background:rgba(9,9,14,.975);backdrop-filter:blur(22px);
+  border-radius:calc(var(--rad) + 5px);overflow:hidden;box-shadow:0 26px 64px -20px #000}
+#rpp.open{display:flex}
+#rph{padding:12px 14px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;
+  align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--gold)}
+#rph em{font-style:normal;color:var(--dim);font-size:8.5px;letter-spacing:.08em}
+#rpx{cursor:pointer;color:var(--dim)}
+.rmode{display:flex;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line2)}
+.rmode[hidden]{display:none}
+.rmode select,.rmode input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:10.5px;padding:6px 7px;border-radius:6px}
+#rpb{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px;font-size:12.2px;line-height:1.55}
+.rpm{max-width:88%;padding:9px 12px;border-radius:calc(var(--rad) + 3px);background:var(--panel2);border:1px solid var(--line2)}
+.rpm.me{align-self:flex-end;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0e;
+  border-color:transparent;font-weight:500}
+.rpm a{color:var(--gold2);text-decoration:underline}
+.rpm.me a{color:#0a0a0e}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px}
+.chip{font-size:10.5px;border:1px solid var(--line);background:none;color:var(--muted);
+  padding:5px 10px;border-radius:99px;cursor:pointer;font:inherit}
+.chip:hover{color:var(--gold2);border-color:var(--gold)}
+.rthink{font-size:10.5px;color:var(--dim);font-family:'JetBrains Mono',monospace}
+#rpf{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line2)}
+#rpi{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);
+  padding:9px 11px;font:inherit;font-size:12px;border-radius:calc(var(--rad) + 2px)}
+#rps{width:42px;border:1px solid var(--gold);background:none;color:var(--gold);cursor:pointer;
+  border-radius:calc(var(--rad) + 2px);font-size:14px}
+#nfilter{width:100%;padding:10px 12px;background:var(--panel2);border:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:12.4px;margin-bottom:10px;border-radius:var(--rad)}
+.pk{position:absolute;left:8px;width:4px;height:14px;border-radius:2px;
+  background:var(--gold2);box-shadow:0 0 12px var(--glow);animation:pk 8s linear infinite}
+@keyframes pk{0%{top:-14px;opacity:0}6%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+@media print{#rp,#rpp{display:none!important}}
+"""
+
+EXTRA_CSS += r"""
+.flow{display:grid;gap:7px;position:relative}
+.flow::before{content:"";position:absolute;left:9px;top:0;width:2px;height:100%;background:linear-gradient(var(--gold),transparent);opacity:.25}
+.nd{position:relative;border:1px solid var(--line2);background:var(--panel);padding:13px 15px 13px 30px;display:flex;justify-content:space-between;gap:10px;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10.5px;overflow:hidden;animation:gate 8s linear infinite}
+.nd b{color:var(--gold);letter-spacing:.13em}
+.nd span{color:var(--dim);font-size:9.5px;text-align:right}
+.nd::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transform-origin:top;animation:gbar 8s linear infinite}
+.nd:nth-child(2)::after,.nd:nth-child(2){animation-delay:.8s}
+.nd:nth-child(3)::after,.nd:nth-child(3){animation-delay:1.6s}
+.nd:nth-child(4)::after,.nd:nth-child(4){animation-delay:2.4s}
+.nd:nth-child(5)::after,.nd:nth-child(5){animation-delay:3.2s}
+.nd:nth-child(6)::after,.nd:nth-child(6){animation-delay:4s}
+.nd:nth-child(7)::after,.nd:nth-child(7){animation-delay:4.8s}
+@keyframes gbar{0%{transform:scaleY(0)}5%{transform:scaleY(1)}18%{transform:scaleY(1)}24%{transform:scaleY(0)}100%{transform:scaleY(0)}}
+@keyframes gate{0%,24%,100%{border-color:var(--line2)}8%,16%{border-color:var(--gold);box-shadow:0 0 18px -6px var(--glow)}}
+.tel{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2);margin-top:18px}
+.tel div{background:var(--panel);padding:14px 15px}
+.tel b{display:block;font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--gold2)}
+.tel span{font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+.tel .live{color:#9fe0b0}
+#rp{position:fixed;right:16px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:75;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:18px;border:1px solid var(--line);background:rgba(10,10,16,.92);color:var(--gold);backdrop-filter:blur(12px);cursor:pointer;transition:.25s}
+#rp:hover{color:var(--gold2);border-color:var(--gold);transform:scale(1.06)}
+#rpp{position:fixed;right:12px;bottom:calc(140px + env(safe-area-inset-bottom));z-index:76;width:min(330px,calc(100vw - 24px));max-height:min(62vh,520px);display:none;flex-direction:column;border:1px solid var(--line);background:rgba(9,9,14,.97);backdrop-filter:blur(20px);border-radius:calc(var(--rad) + 4px);overflow:hidden;box-shadow:0 24px 60px -20px #000}
+#rpp.open{display:flex}
+#rph{padding:12px 14px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--gold)}
+#rph em{font-style:normal;color:var(--dim);font-size:8.5px;letter-spacing:.1em}
+#rpb{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:9px;font-size:12.2px;line-height:1.55}
+.rpm{max-width:88%;padding:9px 12px;border-radius:calc(var(--rad) + 3px);background:var(--panel2);border:1px solid var(--line2)}
+.rpm.me{align-self:flex-end;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0a0a0e;border-color:transparent;font-weight:500}
+.rpm a{color:var(--gold2);text-decoration:underline}
+#rpf{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line2)}
+#rpi{flex:1;background:var(--panel2);border:1px solid var(--line2);color:var(--ink);padding:9px 11px;font:inherit;font-size:12px;border-radius:calc(var(--rad) + 2px)}
+#rps{width:40px;border:1px solid var(--gold);background:none;color:var(--gold);cursor:pointer;border-radius:calc(var(--rad) + 2px)}
+.noteitem{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;border:1px solid var(--line2);background:var(--panel);padding:12px 14px;margin-bottom:1px;font-size:12.4px}
+.noteitem time{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--dim);display:block;margin-bottom:4px}
+.noteitem button{background:none;border:1px solid var(--line2);color:var(--dim);cursor:pointer;padding:3px 8px;font-size:10px}
+#ntext{width:100%;min-height:88px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:12px;font:inherit;font-size:12.6px;border-radius:var(--rad)}
+@media print{#rp,#rpp{display:none!important}}
+"""
+
 HEADBOOT = r"""
 (function(){var R=document.documentElement,L=localStorage;
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
  R.setAttribute('data-fs',L.getItem('alf.fs')||'m');
  R.setAttribute('data-motion',L.getItem('alf.motion')||'on');
- R.setAttribute('data-grain',L.getItem('alf.grain')||'on');})();
+ R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');})();
 """
 
 ROOMS = [
@@ -564,7 +793,10 @@ ROOMS = [
     ("/kolaborasi","28","Kolaborasi","Peluang kerja sama jangka panjang."),
     ("/status","29","Status","Kondisi node dan riwayat kejadian."),
     ("/dokumentasi","30","Dokumentasi","Struktur berkas dan rute aplikasi."),
-    ("/cari","31","Cari","Pencarian cepat antar ruang."),
+    ("/struktur","31","Struktur","Alur permintaan dan lapisan pengaman."),
+    ("/reaper","32","REAPER","Asisten lokal, tanpa token."),
+    ("/admin","33","Admin","Catatan kerja dan kendali node."),
+    ("/cari","34","Cari","Pencarian cepat antar ruang."),
 ]
 
 PRIMARY = ["/","/layanan","/harga","/keamanan","/roadmap","/kontak"]
@@ -583,7 +815,7 @@ def nav(active):
     <button class="iconbtn burger" id="burger" aria-label="Menu"><i class="fas fa-bars"></i></button>
   </div>
 </div></header>
-<div id="drawer"><div class="dhead">30 Ruang</div>__DR__</div>
+<div id="drawer"><div class="dhead">34 Ruang</div>__DR__</div>
 
 <aside id="panel" aria-label="Setelan tampilan">
   <button class="iconbtn close" id="pclose" aria-label="Tutup"><i class="fas fa-xmark"></i></button>
@@ -626,6 +858,31 @@ def nav(active):
     <button data-sd="on" aria-pressed="true">Aktif</button>
     <button data-sd="off" aria-pressed="false">Mati</button>
   </div>
+  <h3>Desain</h3>
+  <div class="sw">
+    <button data-t="kertas" style="background:#f6f3ec" aria-label="Kertas"></button>
+    <button data-t="kapur" style="background:#eaf1f5" aria-label="Kapur"></button>
+    <button data-t="senja" style="background:#ff8a4c" aria-label="Senja"></button>
+    <button data-t="anggur" style="background:#b4527a" aria-label="Anggur"></button>
+  </div>
+  <h3>Lebar konten</h3>
+  <div class="seg"><button data-wd="s">Sempit</button><button data-wd="n" aria-pressed="true">Normal</button><button data-wd="l">Lebar</button></div>
+  <h3>Sudut</h3>
+  <div class="seg"><button data-rd="k" aria-pressed="true">Kotak</button><button data-rd="n">Normal</button><button data-rd="b">Bulat</button></div>
+  <h3>Kerapatan</h3>
+  <div class="seg"><button data-dn="l">Renggang</button><button data-dn="n" aria-pressed="true">Normal</button><button data-dn="r">Rapat</button></div>
+  <h3>Kontras</h3>
+  <div class="seg"><button data-cn="n" aria-pressed="true">Normal</button><button data-cn="t">Tinggi</button></div>
+  <h3>Transparansi</h3>
+  <div class="seg"><button data-tr="s" aria-pressed="true">Solid</button><button data-tr="t">Tipis</button></div>
+  <h3>Bahasa</h3>
+  <div class="seg"><select id="lang" class="sel"></select></div>
+  <div class="seg"><button id="langauto">Otomatis</button></div>
+  <h3>Mata uang</h3>
+  <div class="seg"><select id="cur" class="sel"></select></div>
+  <div class="seg"><button id="curauto">Otomatis</button></div>
+  <h3>Kurs 1 USD (Rp)</h3>
+  <div class="seg"><input id="rate" class="inp" type="number" min="1" step="1" value="16300"></div>
   <h3>Kembalikan</h3>
   <div class="seg"><button id="preset">Setel ulang semua</button></div>
   <p class="note">Pilihan disimpan di perangkat ini saja. Tidak dikirim ke server.</p>
@@ -663,7 +920,7 @@ __NAV__
 <main id="main">__BODY__</main>
 <footer><div class="wrap fg">
   <div>&copy; 2026 ALFILIATOR — Atelier Digital</div>
-  <div class="mono">NODE v5 · 30 RUANG</div>
+  <div class="mono">NODE v6 · 34 RUANG</div>
 </div></footer>
 <a class="fab" href="__WA__?text=Halo%20ALFILIATOR" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <button id="top" aria-label="Atas"><i class="fas fa-arrow-up"></i></button>
@@ -671,115 +928,148 @@ __NAV__
 
 
 
-<style nonce="__NONCE__">
-/* alf_fix */
-main td,main th,main li,main p,main h2,main h3{overflow-wrap:anywhere}
-@media (max-width:760px){
-main table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
-main table th,main table td{white-space:nowrap}
-main .grid,main [class*="grid"],main .row,main [class*="cols"],main .cols{grid-template-columns:1fr!important}
-main *{min-width:0}
-main section,main .wrap{padding-left:14px;padding-right:14px}
-.reg{bottom:12px;left:12px}
-.reg-p{width:min(242px,calc(100vw - 40px))}
-}
-</style>
+
 <!--alf:reg-->
-<style nonce="__NONCE__">
-.reg{position:fixed;left:14px;bottom:14px;z-index:9999;font:500 13px/1.4 system-ui,sans-serif}
-.reg-b{border:1px solid #8886;background:color-mix(in srgb,#111 78%,transparent);backdrop-filter:blur(14px);color:#fff;border-radius:calc(var(--alf-r,14px)*1.4);padding:10px 15px;cursor:pointer;box-shadow:0 6px 22px #0005;opacity:var(--alf-a,1)}
-.reg-p{background:color-mix(in srgb,#101012 80%,transparent);backdrop-filter:blur(18px) saturate(1.5);color:#fff;border:1px solid #8885;border-radius:var(--alf-r,14px);padding:15px;margin-bottom:9px;width:min(268px,calc(100vw - 40px));box-shadow:0 10px 36px #0007;max-height:76vh;overflow:auto;opacity:var(--alf-a,1)}
-.reg-p[hidden]{display:none}
-.reg-p h4{margin:0 0 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;font-weight:700}
-.reg-p label{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.62;margin:11px 0 5px}
-.reg-p label:first-of-type{margin-top:0}
-.reg-p select,.reg-p input[type=number]{width:100%;background:#1c1c1e;color:#fff;border:1px solid #8885;border-radius:calc(var(--alf-r,14px)*.6);padding:8px;font:inherit}
-.reg-p input[type=range]{width:100%;accent-color:#fff}
-.reg-p .chk{display:flex;gap:8px;align-items:center;margin:9px 0;font-size:12px;text-transform:none;letter-spacing:0;opacity:.85}
-.reg-p .chk input{accent-color:#fff}
-.reg-x{margin-top:12px;width:100%;background:none;border:1px solid #8885;color:#fff;border-radius:calc(var(--alf-r,14px)*.6);padding:8px;cursor:pointer;font:inherit}
-body.alf-dense main{line-height:1.45}
-body.alf-hi main{filter:contrast(1.14)}
-body.alf-dark{background:#0b0b0d;color:#f2f2f2}
-main{opacity:var(--alf-a,1);transition:opacity .2s}
-@media print{.reg{display:none}}
-</style>
+
+<!--/alf:reg-->
+
+
+<div id="rpp" aria-label="REAPER">
+  <div id="rph"><span>REAPER <em>· nol token</em></span><span id="rpx">✕</span></div>
+  <div class="rmode"><select id="rmode"><option value="lokal">Lokal — gratis</option><option value="venice">Venice — kunci API</option></select></div>
+  <div class="rmode" id="rven" hidden>
+    <input id="rkey" type="password" placeholder="Kunci API Venice">
+    <select id="rmod">
+      <option value="deepseek-v4-1-flash">DeepSeek V4.1 Flash</option>
+      <option value="venice-uncensored-1-2">Venice Uncensored</option>
+      <option value="llama-3.3-70b">Llama 3.3 70B</option>
+      <option value="gemini-3-5-flash">Gemini 3.5 Flash</option>
+      <option value="qwen-3-8-flash">Qwen 3.8 Flash</option>
+    </select>
+  </div>
+  <div id="rpb"></div>
+  <div class="chips" id="rch"></div>
+  <div id="rpf"><input id="rpi" placeholder="Tulis pertanyaan…" autocomplete="off"><button id="rps" aria-label="Kirim">→</button></div>
+</div>
+<button id="rp" aria-label="Buka REAPER"><b>R</b>REAPER</button>
 <script nonce="__NONCE__">
 (function(){
-var K='alf_reg2';
-var d={lang:'id',cur:'IDR',rate:16300,a:1,r:14,dense:0,hi:0,dark:0,autoL:0,autoC:0};
-try{Object.assign(d,JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){}
-var L=[['id','Indonesia'],['en','English'],['ms','Melayu'],['zh','中文'],['ja','日本語'],['ar','العربية']];
-var C=[['IDR','Rupiah'],['USD','Dolar AS'],['EUR','Euro'],['SGD','Dolar SG']];
-var U={rb:1e3,jt:1e6,miliar:1e9};
-var T={
-en:{'Beranda':'Home','Layanan':'Services','Harga':'Pricing','Portofolio':'Portfolio','Proses':'Process','Keamanan':'Security','Ketentuan':'Terms','Tanya':'FAQ','Kontak':'Contact','Mulai':'Start','Matriks':'Comparison','Teknologi Web':'Web Tech','Teknologi Mobile':'Mobile Tech','Integrasi':'Integrations','Infrastruktur':'Infrastructure','Perawatan':'Maintenance','Garansi':'Warranty','Legal':'Legal','Privasi':'Privacy','Syarat':'Terms of Use','Catatan':'Notes','Glosarium':'Glossary','Roadmap Celah':'Gap Roadmap','Kapasitas':'Capacity','Mitra':'Partners','Kolaborasi':'Collaboration','Status':'Status','Dokumentasi':'Docs','Cari':'Search','Proyek Selesai':'Projects Delivered','Klien Kembali':'Returning Clients','Respon':'Response','Kirim Brief':'Send Brief','Lihat Tarif':'See Rates','Konsultasi':'Consult','Formulir':'Form','Perangkat lunak yang dibuat ':'Software built ','benda mahal':'expensive things'},
-ms:{'Beranda':'Utama','Layanan':'Perkhidmatan','Harga':'Harga','Portofolio':'Portfolio','Proses':'Proses','Keamanan':'Keselamatan','Ketentuan':'Terma','Tanya':'Soalan','Kontak':'Hubungi','Mulai':'Mula','Matriks':'Perbandingan','Teknologi Web':'Teknologi Web','Teknologi Mobile':'Teknologi Mudah Alih','Integrasi':'Integrasi','Infrastruktur':'Infrastruktur','Perawatan':'Penyelenggaraan','Garansi':'Jaminan','Legal':'Perundangan','Privasi':'Privasi','Syarat':'Syarat Guna','Catatan':'Nota','Glosarium':'Glosari','Roadmap Celah':'Peta Jurang','Kapasitas':'Kapasiti','Mitra':'Rakan','Kolaborasi':'Kerjasama','Status':'Status','Dokumentasi':'Dokumentasi','Cari':'Cari','Proyek Selesai':'Projek Siap','Klien Kembali':'Klien Berulang','Respon':'Respons','Kirim Brief':'Hantar Brief','Lihat Tarif':'Lihat Kadar','Konsultasi':'Rundingan','Formulir':'Borang','Perangkat lunak yang dibuat ':'Perisian yang dibina ','benda mahal':'barang mahal'},
-zh:{'Beranda':'首页','Layanan':'服务','Harga':'价格','Portofolio':'作品','Proses':'流程','Keamanan':'安全','Ketentuan':'条款','Tanya':'常见问题','Kontak':'联系','Mulai':'开始','Matriks':'对比','Teknologi Web':'Web 技术','Teknologi Mobile':'移动技术','Integrasi':'集成','Infrastruktur':'基础设施','Perawatan':'维护','Garansi':'保修','Legal':'法律','Privasi':'隐私','Syarat':'使用条款','Catatan':'笔记','Glosarium':'术语表','Roadmap Celah':'差距路线图','Kapasitas':'产能','Mitra':'合作伙伴','Kolaborasi':'合作','Status':'状态','Dokumentasi':'文档','Cari':'搜索','Proyek Selesai':'完成项目','Klien Kembali':'回头客','Respon':'响应','Kirim Brief':'发送简报','Lihat Tarif':'查看费率','Konsultasi':'咨询','Formulir':'表单','Perangkat lunak yang dibuat ':'像昂贵物件一样打造的软件','benda mahal':'昂贵物件'},
-ja:{'Beranda':'ホーム','Layanan':'サービス','Harga':'料金','Portofolio':'実績','Proses':'進め方','Keamanan':'セキュリティ','Ketentuan':'規約','Tanya':'よくある質問','Kontak':'お問い合わせ','Mulai':'はじめる','Matriks':'比較','Teknologi Web':'Web技術','Teknologi Mobile':'モバイル技術','Integrasi':'連携','Infrastruktur':'インフラ','Perawatan':'保守','Garansi':'保証','Legal':'法務','Privasi':'プライバシー','Syarat':'利用規約','Catatan':'記録','Glosarium':'用語集','Roadmap Celah':'改善ロードマップ','Kapasitas':'対応枠','Mitra':'パートナー','Kolaborasi':'協業','Status':'稼働状況','Dokumentasi':'ドキュメント','Cari':'検索','Proyek Selesai':'完了案件','Klien Kembali':'リピート顧客','Respon':'返信','Kirim Brief':'ブリーフを送る','Lihat Tarif':'料金を見る','Konsultasi':'相談','Formulir':'フォーム','Perangkat lunak yang dibuat ':'高級品のように作られたソフトウェア','benda mahal':'高級品'},
-ar:{'Beranda':'الرئيسية','Layanan':'الخدمات','Harga':'الأسعار','Portofolio':'الأعمال','Proses':'سير العمل','Keamanan':'الأمان','Ketentuan':'الشروط','Tanya':'الأسئلة','Kontak':'اتصل','Mulai':'ابدأ','Matriks':'المقارنة','Teknologi Web':'تقنيات الويب','Teknologi Mobile':'تقنيات الجوال','Integrasi':'التكامل','Infrastruktur':'البنية التحتية','Perawatan':'الصيانة','Garansi':'الضمان','Legal':'القانوني','Privasi':'الخصوصية','Syarat':'شروط الاستخدام','Catatan':'ملاحظات','Glosarium':'المصطلحات','Roadmap Celah':'خطة الثغرات','Kapasitas':'الطاقة','Mitra':'الشركاء','Kolaborasi':'التعاون','Status':'الحالة','Dokumentasi':'الوثائق','Cari':'بحث','Proyek Selesai':'مشاريع منجزة','Klien Kembali':'عملاء عائدون','Respon':'الاستجابة','Kirim Brief':'أرسل موجزاً','Lihat Tarif':'انظر الأسعار','Konsultasi':'استشارة','Formulir':'نموذج','Perangkat lunak yang dibuat ':'برمجيات تُصنع كأنها قطعة فاخرة','benda mahal':'قطعة فاخرة'}
-};
-var box=document.createElement('div');box.className='reg';
-var btn=document.createElement('button');btn.type='button';btn.className='reg-b';btn.textContent='ID · Rp';btn.setAttribute('aria-expanded','false');btn.setAttribute('aria-label','Pengaturan tampilan, bahasa, dan mata uang');
-var pan=document.createElement('div');pan.className='reg-p';pan.hidden=true;
-function h4(t){var e=document.createElement('h4');e.textContent=t;pan.appendChild(e)}
-function sel(labels){var s=document.createElement('select');labels.forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];s.appendChild(o)});return s}
-function chk(t,k){var w=document.createElement('label');w.className='chk';var i=document.createElement('input');i.type='checkbox';i.checked=cd ~/alfiliator-landingd[k];i.onchange=function(){d[k]=i.checked?1:0;apply()};var x=document.createElement('span');x.textContent=t;w.appendChild(i);w.appendChild(x);pan.appendChild(w);return i}
-function rng(t,k,min,max){var l=document.createElement('label');l.innerHTML='<span>'+t+'</span><span data-v></span>';var i=document.createElement('input');i.type='range';i.min=min;i.max=max;i.value=k==='a'?d.a*100:d.r;var out=l.querySelector('[data-v]');function sync(){out.textContent=i.value;if(k==='a'){d.a=+i.value/100}else{d.r=+i.value}apply()}i.oninput=sync;sync();pan.appendChild(l);pan.appendChild(i);return i}
-h4('Bahasa & mata uang');
-var sl=sel(L);sl.value=d.lang;sl.onchange=function(){d.lang=sl.value;d.autoL=0;apply()};pan.appendChild(sl);
-var cl=chk('Deteksi bahasa otomatis',"autoL");
-var sc=sel(C);sc.value=d.cur;sc.onchange=function(){d.cur=sc.value;d.autoC=0;apply()};pan.appendChild(sc);
-chk('Deteksi mata uang otomatis',"autoC");
-var ri=document.createElement('input');ri.type='number';ri.min='1';ri.value=d.rate;ri.onchange=function(){d.rate=+ri.value||16300;apply()};pan.appendChild(ri);
-h4('Tampilan');
-rng('Transparansi','a',40,100);
-rng('Sudut','r',0,22);
-chk('Kepadatan rapat','dense');
-chk('Kontras tinggi','hi');
-chk('Gelap otomatis (18.00–06.00)','dark');
-var rst=document.createElement('button');rst.type='button';rst.className='reg-x';rst.textContent='Setel ulang semua';rst.onclick=function(){localStorage.removeItem(K);location.reload()};pan.appendChild(rst);
-box.appendChild(pan);box.appendChild(btn);document.body.appendChild(box);
-var texts=[],prices=[];
-function walk(n){
-  if(n.nodeType===3){var v=n.nodeValue;if(v&&v.trim()){n.__o=v;texts.push(n);if(/Rp\.?\s?[\d.,]+\s?(miliar|jt|rb)?/i.test(v)){n.__p=v;prices.push(n)}}return}
-  if(n.nodeType!==1)return;var t=n.tagName;if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT')return;
-  if(n.classList&&n.classList.contains('reg'))return;
-  for(var i=0;i<n.childNodes.length;i++)walk(n.childNodes[i]);
-}
-walk(document.body);
-function autoLang(){var p=(navigator.language||'id').slice(0,2);var ok=L.some(function(x){return x[0]===p});return ok?p:'id'}
-function autoCur(){var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';if(/Jakarta|Makassar|Jayapura|Pontianak/.test(tz))return 'IDR';if(/Europe\//.test(tz))return 'EUR';if(/Singapore|Kuala/.test(tz))return 'SGD';return 'USD'}
-function fmt(idr){
-  var v=d.cur==='IDR'?idr:(d.cur==='USD'?idr/d.rate:(d.cur==='EUR'?idr/d.rate/1.08:idr/d.rate*1.35));
-  if(d.cur==='IDR')return 'Rp '+Math.round(v).toLocaleString('id-ID');
-  var sym=d.cur==='USD'?'$':(d.cur==='EUR'?'€':'S$');
-  return sym+Math.round(v).toLocaleString('en-US');
-}
-function apply(){
-  var lg=d.autoL?autoLang():d.lang, cu=d.autoC?autoCur():d.cur;
-  var map=T[lg]||{};
-  texts.forEach(function(n){var k=n.__o.trim(),tr=map[k];n.nodeValue=tr?n.__o.replace(k,tr):n.__o});
-  prices.forEach(function(n){n.nodeValue=n.__p.replace(/Rp\.?\s?([\d.,]+)\s?(miliar|jt|rb)?/gi,function(_,x,u){
-    var num=parseFloat(x.replace(/\./g,'').replace(',','.'))*(U[(u||'').toLowerCase()]||1);return fmt(num)})});
-  var de=document.documentElement;
-  de.lang=lg;de.dir=(lg==='ar'?'rtl':'ltr');
-  de.style.setProperty('--alf-a',d.a);de.style.setProperty('--alf-r',d.r+'px');
-  document.body.classList.toggle('alf-dense',!!d.dense);
-  document.body.classList.toggle('alf-hi',!!d.hi);
-  var h=new Date().getHours();
-  document.body.classList.toggle('alf-dark',!!d.dark&&(h<6||h>=18));
-  btn.textContent=lg.toUpperCase()+' · '+(cu==='IDR'?'Rp':cu);
-  try{localStorage.setItem(K,JSON.stringify(d))}catch(e){}
-}
-sl.value=d.lang;sc.value=d.cur;
-btn.onclick=function(){pan.hidden=!pan.hidden;btn.setAttribute('aria-expanded',String(!pan.hidden))};
-apply();
-if(d.dark)setInterval(apply,600000);
-console.log('[alf] panel pengaturan aktif');
+  var P=document.getElementById('rpp'),O=document.getElementById('rp'),X=document.getElementById('rpx'),
+      Bx=document.getElementById('rpb'),I=document.getElementById('rpi'),S=document.getElementById('rps'),
+      CH=document.getElementById('rch'),MD=document.getElementById('rmode'),VW=document.getElementById('rven'),
+      KY=document.getElementById('rkey'),MO=document.getElementById('rmod');
+  var WA='__WA__', hist=[];
+  var SYN={brp:'berapa',hrg:'harga',hargai:'harga',duit:'harga',biaya:'harga',budget:'harga',
+    murah:'harga',lama:'durasi',cepat:'durasi',wa:'whatsapp',tlp:'kontak',jmin:'jaminan',
+    gmn:'bagaimana',gimana:'bagaimana',bs:'bisa',tdk:'tidak',gak:'tidak',ga:'tidak',klo:'kalau'};
+  var PR={landing:1750000,bisnis:6500000,toko:8500000,sistem:24000000,android:15000000,
+    ios:26000000,bot:3500000,audit:5000000,payment:2750000,desain:3250000,pelatihan:1250000,rawat:750000};
+  var LB={landing:'Landing page',bisnis:'Company profile',toko:'Toko online',sistem:'Sistem custom',
+    android:'Aplikasi Android',ios:'Aplikasi iOS',bot:'Bot automation',audit:'Audit keamanan',
+    payment:'Payment gateway',desain:'Desain UI/UX',pelatihan:'Pelatihan admin',rawat:'Perawatan 1 bulan'};
+  var KB=[
+    {k:['harga','tarif','paket'],a:'Tarif terbuka: landing Rp 1.750.000, bisnis Rp 6.500.000, sistem mulai Rp 24.000.000. <a href="/harga">Halaman harga</a>.'},
+    {k:['android','apk','play'],a:'Android mulai Rp 15.000.000, 25–32 hari. <a href="/mobile">Detail</a>.'},
+    {k:['ios','iphone','apple'],a:'iOS mulai Rp 26.000.000 karena biaya Apple Developer dan review ketat. <a href="/mobile">Penjelasan</a>.'},
+    {k:['garansi','rusak','bug'],a:'Garansi 30 hari web dasar, 60 hari Enterprise, 45 hari cross-platform, hanya untuk bug. <a href="/garansi">Rincian</a>.'},
+    {k:['dp','bayar','pembayaran'],a:'50 persen tanda jadi, 50 persen sebelum serah terima. <a href="/sla">Ketentuan</a>.'},
+    {k:['revisi'],a:'Revisi: Starter 1x, Bisnis 2x, mobile sesuai kontrak. <a href="/sla">Baca</a>.'},
+    {k:['source','kode','kepemilikan'],a:'Source code dan kredensial diserahkan penuh setelah pelunasan.'},
+    {k:['nda','rahasia'],a:'NDA tersedia sebelum brief. Kirim draf atau saya siapkan versi sederhana.'},
+    {k:['keamanan','audit','celah'],a:'Audit Rp 5.000.000, 3–5 hari, laporan bertingkat. <a href="/keamanan">Cakupan</a>.'},
+    {k:['durasi','waktu'],a:'Landing 5–7 hari, bisnis 14–20 hari, mobile 25–60 hari.'},
+    {k:['kontak','whatsapp','telegram'],a:'<a href="/kontak">Kanal resmi</a> atau <a href="'+WA+'?text=Halo" target="_blank" rel="noopener">WhatsApp</a>.'},
+    {k:['bot','otomasi'],a:'Bot WhatsApp atau Telegram Rp 3.500.000. <a href="/integrasi">Integrasi</a>.'},
+    {k:['perawatan','rawat','maintenance'],a:'Perawatan mulai Rp 750.000 per bulan. <a href="/maintenance">Detail</a>.'},
+    {k:['token','gratis','reaper'],a:'Mode lokal tanpa API dan tanpa batas. Mode Venice memakai kunci Anda sendiri.'},
+    {k:['struktur','alur'],a:'Alur permintaan melewati tujuh gerbang. <a href="/struktur">Diagram</a>.'},
+    {k:['toko','online','jualan'],a:'Toko online Rp 8.500.000: katalog, keranjang, checkout, payment gateway.'},
+    {k:['desain','ui','ux','figma'],a:'Desain UI/UX di Figma Rp 3.250.000, dikerjakan sebelum kode.'},
+    {k:['portofolio','contoh','hasil'],a:'Enam studi kasus dengan metrik. <a href="/portofolio">Portofolio</a>.'},
+    {k:['proses','tahap'],a:'Empat tahap: brief, desain, development, peluncuran. <a href="/proses">Detail</a>.'},
+    {k:['lokasi','remote','domisili'],a:'Pengerjaan remote, komunikasi tertulis, preview bisa dipantau.'}
+  ];
+  function nrm(t){ return t.toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim()
+    .split(' ').map(function(w){ return SYN[w]||w; }).join(' '); }
+  function lev(a,b){ if(Math.abs(a.length-b.length)>2) return 9;
+    var m=[],i,j; for(i=0;i<=b.length;i++) m[i]=[i];
+    for(j=0;j<=a.length;j++) m[0][j]=j;
+    for(i=1;i<=b.length;i++) for(j=1;j<=a.length;j++)
+      m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[j-1]===b[i-1]?0:1));
+    return m[b.length][a.length]; }
+  function skor(q,e){ var ws=q.split(' '), sc=0;
+    e.k.forEach(function(k){ if(q.indexOf(k)>-1) sc+=4;
+      else ws.forEach(function(w){ if(w.length>3&&w.indexOf(k)===0) sc+=2;
+        else if(lev(w,k)<=1) sc+=1.5; }); });
+    return sc; }
+  function uang(v){ var r=+(localStorage.getItem('alf.rate')||16300), c=localStorage.getItem('alf.cur')||'IDR';
+    var x = c==='IDR' ? v : (c==='USD' ? v/r : (c==='EUR' ? v/r/1.08 : v/r*1.35));
+    if(c==='IDR') return 'Rp '+Math.round(x).toLocaleString('id-ID');
+    return (c==='USD'?'$':c==='EUR'?'€':'S$')+Math.round(x).toLocaleString('en-US'); }
+  function hitung(q){ var pil=[]; Object.keys(PR).forEach(function(k){ if(q.indexOf(k)>-1) pil.push(k); });
+    if(pil.length<2) return null;
+    var tot=0, bar=pil.map(function(k){ tot+=PR[k]; return LB[k]+' — '+uang(PR[k]); });
+    return bar.join('<br>')+'<br><b>Total '+uang(tot)+'</b><br><a href="'+WA+'?text='+encodeURIComponent('Halo, estimasi saya: '+pil.map(function(k){return LB[k]}).join(', '))+'" target="_blank" rel="noopener">Kirim sebagai brief</a>'; }
+  function lokal(q){
+    var h=hitung(q); if(h) return h;
+    var best=null,bs=0; KB.forEach(function(e){ var v=skor(q,e); if(v>bs){bs=v;best=e} });
+    if(best&&bs>=4) return best.a;
+    var d=KB.slice().sort(function(a,b){return skor(q,b)-skor(q,a)}).slice(0,3)
+      .filter(function(e){return skor(q,e)>0}).map(function(e){return e.k[0]});
+    return 'Belum ada di basis lokal.'+(d.length?' Mungkin maksud Anda: <b>'+d.join(', ')+'</b>.':'')
+      +' Atau <a href="'+WA+'?text='+encodeURIComponent(q)+'" target="_blank" rel="noopener">tanya langsung</a>.';
+  }
+  function api(q){
+    var k=localStorage.getItem('alf.vkey')||'';
+    if(!k) return Promise.reject(new Error('nokey'));
+    var m=[{role:'system',content:'Anda REAPER, asisten situs ALFILIATOR (jasa web, Android, iOS, sistem custom, bot, audit keamanan). Jawab singkat dalam Bahasa Indonesia, maksimal 90 kata. Harga: landing 1.750.000, bisnis 6.500.000, toko 8.500.000, android 15.000.000, iOS 26.000.000, sistem 24.000.000, bot 3.500.000, audit 5.000.000. Arahkan ke WhatsApp untuk penawaran.'}];
+    hist.slice(-6).forEach(function(x){ m.push(x) });
+    m.push({role:'user',content:q});
+    return fetch('https://api.venice.ai/api/v1/chat/completions',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},
+      body:JSON.stringify({model:MO.value,messages:m,max_completion_tokens:320,temperature:0.4})})
+      .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+      .then(function(d){ return d.choices[0].message.content.replace(/</g,'&lt;'); });
+  }
+  function add(t,me){ var d=document.createElement('div'); d.className='rpm'+(me?' me':''); d.innerHTML=t;
+    Bx.appendChild(d); Bx.scrollTop=Bx.scrollHeight; return d; }
+  function chips(a){ CH.innerHTML=''; a.forEach(function(t){
+    var b=document.createElement('button'); b.className='chip'; b.type='button'; b.textContent=t;
+    b.onclick=function(){ I.value=t; kirim(); }; CH.appendChild(b); }); }
+  function kirim(){
+    var q=I.value.trim(); if(!q) return;
+    add(q.replace(/</g,'&lt;'),1); I.value=''; chips([]);
+    if(MD.value==='venice'){
+      var th=add('<span class="rthink">menghubungi api.venice.ai…</span>');
+      api(q).then(function(t){ th.remove(); add(t); hist.push({role:'user',content:q}); hist.push({role:'assistant',content:t}); })
+        .catch(function(e){ th.remove();
+          var msg = e.message==='nokey' ? 'Kunci API belum diisi. Buka mode Venice lalu tempel kunci.' :
+            e.message==='HTTP 401' ? 'Kunci ditolak (401). Periksa kembali.' :
+            e.message==='HTTP 402' ? 'Saldo kredit Venice habis (402).' :
+            e.message==='HTTP 403' ? 'Kunci dibatasi IP (403). Kosongkan daftar IP di dasbor Venice.' :
+            'Gagal menghubungi API ('+e.message+').';
+          add(msg+' <b>Jawaban lokal:</b><br>'+lokal(nrm(q)));
+        });
+      return;
+    }
+    setTimeout(function(){ add(lokal(nrm(q))); chips(['harga toko online','garansi','aplikasi iOS','audit keamanan']); }, 280);
+  }
+  S.onclick=kirim;
+  I.addEventListener('keydown',function(e){ if(e.key==='Enter') kirim(); });
+  O.onclick=function(){ P.classList.toggle('open'); if(P.classList.contains('open')) I.focus(); };
+  X.onclick=function(){ P.classList.remove('open'); };
+  var op=document.getElementById('rpop'); if(op) op.onclick=function(e){ e.preventDefault(); P.classList.add('open'); I.focus(); };
+  MD.value=localStorage.getItem('alf.rmode')||'lokal';
+  MD.onchange=function(){ VW.hidden = MD.value!=='venice'; localStorage.setItem('alf.rmode',MD.value); };
+  VW.hidden = MD.value!=='venice';
+  KY.value=localStorage.getItem('alf.vkey')||'';
+  KY.onchange=function(){ localStorage.setItem('alf.vkey',KY.value.trim()); };
+  MO.value=localStorage.getItem('alf.rmodel')||'deepseek-v4-1-flash';
+  MO.onchange=function(){ localStorage.setItem('alf.rmodel',MO.value); };
+  add('Halo. Saya REAPER. Mode lokal aktif, tanpa token.');
+  chips(['harga toko online','garansi','aplikasi iOS','audit keamanan']);
 })();
 </script>
-<!--/alf:reg-->
 </body></html>""".replace("__T__", html.escape(title)).replace("__D__", html.escape(desc)) \
    .replace("__HB__", HEADBOOT).replace("__CSS__", CSS).replace("__NAV__", nav(active)) \
    .replace("__BODY__", body).replace("__WA__", WA).replace("__CSS2__", EXTRA_CSS).replace("__CAN__", BASE + active).replace("__JS__", JS)
@@ -809,7 +1099,7 @@ B["/"] = """
   </div>
 </div>
 <section><div class="wrap">
-  <div class="kick rv">Tiga Puluh Ruang</div>
+  <div class="kick rv">Tiga Puluh Empat Ruang</div>
   <h2 class="rv">Jelajahi seluruh atelier</h2><div class="hr rv"></div>
   <div class="rooms rv">__ROOMS__</div>
 </div></section>
@@ -1468,7 +1758,7 @@ B["/status"] = """
 <h1>Kondisi <em>node</em>.</h1>
 <p class="lead">Situs ini dilayani dari satu proses tanpa basis data. Riwayat kejadian dicatat terbuka.</p></div>
 <section><div class="wrap"><div class="grid">
-  <div class="cell rv"><div class="ic"><i class="fas fa-circle-check"></i></div><h3>Operasional</h3><p>Seluruh 30 ruang dilayani normal.</p></div>
+  <div class="cell rv"><div class="ic"><i class="fas fa-circle-check"></i></div><h3>Operasional</h3><p>Seluruh 34 ruang dilayani normal.</p></div>
   <div class="cell rv"><div class="ic"><i class="fas fa-gauge-high"></i></div><h3>Batas Permintaan</h3><p>90 permintaan per menit per alamat IP.</p></div>
   <div class="cell rv"><div class="ic"><i class="fas fa-database"></i></div><h3>Basis Data</h3><p>Tidak dipakai. Tidak ada penyimpanan data pengguna.</p></div>
 </div>
@@ -1491,7 +1781,7 @@ B["/dokumentasi"] = """
   <tr><td>export.py</td><td>Mengekspor versi statis untuk Pages</td></tr>
 </table>
 <h2 class="rv" style="margin-top:30px">Rute</h2><div class="hr rv"></div>
-<p class="rv" style="font-size:12.6px;color:var(--muted)">30 rute halaman, ditambah <span class="mono">/health</span>, <span class="mono">/robots.txt</span>, dan <span class="mono">/sitemap.xml</span>. Rute di luar daftar dijawab 404 tanpa membuka direktori.</p>
+<p class="rv" style="font-size:12.6px;color:var(--muted)">34 rute halaman, ditambah <span class="mono">/health</span>, <span class="mono">/robots.txt</span>, dan <span class="mono">/sitemap.xml</span>. Rute di luar daftar dijawab 404 tanpa membuka direktori.</p>
 <div style="margin-top:24px"><a href="https://github.com/yuana448/alfiliator-landing" class="btn ghost" target="_blank" rel="noopener">Lihat Repositori</a></div>
 </div></section>
 """
@@ -1505,7 +1795,7 @@ B["/cari"] = """
  style="width:100%;max-width:460px;margin-top:18px;padding:13px 16px;background:var(--panel);
  border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:13.5px">
 <div id="out" class="rooms" style="margin-top:24px"></div></div>
-<section><div class="wrap"><p id="hint" style="font-size:12.4px;color:var(--dim)">Mulai mengetik untuk menyaring 31 ruang.</p></div></section>
+<section><div class="wrap"><p id="hint" style="font-size:12.4px;color:var(--dim)">Mulai mengetik untuk menyaring 34 ruang.</p></div></section>
 <script nonce="__NONCE__">
 (function(){
   var idx=[],out=document.getElementById('out'),q=document.getElementById('q'),hint=document.getElementById('hint');
@@ -1513,7 +1803,7 @@ B["/cari"] = """
   function run(){
     var t=q.value.toLowerCase().trim();
     out.innerHTML='';
-    if(!t){hint.textContent='Mulai mengetik untuk menyaring 31 ruang.';return}
+    if(!t){hint.textContent='Mulai mengetik untuk menyaring 34 ruang.';return}
     var hit=idx.filter(function(x){return (x.t+' '+x.d+' '+x.k).toLowerCase().indexOf(t)>-1}).slice(0,12);
     hint.textContent=hit.length+' ruang cocok';
     hit.forEach(function(x){
@@ -1527,6 +1817,148 @@ B["/cari"] = """
 </script>
 """
 
+B["/struktur"] = r"""
+<div class="wrap pghead"><div class="kick">31 · Struktur</div>
+<h1>Alur permintaan, <em>lapisan demi lapisan</em>.</h1>
+<p class="lead">Setiap permintaan melewati tujuh gerbang sebelum HTML keluar. Tidak ada satu pun yang dilewati, termasuk untuk halaman statis.</p></div>
+<section><div class="wrap">
+<div class="flow"><div class="pk"></div><div class="pk"></div>
+  <div class="nd"><b>01 · KLIEN</b><span>permintaan masuk</span></div>
+  <div class="nd"><b>02 · TLS + HSTS</b><span>paksa kanal terenkripsi</span></div>
+  <div class="nd"><b>03 · BATAS LAJU</b><span>90/menit · burst 18/10 dtk</span></div>
+  <div class="nd"><b>04 · VALIDASI JALUR</b><span>regex · tolak traversal · maks 120</span></div>
+  <div class="nd"><b>05 · ROUTER</b><span>daftar rute eksplisit · 404 tertutup</span></div>
+  <div class="nd"><b>06 · RENDER</b><span>nonce baru tiap permintaan</span></div>
+  <div class="nd"><b>07 · HEADER</b><span>CSP · COOP · CORP · nosniff</span></div>
+</div>
+<div class="tel">
+  <div><b id="t1" class="live">200</b><span>status</span></div>
+  <div><b id="t2">0</b><span>dependensi python</span></div>
+  <div><b id="t3">90</b><span>batas / menit</span></div>
+  <div><b id="t4">0</b><span>basis data</span></div>
+  <div><b id="t5">18</b><span>antrean puncak</span></div>
+  <div><b id="t6">7</b><span>gerbang aktif</span></div>
+  <div><b id="t5">18</b><span>antrean puncak</span></div>
+  <div><b id="t6">7</b><span>gerbang aktif</span></div>
+</div>
+<p style="margin-top:18px;font-size:12px;color:var(--dim);border-left:1px solid var(--gold);padding-left:16px">Angka bergerak di atas hanya simulasi tampilan. Nilai sebenarnya ada di <a href="/status" style="color:var(--gold)">Status</a> dan <a href="/keamanan" style="color:var(--gold)">Keamanan</a>.</p>
+</div></section>
+<section><div class="wrap"><h2>Yang tidak dipakai</h2><div class="hr"></div>
+<div class="grid">
+  <div class="cell"><h3>Tanpa framework</h3><p>Tidak ada paket pihak ketiga yang bisa usang atau bocor.</p></div>
+  <div class="cell"><h3>Tanpa basis data</h3><p>Tidak ada data pengguna yang bisa dicuri.</p></div>
+  <div class="cell"><h3>Tanpa sesi</h3><p>Tidak ada kuki yang perlu dijaga.</p></div>
+</div>
+<div class="cta" style="margin-top:24px"><h2>Minta diagram untuk proyek Anda</h2>
+<p>Struktur disusun per proyek, mengikuti risiko dan tumpukan yang dipakai.</p>
+<div class="row"><a href="__WA__?text=Halo__mau__diagram__struktur" class="btn solid" target="_blank" rel="noopener">Minta Diagram</a></div></div>
+</div></section>
+<script nonce="__NONCE__">
+(function(){
+  var t=document.getElementById('t1'),s=0;
+  setInterval(function(){
+    s=(s+1)%9;
+    t.textContent=['200','200','200','304','200','200','429','200','200'][s];
+    t.className=s===6?'':'live';
+  },1400);
+})();
+</script>
+"""
+
+B["/reaper"] = r"""
+<div class="wrap pghead"><div class="kick">32 · REAPER</div>
+<h1>REAPER, <em>dua mode</em>.</h1>
+<p class="lead">Mode lokal menjawab tanpa jaringan dan tanpa token. Mode Venice memakai kunci API Anda sendiri untuk jawaban bebas.</p></div>
+<section><div class="wrap"><div class="grid">
+  <div class="cell"><h3>Lokal — gratis selamanya</h3><p>Basis jawaban ikut terunduh. Jalan tanpa sinyal, tanpa kunci, tanpa batas.</p></div>
+  <div class="cell"><h3>Venice — pakai kunci sendiri</h3><p>Kunci disimpan di perangkat, tidak dikirim ke server situs ini. Butuh jaringan.</p></div>
+  <div class="cell"><h3>Tanpa perantara</h3><p>Mode Venice memanggil api.venice.ai langsung.</p></div>
+</div>
+<div class="cta" style="margin-top:26px"><h2>Coba sekarang</h2>
+<p>Tanya "berapa harga toko online" di mode lokal, atau isi kunci di mode Venice.</p>
+<div class="row"><a href="#" id="rpop" class="btn solid">Buka REAPER</a><a href="/harga" class="btn ghost">Lihat Tarif</a></div></div>
+</div></section>
+<section><div class="wrap"><h2>Cara dapat kunci Venice</h2><div class="hr"></div>
+<table class="tbl"><tr><th>Langkah</th><th>Keterangan</th></tr>
+  <tr><td>1</td><td>Masuk akun Venice, buka halaman API</td></tr>
+  <tr><td>2</td><td>Buat kunci. Biarkan daftar IP kosong bila dipasang di GitHub Pages</td></tr>
+  <tr><td>3</td><td>Tempel di mode Venice. Tersimpan hanya di perangkat Anda</td></tr>
+</table>
+<p style="margin-top:16px;font-size:12px;color:var(--dim);border-left:1px solid var(--gold);padding-left:16px">Kunci yang dibatasi IP akan ditolak 403 dari GitHub Pages.</p>
+</div></section>
+<section><div class="wrap"><h2>Supaya tetap gratis</h2><div class="hr"></div>
+<div class="grid">
+  <div class="cell"><h3>Kredit harian DIEM</h3><p>Satu DIEM memberi kredit 1 dolar per hari, diperbarui 00:01 UTC, tidak kedaluwarsa.</p></div>
+  <div class="cell"><h3>Rujukan</h3><p>Tautan rujukan memberi kredit 10 dolar untuk Anda dan pendaftar, setelah dia berlangganan Pro.</p></div>
+  <div class="cell"><h3>Model murah</h3><p>DeepSeek V4.1 Flash sekitar 0,30 dolar per juta token masuk.</p></div>
+</div>
+<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+  <a href="https://venice.ai/token" class="btn ghost" target="_blank" rel="noopener">Dasbor Token</a>
+  <a href="https://venice.ai/chat" class="btn ghost" target="_blank" rel="noopener">Ambil tautan rujukan</a>
+</div>
+<p style="margin-top:16px;font-size:12px;color:var(--dim)">Tautan rujukan ada di menu Setelan akun Venice. Belum ada komisi tunai, bentuknya kredit API.</p>
+</div></section>
+"""
+
+B["/admin"] = r"""
+<div class="wrap pghead"><div class="kick">33 · Admin</div>
+<h1>Catatan kerja <em>dan kendali node</em>.</h1>
+<p class="lead">Catatan disimpan di perangkat ini saja. Belum ada kata sandi, jangan simpan rahasia di sini.</p></div>
+<section><div class="wrap">
+<div class="grid">
+  <div class="cell"><h3>Node</h3><p id="astat">memeriksa…</p></div>
+  <div class="cell"><h3>Ruang</h3><p>34 rute aktif, 3 di antaranya baru.</p></div>
+  <div class="cell"><h3>Catatan</h3><p id="acount">0 catatan tersimpan.</p></div>
+</div>
+<h2 style="margin-top:34px">Catatan baru</h2><div class="hr"></div>
+<textarea id="ntext" placeholder="Contoh: klien A minta revisi warna, tenggat Kamis."></textarea>
+<div style="display:flex;gap:9px;margin-top:12px;flex-wrap:wrap">
+  <button id="nsave" class="btn solid">Simpan</button>
+  <button id="nexp" class="btn ghost">Ekspor JSON</button>
+  <button id="nclear" class="btn ghost">Hapus semua</button>
+</div>
+<h2 style="margin-top:34px">Daftar catatan</h2><div class="hr"></div>
+<input id="nfilter" type="search" placeholder="Saring catatan..."><div id="nlist"></div>
+</div></section>
+<script nonce="__NONCE__">
+(function(){
+  var K='alf.notes', ta=document.getElementById('ntext'), list=document.getElementById('nlist'),
+      cnt=document.getElementById('acount'), st=document.getElementById('astat'), FLT='';
+  function get(){ try{ return JSON.parse(localStorage.getItem(K)||'[]'); }catch(e){ return []; } }
+  function set(v){ localStorage.setItem(K, JSON.stringify(v)); render(); }
+  function render(){
+    var a=get(); list.innerHTML=''; cnt.textContent=a.length+' catatan tersimpan.';
+    if(FLT) a=a.filter(function(n){return n.x.toLowerCase().indexOf(FLT)>-1});
+    if(!a.length){ list.innerHTML='<p style="font-size:12px;color:var(--dim)">Belum ada catatan.</p>'; return; }
+    a.slice().reverse().forEach(function(n){
+      var d=document.createElement('div'); d.className='noteitem';
+      var box=document.createElement('div');
+      var t=document.createElement('time'); t.textContent=new Date(n.t).toLocaleString('id-ID');
+      var q=document.createElement('div'); q.textContent=n.x;
+      box.appendChild(t); box.appendChild(q);
+      var del=document.createElement('button'); del.textContent='hapus';
+      del.onclick=function(){ set(get().filter(function(o){return o.id!==n.id})); };
+      d.appendChild(box); d.appendChild(del); list.appendChild(d);
+    });
+  }
+  document.getElementById('nsave').onclick=function(){
+    if(!ta.value.trim()) return;
+    var v=get(); v.push({x:ta.value.trim(), t:Date.now(), id:String(Date.now())+Math.random()});
+    set(v); ta.value='';
+  };
+  document.getElementById('nclear').onclick=function(){ if(confirm('Hapus semua catatan?')) set([]); };
+  document.getElementById('nexp').onclick=function(){
+    var b=new Blob([JSON.stringify(get(),null,2)],{type:'application/json'}), u=URL.createObjectURL(b);
+    var a=document.createElement('a'); a.href=u; a.download='catatan-alfiliator.json'; a.click(); URL.revokeObjectURL(u);
+  };
+  document.getElementById('nfilter').addEventListener('input', function(e){ FLT=e.target.value.toLowerCase(); render(); });
+  fetch('/health').then(function(r){return r.json()}).then(function(d){
+    st.textContent='online · '+d.rooms+' ruang'; }).catch(function(){ st.textContent='health tidak terbaca'; });
+  render();
+})();
+</script>
+
+"""
 PAGES = {u: (t, d, B[u]) for u, _n, t, d in ROOMS}
 BUILT = {u: page(u, t, d, B[u]) for u, (t, d, _b) in PAGES.items()}
 
@@ -1580,7 +2012,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https:; "
-            "connect-src 'self'; manifest-src 'self'; "
+            "connect-src 'self' https://api.venice.ai; manifest-src 'self'; "
             "form-action 'self'; base-uri 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
             % getattr(self, "nonce", ""))
         if extra:
@@ -1652,7 +2084,7 @@ class Server(socketserver.ThreadingTCPServer):
 
 if __name__ == "__main__":
     print("=" * 52)
-    print("  ATELIER NODE v5 AKTIF — 30 ruang, tema, roadmap")
+    print("  ATELIER NODE v6 AKTIF — 34 ruang, tema, roadmap")
     print("  http://localhost:%d" % PORT)
     print("=" * 52)
     try:
