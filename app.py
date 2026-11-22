@@ -473,6 +473,33 @@ JS = r"""
       });
     });
   }
+
+  var PK={atelier:{theme:'emas',rd:'k',dn:'n',cn:'n',wd:'n'},
+    editorial:{theme:'kertas',rd:'k',dn:'l',cn:'n',wd:'s'},
+    terminal:{theme:'zamrud',rd:'k',dn:'r',cn:'t',wd:'n'},
+    lembut:{theme:'anggur',rd:'b',dn:'l',cn:'n',wd:'n'},
+    tegas:{theme:'mono',rd:'k',dn:'n',cn:'t',wd:'l'}};
+  document.querySelectorAll('#panel [data-pk]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var cfg=PK[b.dataset.pk]; if(!cfg) return;
+      R.setAttribute('data-pk', b.dataset.pk);
+      ['theme','rd','dn','cn','wd'].forEach(function(k){
+        var v=cfg[k], attr = k==='theme' ? 'data-theme' : 'data-'+k;
+        R.setAttribute(attr, v);
+        localStorage.setItem('alf.'+(k==='theme'?'theme':k), v);
+      });
+      document.querySelectorAll('#panel [data-pk]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+      document.querySelectorAll('#panel [data-rd],#panel [data-dn],#panel [data-cn],#panel [data-wd]').forEach(function(x){
+        var a=x.dataset.rd?'rd':x.dataset.dn?'dn':x.dataset.cn?'cn':x.dataset.wd?'wd':null;
+        if(a) x.setAttribute('aria-pressed', String(x.dataset[a]===cfg[a]));
+      });
+      document.querySelectorAll('#panel [data-t]').forEach(function(x){
+        x.setAttribute('aria-pressed', String(x.dataset.t===cfg.theme));
+      });
+      localStorage.setItem('alf.pk', b.dataset.pk);
+    });
+  });
+  wire('gd','grid');
   wire('wd','wide'); wire('rd','rad'); wire('dn','dense'); wire('cn','con'); wire('tr','tr');
 
   /* bahasa & mata uang */
@@ -584,6 +611,21 @@ EXTRA_CSS += r"""
 .devlab{text-align:center;margin-top:16px;font-family:'JetBrains Mono',monospace;
   font-size:10px;letter-spacing:.24em;color:var(--gold)}
 @media(prefers-reduced-motion:reduce){.dev-in{animation:none;transform:none}}
+
+.dev.tab .dev-in{border-radius:20px;padding:13px}
+.dev.tab .scr{aspect-ratio:3/4;border-radius:14px}
+.dev.tab .dev-in::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:#0b0f16;z-index:5}
+.dev.lap .dev-in{border-radius:12px;padding:10px}
+.dev.lap .scr{aspect-ratio:16/10;border-radius:7px}
+.dev.lap .dev-in::after{content:"";position:absolute;left:-7%;right:-7%;bottom:-13px;height:11px;
+  border-radius:0 0 12px 12px;background:linear-gradient(#3a3f4b,#141821)}
+.dev.pc .dev-in{border-radius:9px;padding:10px}
+.dev.pc .scr{aspect-ratio:16/9;border-radius:5px}
+.dev.pc .dev-in::after{content:"";position:absolute;left:50%;transform:translateX(-50%);
+  bottom:-30px;width:52px;height:30px;background:linear-gradient(#2a2f3a,#141821);border-radius:0 0 7px 7px}
+.dev.pc .dev-in::before{content:"";position:absolute;left:50%;transform:translateX(-50%);
+  bottom:-34px;width:96px;height:6px;border-radius:99px;background:#1a1d24}
 """
 
 EXTRA_CSS += r"""
@@ -735,6 +777,23 @@ EXTRA_CSS += r"""
 .tel span{font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
 .tel .live{color:#9fe0b0}
 
+html[data-pk="editorial"] .wrap{width:min(820px,100% - 60px)}
+html[data-pk="editorial"] h1{font-size:clamp(40px,7vw,76px);letter-spacing:-.03em}
+html[data-pk="editorial"] .cell,html[data-pk="editorial"] .room{border-left:1px solid var(--line)}
+html[data-pk="terminal"]{--rad:0px;--line:rgba(63,219,154,.22);--line2:rgba(63,219,154,.1)}
+html[data-pk="terminal"] body{font-family:'JetBrains Mono',monospace;font-size:calc(14px * var(--fs))}
+html[data-pk="terminal"] h1,html[data-pk="terminal"] h2{font-family:'JetBrains Mono',monospace;letter-spacing:-.04em}
+html[data-pk="terminal"] .kick::before{background:#3fdb9a}
+html[data-pk="lembut"]{--rad:18px}
+html[data-pk="lembut"] .cell,html[data-pk="lembut"] .plan,html[data-pk="lembut"] .room{
+  box-shadow:0 12px 30px -22px #000}
+html[data-pk="tegas"]{--rad:0px;--line:rgba(255,255,255,.3)}
+html[data-pk="tegas"] .btn{border-width:2px}
+html[data-pk="tegas"] h1 em{-webkit-text-fill-color:currentColor;background:none}
+html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--line2) 1px,transparent 1px),
+  linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:32px 32px;opacity:.5}
+
 /* tata letak layar besar */
 @media(min-width:768px){
   .wrap{width:min(760px,100% - 56px)}
@@ -801,7 +860,7 @@ HEADBOOT = r"""
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
  R.setAttribute('data-fs',L.getItem('alf.fs')||'m');
  R.setAttribute('data-motion',L.getItem('alf.motion')||'on');
- R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');})();
+ R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');R.setAttribute('data-pk',L.getItem('alf.pk')||'atelier');R.setAttribute('data-grid',L.getItem('alf.grid')||'off');})();
 """
 
 ROOMS = [
@@ -914,6 +973,18 @@ def nav(active):
     <button data-t="senja" style="background:#ff8a4c" aria-label="Senja"></button>
     <button data-t="anggur" style="background:#b4527a" aria-label="Anggur"></button>
   </div>
+  <h3>Paket desain</h3>
+  <div class="seg">
+    <button data-pk="atelier" aria-pressed="true">Atelier</button>
+    <button data-pk="editorial">Editorial</button>
+    <button data-pk="terminal">Terminal</button>
+  </div>
+  <div class="seg">
+    <button data-pk="lembut">Lembut</button>
+    <button data-pk="tegas">Tegas</button>
+  </div>
+  <h3>Garis bantu</h3>
+  <div class="seg"><button data-gd="off" aria-pressed="true">Mati</button><button data-gd="on">Aktif</button></div>
   <h3>Lebar konten</h3>
   <div class="seg"><button data-wd="s">Sempit</button><button data-wd="n" aria-pressed="true">Normal</button><button data-wd="l">Lebar</button></div>
   <h3>Sudut</h3>
@@ -1514,8 +1585,8 @@ B["/web"] = """
 
 B["/mobile"] = """
 <div class="wrap pghead"><div class="kick">14 · Teknologi Mobile</div>
-<h1>Android dan iOS, <em>dua jalur berbeda</em>.</h1>
-<p class="lead">Native dipakai bila butuh performa dan akses perangkat. Cross-platform dipakai bila anggaran dan waktu lebih ketat.</p>
+<h1>Ponsel, tablet, laptop, <em>sampai PC</em>.</h1>
+<p class="lead">Satu sistem, banyak ukuran layar. Tata letak disesuaikan per perangkat: ponsel satu kolom, tablet dua, laptop dan PC memakai ruang lebar. Native dipakai bila butuh performa dan akses perangkat; cross-platform bila anggaran dan waktu lebih ketat.</p>
 <div class="showcase rv">
   <div class="dev">
     <div class="dev-in">
@@ -1551,6 +1622,66 @@ B["/mobile"] = """
     </div>
     <div class="devlab">iOS</div>
   </div>
+  <div class="dev tab">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">iPAD</div>
+  </div>
+  <div class="dev tab">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">TABLET</div>
+  </div>
+  <div class="dev lap">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">LAPTOP</div>
+  </div>
+  <div class="dev pc">
+    <div class="dev-in">
+      <div class="scr">
+        <div class="dtop"><span>09:41</span><span><i class="fas fa-signal"></i> <i class="fas fa-wifi"></i></span></div>
+        <div class="dbody">
+          <div class="dhero"></div>
+          <div class="dline"></div><div class="dline s"></div>
+          <div class="drow"><div class="dcard"></div><div class="dcard"></div><div class="dcard"></div></div>
+          <div class="dline"></div><div class="dbtn"></div>
+        </div>
+      </div>
+      <span class="side"></span><span class="side v"></span>
+    </div>
+    <div class="devlab">PC</div>
+  </div>
 </div>
 </div>
 <section><div class="wrap"><div class="grid">
@@ -1562,6 +1693,8 @@ B["/mobile"] = """
   <tr><td>Akses kamera, Bluetooth, sensor berat</td><td>native</td></tr>
   <tr><td>Anggaran terbatas, rilis cepat</td><td>cross-platform</td></tr>
   <tr><td>Kedua platform wajib</td><td>cross-platform lebih dulu, native bila perlu</td></tr>
+  <tr><td>Tablet dan iPad</td><td>dua kolom, target sentuh 44 px</td></tr>
+  <tr><td>Laptop dan PC</td><td>tiga sampai empat kolom, papan ketik penuh</td></tr>
 </table></div></section>
 """
 
@@ -2313,6 +2446,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
     timeout = 15
 
     def _rl(self):
+        if self.command == "HEAD":
+            return True
         ip = self.client_address[0]
         ua = (self.headers.get("User-Agent") or "").lower()
         slow = any(b in ua for b in BAD_UA)
@@ -2323,7 +2458,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
         b = _burst[ip]
         while b and now - b[0] > BURST_WINDOW: b.popleft()
         if len(b) >= BURST_LIMIT: return False
-        q.append(now); b.append(now); return True
+        q.append(now); b.append(now)
+        if len(_hits) > 4096:
+            for k in [k for k, v in _hits.items() if not v][:1024]:
+                _hits.pop(k, None); _burst.pop(k, None)
+        return True
 
     def _send(self, code, body, ctype="text/html; charset=utf-8", extra=None):
         data = body.encode("utf-8")
@@ -2375,7 +2514,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
                        extra={"Retry-After": str(RATE_WINDOW)}); return
         path = raw.rstrip("/").lower() or "/"
         if path in BUILT:
-            self._send(200, BUILT[path].replace("__NONCE__", self.nonce))
+            extra = {"X-Robots-Tag": "noindex"} if path == "/admin" else None
+            self._send(200, BUILT[path].replace("__NONCE__", self.nonce), extra=extra)
         elif path == "/health": self._send(200, '{"status":"online","rooms":31}', "application/json")
         elif path == "/index.json":
             import json as _j

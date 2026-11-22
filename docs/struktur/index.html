@@ -19,7 +19,7 @@
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
  R.setAttribute('data-fs',L.getItem('alf.fs')||'m');
  R.setAttribute('data-motion',L.getItem('alf.motion')||'on');
- R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');})();
+ R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');R.setAttribute('data-pk',L.getItem('alf.pk')||'atelier');R.setAttribute('data-grid',L.getItem('alf.grid')||'off');})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -390,6 +390,21 @@ footer{border-top:1px solid var(--line2);padding:40px 0 50px;margin-top:50px}
   font-size:10px;letter-spacing:.24em;color:var(--gold)}
 @media(prefers-reduced-motion:reduce){.dev-in{animation:none;transform:none}}
 
+.dev.tab .dev-in{border-radius:20px;padding:13px}
+.dev.tab .scr{aspect-ratio:3/4;border-radius:14px}
+.dev.tab .dev-in::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:#0b0f16;z-index:5}
+.dev.lap .dev-in{border-radius:12px;padding:10px}
+.dev.lap .scr{aspect-ratio:16/10;border-radius:7px}
+.dev.lap .dev-in::after{content:"";position:absolute;left:-7%;right:-7%;bottom:-13px;height:11px;
+  border-radius:0 0 12px 12px;background:linear-gradient(#3a3f4b,#141821)}
+.dev.pc .dev-in{border-radius:9px;padding:10px}
+.dev.pc .scr{aspect-ratio:16/9;border-radius:5px}
+.dev.pc .dev-in::after{content:"";position:absolute;left:50%;transform:translateX(-50%);
+  bottom:-30px;width:52px;height:30px;background:linear-gradient(#2a2f3a,#141821);border-radius:0 0 7px 7px}
+.dev.pc .dev-in::before{content:"";position:absolute;left:50%;transform:translateX(-50%);
+  bottom:-34px;width:96px;height:6px;border-radius:99px;background:#1a1d24}
+
 html{--rad:0px}
 html[data-rd="n"]{--rad:2px}html[data-rd="b"]{--rad:14px}
 .btn,.cell,.plan,.room,.tbl,.iconbtn,.seg button,.sw button,details,.cta,.wk,.quote,.step,.sel,.inp,.plan .tag{border-radius:var(--rad)}
@@ -532,6 +547,23 @@ html[data-theme="kertas"] #panel,html[data-theme="kapur"] #panel{background:var(
 .tel span{font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
 .tel .live{color:#9fe0b0}
 
+html[data-pk="editorial"] .wrap{width:min(820px,100% - 60px)}
+html[data-pk="editorial"] h1{font-size:clamp(40px,7vw,76px);letter-spacing:-.03em}
+html[data-pk="editorial"] .cell,html[data-pk="editorial"] .room{border-left:1px solid var(--line)}
+html[data-pk="terminal"]{--rad:0px;--line:rgba(63,219,154,.22);--line2:rgba(63,219,154,.1)}
+html[data-pk="terminal"] body{font-family:'JetBrains Mono',monospace;font-size:calc(14px * var(--fs))}
+html[data-pk="terminal"] h1,html[data-pk="terminal"] h2{font-family:'JetBrains Mono',monospace;letter-spacing:-.04em}
+html[data-pk="terminal"] .kick::before{background:#3fdb9a}
+html[data-pk="lembut"]{--rad:18px}
+html[data-pk="lembut"] .cell,html[data-pk="lembut"] .plan,html[data-pk="lembut"] .room{
+  box-shadow:0 12px 30px -22px #000}
+html[data-pk="tegas"]{--rad:0px;--line:rgba(255,255,255,.3)}
+html[data-pk="tegas"] .btn{border-width:2px}
+html[data-pk="tegas"] h1 em{-webkit-text-fill-color:currentColor;background:none}
+html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--line2) 1px,transparent 1px),
+  linear-gradient(90deg,var(--line2) 1px,transparent 1px);background-size:32px 32px;opacity:.5}
+
 /* tata letak layar besar */
 @media(min-width:768px){
   .wrap{width:min(760px,100% - 56px)}
@@ -659,6 +691,18 @@ html[data-theme="kertas"] #panel,html[data-theme="kapur"] #panel{background:var(
     <button data-t="senja" style="background:#ff8a4c" aria-label="Senja"></button>
     <button data-t="anggur" style="background:#b4527a" aria-label="Anggur"></button>
   </div>
+  <h3>Paket desain</h3>
+  <div class="seg">
+    <button data-pk="atelier" aria-pressed="true">Atelier</button>
+    <button data-pk="editorial">Editorial</button>
+    <button data-pk="terminal">Terminal</button>
+  </div>
+  <div class="seg">
+    <button data-pk="lembut">Lembut</button>
+    <button data-pk="tegas">Tegas</button>
+  </div>
+  <h3>Garis bantu</h3>
+  <div class="seg"><button data-gd="off" aria-pressed="true">Mati</button><button data-gd="on">Aktif</button></div>
   <h3>Lebar konten</h3>
   <div class="seg"><button data-wd="s">Sempit</button><button data-wd="n" aria-pressed="true">Normal</button><button data-wd="l">Lebar</button></div>
   <h3>Sudut</h3>
@@ -871,6 +915,33 @@ html[data-theme="kertas"] #panel,html[data-theme="kapur"] #panel{background:var(
       });
     });
   }
+
+  var PK={atelier:{theme:'emas',rd:'k',dn:'n',cn:'n',wd:'n'},
+    editorial:{theme:'kertas',rd:'k',dn:'l',cn:'n',wd:'s'},
+    terminal:{theme:'zamrud',rd:'k',dn:'r',cn:'t',wd:'n'},
+    lembut:{theme:'anggur',rd:'b',dn:'l',cn:'n',wd:'n'},
+    tegas:{theme:'mono',rd:'k',dn:'n',cn:'t',wd:'l'}};
+  document.querySelectorAll('#panel [data-pk]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var cfg=PK[b.dataset.pk]; if(!cfg) return;
+      R.setAttribute('data-pk', b.dataset.pk);
+      ['theme','rd','dn','cn','wd'].forEach(function(k){
+        var v=cfg[k], attr = k==='theme' ? 'data-theme' : 'data-'+k;
+        R.setAttribute(attr, v);
+        localStorage.setItem('alf.'+(k==='theme'?'theme':k), v);
+      });
+      document.querySelectorAll('#panel [data-pk]').forEach(function(x){ x.setAttribute('aria-pressed', x===b); });
+      document.querySelectorAll('#panel [data-rd],#panel [data-dn],#panel [data-cn],#panel [data-wd]').forEach(function(x){
+        var a=x.dataset.rd?'rd':x.dataset.dn?'dn':x.dataset.cn?'cn':x.dataset.wd?'wd':null;
+        if(a) x.setAttribute('aria-pressed', String(x.dataset[a]===cfg[a]));
+      });
+      document.querySelectorAll('#panel [data-t]').forEach(function(x){
+        x.setAttribute('aria-pressed', String(x.dataset.t===cfg.theme));
+      });
+      localStorage.setItem('alf.pk', b.dataset.pk);
+    });
+  });
+  wire('gd','grid');
   wire('wd','wide'); wire('rd','rad'); wire('dn','dense'); wire('cn','con'); wire('tr','tr');
 
   /* bahasa & mata uang */
