@@ -734,6 +734,48 @@ EXTRA_CSS += r"""
 .tel b{display:block;font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--gold2)}
 .tel span{font-size:9px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
 .tel .live{color:#9fe0b0}
+
+/* tata letak layar besar */
+@media(min-width:768px){
+  .wrap{width:min(760px,100% - 56px)}
+  .hero{padding:88px 0 92px}
+  h1{font-size:clamp(38px,5.4vw,60px)}
+  .lead{font-size:16.5px}
+  .grid,.rooms,.quotes,.steps,.cgrid{grid-template-columns:repeat(2,1fr)}
+  .tbl th,.tbl td{padding:15px 18px}
+  .btn{padding:15px 30px;font-size:12.5px}
+  .iconbtn{width:42px;height:42px}
+  .reg,.rpp{font-size:13.5px}
+}
+@media(min-width:1024px){
+  .wrap{width:min(1000px,100% - 72px)}
+  .grid,.rooms{grid-template-columns:repeat(3,1fr)}
+  .steps,.weeks{grid-template-columns:repeat(2,1fr)}
+  .cgrid{grid-template-columns:repeat(3,1fr)}
+  .hero{padding:104px 0 108px}
+  .cell,.room{padding:28px 24px}
+  .stats{grid-template-columns:repeat(4,1fr)}
+}
+@media(min-width:1440px){
+  .wrap{width:min(1240px,100% - 96px)}
+  .grid,.rooms{grid-template-columns:repeat(4,1fr)}
+  .quotes{grid-template-columns:repeat(3,1fr)}
+  h1{font-size:64px}
+}
+@media(min-width:768px) and (pointer:coarse){
+  .nl{gap:26px;font-size:12.5px}
+  .nl a{padding-block:9px}
+  .iconbtn{width:46px;height:46px}
+  .seg button{padding:12px}
+  .sw button{width:44px;height:44px}
+  #panel{width:min(400px,70vw)}
+}
+@media(hover:hover){
+  .room:hover .ar{transform:translate(4px,-4px)}
+  .clink:hover i{transform:translateX(3px)}
+  .clink i{transition:transform .25s}
+}
+@media(min-width:768px){#rp{height:50px;padding:0 20px}}
 #rp{position:fixed;right:16px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:75;width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-size:18px;border:1px solid var(--line);background:rgba(10,10,16,.92);color:var(--gold);backdrop-filter:blur(12px);cursor:pointer;transition:.25s}
 #rp:hover{color:var(--gold2);border-color:var(--gold);transform:scale(1.06)}
 #rpp{position:fixed;right:12px;bottom:calc(140px + env(safe-area-inset-bottom));z-index:76;width:min(330px,calc(100vw - 24px));max-height:min(62vh,520px);display:none;flex-direction:column;border:1px solid var(--line);background:rgba(9,9,14,.97);backdrop-filter:blur(20px);border-radius:calc(var(--rad) + 4px);overflow:hidden;box-shadow:0 24px 60px -20px #000}
@@ -796,8 +838,15 @@ ROOMS = [
     ("/struktur","31","Struktur","Alur permintaan dan lapisan pengaman."),
     ("/reaper","32","REAPER","Asisten lokal, tanpa token."),
     ("/admin","33","Admin","Catatan kerja dan kendali node."),
-    ("/cari","34","Cari","Pencarian cepat antar ruang."),
 ]
+
+import rooms80 as _r80
+import rooms80b as _r80b
+_EXT = _r80.DATA + _r80b.DATA
+_EXT.sort(key=lambda x: int(x[1]))
+for _s, _n, _t, _d, _rows in _EXT:
+    ROOMS.append((_s, _n, _t, _d))
+ROOMS.append(("/cari", "115", "Cari", "Pencarian cepat antar ruang."))
 
 PRIMARY = ["/","/layanan","/harga","/keamanan","/roadmap","/kontak"]
 
@@ -1787,6 +1836,268 @@ B["/dokumentasi"] = """
 """
 
 
+
+B["/kualitas"] = r"""
+<div class="wrap pghead"><div class="kick">35 · Kualitas</div>
+<h1>Standar yang dipakai <em>sebelum kode ditulis</em>.</h1>
+<p class="lead">Kualitas bukan selera. Isinya ambang terukur yang disepakati di brief, lalu diperiksa sebelum peluncuran.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Aspek</th><th>Ambang</th><th>Alat</th></tr>
+  <tr><td>Kontras teks</td><td>minimal 4,5:1</td><td>pemeriksa kontras</td></tr>
+  <tr><td>Ukuran target sentuh</td><td>minimal 24×24 px</td><td>tinjau manual</td></tr>
+  <tr><td>Skor performa seluler</td><td>di atas 85</td><td>Lighthouse</td></tr>
+  <tr><td>Kesalahan konsol</td><td>nol</td><td>uji peramban</td></tr>
+  <tr><td>Gambar tanpa alt</td><td>nol</td><td>lint HTML</td></tr>
+  <tr><td>Ukuran halaman awal</td><td>di bawah 1 MB</td><td>ukur transfer</td></tr>
+</table>
+<div class="cta rv" style="margin-top:26px"><h2>Minta ambang untuk proyek Anda</h2>
+<p>Ambang disesuaikan dengan jenis produk dan penggunanya, lalu dikunci di dokumen kerja.</p>
+<div class="row"><a href="__WA__?text=Halo__mau__bahas__kualitas" class="btn solid" target="_blank" rel="noopener">Diskusikan</a></div></div>
+</div></section>
+"""
+
+B["/pengujian"] = r"""
+<div class="wrap pghead"><div class="kick">36 · Pengujian</div>
+<h1>Diuji <em>sebelum diserahkan</em>.</h1>
+<p class="lead">Tiga lapis: fungsi, beban, dan perangkat. Hasil uji diserahkan sebagai berkas, bukan lisan.</p></div>
+<section><div class="wrap"><div class="steps">
+  <div class="step rv"><h3>Uji fungsi</h3><p>Setiap alur di brief punya skenario lulus dan gagal. Bug dicatat, diperbaiki, lalu diuji ulang.</p></div>
+  <div class="step rv"><h3>Uji beban</h3><p>Permintaan bersamaan dinaikkan bertahap sampai ambang gagal, lalu hasilnya dicatat.</p></div>
+  <div class="step rv"><h3>Uji perangkat</h3><p>Layar sempit, sedang, dan lebar; dua peramban; mode gelap dan terang.</p></div>
+</div>
+<table class="tbl rv" style="margin-top:24px"><tr><th>Yang tidak diklaim</th><th>Alasan</th></tr>
+  <tr><td>Bebas bug sepenuhnya</td><td>tidak ada perangkat lunak yang demikian</td></tr>
+  <tr><td>Lulus semua peramban lama</td><td>dua versi terakhir saja yang dijamin</td></tr>
+  <tr><td>Uji penetrasi penuh</td><td>itu cakupan audit terpisah</td></tr>
+</table>
+</div></section>
+"""
+
+B["/aksesibilitas"] = r"""
+<div class="wrap pghead"><div class="kick">37 · Aksesibilitas</div>
+<h1>Bisa dipakai <em>semua orang</em>.</h1>
+<p class="lead">Mengikuti WCAG 2.2 level AA. Target sentuh minimal 24×24 piksel, kontras teks minimal 4,5:1, dan seluruh fungsi bisa dicapai lewat papan ketik.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Kriteria</th><th>Penerapan</th></tr>
+  <tr><td>Ukuran target (2.5.8)</td><td>minimal 24×24 px atau jarak memadai</td></tr>
+  <tr><td>Kontras (1.4.3)</td><td>minimal 4,5:1 untuk teks biasa</td></tr>
+  <tr><td>Fokus terlihat (2.4.7)</td><td>garis fokus 2 px, bukan outline bawaan</td></tr>
+  <tr><td>Lompat ke isi (2.4.1)</td><td>tautan skip di awal dokumen</td></tr>
+  <tr><td>Gerak bisa dimatikan (2.3.3)</td><td>setelan animasi di panel</td></tr>
+  <tr><td>Nama aksesibel (4.1.2)</td><td>label pada setiap tombol ikon</td></tr>
+</table>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim);border-left:1px solid var(--gold);padding-left:16px">Situs ini punya mode kontras tinggi dan ukuran huruf tiga tingkat. Keduanya di panel setelan.</p>
+</div></section>
+"""
+
+B["/performa"] = r"""
+<div class="wrap pghead"><div class="kick">38 · Performa</div>
+<h1>Anggaran muat, <em>ditulis di depan</em>.</h1>
+<p class="lead">Kecepatan bukan tambahan di akhir. Angkanya masuk anggaran dan diuji sebelum rilis.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Metrik</th><th>Ambang</th></tr>
+  <tr><td>LCP</td><td>di bawah 2,5 detik</td></tr>
+  <tr><td>CLS</td><td>di bawah 0,1</td></tr>
+  <tr><td>INP</td><td>di bawah 200 ms</td></tr>
+  <tr><td>Ukuran awal</td><td>di bawah 1 MB</td></tr>
+  <tr><td>Permintaan awal</td><td>di bawah 40</td></tr>
+</table>
+<h2 class="rv" style="margin-top:30px">Cara menekan</h2><div class="hr rv"></div>
+<div class="grid">
+  <div class="cell rv"><h3>Gambar</h3><p>WebP, ukuran sesuai tampil, muat bertahap.</p></div>
+  <div class="cell rv"><h3>Skrip</h3><p>Tanpa pustaka berat, dimuat setelah isi utama.</p></div>
+  <div class="cell rv"><h3>Font</h3><p>Dua keluarga, subset latin, preconnect.</p></div>
+</div>
+</div></section>
+"""
+
+B["/seo"] = r"""
+<div class="wrap pghead"><div class="kick">39 · SEO</div>
+<h1>Struktur yang <em>terbaca mesin</em>.</h1>
+<p class="lead">Tanpa jasa backlink. Yang dikerjakan hanya hal teknis yang memang di bawah kendali pengembang.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Pekerjaan</th><th>Keterangan</th></tr>
+  <tr><td>Canonical</td><td>satu URL resmi per halaman</td></tr>
+  <tr><td>Judul dan deskripsi</td><td>unik, panjang wajar</td></tr>
+  <tr><td>Data terstruktur</td><td>JSON-LD jenis usaha</td></tr>
+  <tr><td>Sitemap dan robots</td><td>keduanya tersedia dan benar</td></tr>
+  <tr><td>Heading</td><td>satu H1, urutan tanpa lompatan</td></tr>
+  <tr><td>404</td><td>status benar, bukan pengalihan diam</td></tr>
+</table>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim)">Peringkat tetap ditentukan konten dan tautan masuk. Klaim halaman satu tanpa itu tidak jujur.</p>
+</div></section>
+"""
+
+B["/analitik"] = r"""
+<div class="wrap pghead"><div class="kick">40 · Analitik</div>
+<h1>Ukur tanpa <em>pelacak iklan</em>.</h1>
+<p class="lead">Yang dicatat hanya kejadian yang berguna. Tidak ada kuki pihak ketiga, tidak ada profil pengunjung.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Kejadian</th><th>Guna</th></tr>
+  <tr><td>Kunjungan halaman</td><td>tahu halaman yang dibaca</td></tr>
+  <tr><td>Klik WhatsApp</td><td>tahu niat menghubungi</td></tr>
+  <tr><td>Klik tarif</td><td>tahu minat harga</td></tr>
+  <tr><td>Pengiriman brief</td><td>tahu ujung corong</td></tr>
+</table>
+<div class="grid rv" style="margin-top:24px">
+  <div class="cell rv"><h3>Tanpa kuki</h3><p>Bisa dipasang tanpa spanduk persetujuan.</p></div>
+  <div class="cell rv"><h3>Ringan</h3><p>Di bawah 2 KB, tanpa memblokir render.</p></div>
+  <div class="cell rv"><h3>Milik Anda</h3><p>Data di akun Anda sendiri, bisa diekspor.</p></div>
+</div>
+</div></section>
+"""
+
+B["/konten"] = r"""
+<div class="wrap pghead"><div class="kick">41 · Konten</div>
+<h1>Naskah yang dibaca <em>manusia dan mesin</em>.</h1>
+<p class="lead">Kalimat pendek, satu gagasan per paragraf, kata kerja jelas. Tanpa jargon pemasaran.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Aturan</th><th>Contoh salah</th><th>Perbaikan</th></tr>
+  <tr><td>Satu gagasan per paragraf</td><td>paragraf empat kalimat campur</td><td>pecah jadi tiga</td></tr>
+  <tr><td>Kalimat aktif</td><td>situs akan dikerjakan oleh kami</td><td>kami mengerjakan situs</td></tr>
+  <tr><td>Angka konkret</td><td>pengerjaan cepat</td><td>selesai 7 hari kerja</td></tr>
+  <tr><td>Tanpa klaim kosong</td><td>solusi terbaik nomor satu</td><td>muat 1,4 detik, terukur</td></tr>
+</table>
+<div class="cta rv" style="margin-top:26px"><h2>Butuh penulis naskah?</h2>
+<p>Bila naskah disiapkan pihak lain, saya sesuaikan strukturnya agar tetap terbaca mesin.</p>
+<div class="row"><a href="__WA__?text=Halo__soal__naskah" class="btn solid" target="_blank" rel="noopener">Tanya</a></div></div>
+</div></section>
+"""
+
+B["/merek"] = r"""
+<div class="wrap pghead"><div class="kick">42 · Merek</div>
+<h1>Identitas yang <em>dipakai ulang</em>.</h1>
+<p class="lead">Warna, huruf, dan jarak disimpan sebagai token. Perubahan satu tempat merambat konsisten, bukan diubah manual satu per satu.</p></div>
+<section><div class="wrap"><div class="grid">
+  <div class="cell rv"><h3>Token warna</h3><p>Variabel CSS, bukan kode warna tersebar.</p></div>
+  <div class="cell rv"><h3>Skala huruf</h3><p>Tiga tingkat ukuran, tanpa nilai acak.</p></div>
+  <div class="cell rv"><h3>Jarak</h3><p>Kelipatan tetap supaya rapi.</p></div>
+</div>
+<table class="tbl rv" style="margin-top:24px"><tr><th>Diserahkan</th><th>Bentuk</th></tr>
+  <tr><td>Logo</td><td>SVG, versi terang dan gelap</td></tr>
+  <tr><td>Palet</td><td>berkas token</td></tr>
+  <tr><td>Aturan pakai</td><td>satu halaman ringkas</td></tr>
+</table>
+</div></section>
+"""
+
+B["/handover"] = r"""
+<div class="wrap pghead"><div class="kick">43 · Serah Terima</div>
+<h1>Diserahkan <em>utuh</em>, bukan setengah.</h1>
+<p class="lead">Serah terima punya daftar periksa sendiri. Tidak ada kredensial yang tertahan setelah pelunasan.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Item</th><th>Keterangan</th></tr>
+  <tr><td>Repositori</td><td>riwayat commit lengkap</td></tr>
+  <tr><td>Kredensial</td><td>diserahkan lewat pengelola sandi</td></tr>
+  <tr><td>Berkas desain</td><td>sumber, bukan hanya gambar</td></tr>
+  <tr><td>Dokumentasi</td><td>cara pasang, cara cadangkan</td></tr>
+  <tr><td>Hasil uji</td><td>berkas, termasuk yang gagal</td></tr>
+  <tr><td>Berita acara</td><td>ditandatangani kedua pihak</td></tr>
+</table>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim)">Garansi berjalan setelah berita acara ditandatangani, bukan setelah kode dikirim.</p>
+</div></section>
+"""
+
+B["/pelatihan"] = r"""
+<div class="wrap pghead"><div class="kick">44 · Pelatihan</div>
+<h1>Tim Anda <em>bisa memakainya sendiri</em>.</h1>
+<p class="lead">Satu sesi rekaman dan satu sesi tanya jawab. Materi tertulis, bukan hanya lisan.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Sesi</th><th>Isi</th><th>Durasi</th></tr>
+  <tr><td>Dasar</td><td>masuk, peran, alur utama</td><td>60 menit</td></tr>
+  <tr><td>Admin</td><td>kelola konten, pesanan, laporan</td><td>60 menit</td></tr>
+  <tr><td>Tanya jawab</td><td>bebas, direkam</td><td>45 menit</td></tr>
+</table>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim)">Tambahan di luar jadwal dihitung Rp 1.250.000 per sesi.</p>
+</div></section>
+"""
+
+B["/eskalasi"] = r"""
+<div class="wrap pghead"><div class="kick">45 · Eskalasi</div>
+<h1>Kalau ada yang <em>rusak</em>.</h1>
+<p class="lead">Jalur lapor dan waktu tanggap ditulis, bukan dijanjikan di percakapan.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Tingkat</th><th>Contoh</th><th>Tanggap</th></tr>
+  <tr><td><span class="sev c">KRITIS</span></td><td>situs mati, pembayaran gagal</td><td>2 jam</td></tr>
+  <tr><td><span class="sev h">TINGGI</span></td><td>fitur utama tidak jalan</td><td>12 jam</td></tr>
+  <tr><td><span class="sev m">SEDANG</span></td><td>tampilan rusak, salah teks</td><td>2 hari kerja</td></tr>
+  <tr><td><span class="sev l">RENDAH</span></td><td>permintaan perubahan kecil</td><td>5 hari kerja</td></tr>
+</table>
+<div class="cta rv" style="margin-top:26px"><h2>Laporkan insiden</h2>
+<p>Sertakan URL, waktu kejadian, dan tangkapan layar bila ada.</p>
+<div class="row"><a href="__WA__?text=INSIDEN" class="btn solid" target="_blank" rel="noopener">WhatsApp</a><a href="/kontak" class="btn ghost">Kanal Lain</a></div></div>
+</div></section>
+"""
+
+B["/retainer"] = r"""
+<div class="wrap pghead"><div class="kick">46 · Retainer</div>
+<h1>Kerja sama <em>bulanan</em>.</h1>
+<p class="lead">Untuk produk yang terus berjalan. Jam kerja disepakati di muka dan bisa dipakai untuk perbaikan maupun pengembangan kecil.</p></div>
+<section><div class="wrap"><div class="plans">
+  <div class="plan"><h3>Ringan</h3><div class="price">Rp 1.500.000<small>per bulan</small></div>
+    <ul><li><i class="fas fa-check"></i>4 jam kerja</li><li><i class="fas fa-check"></i>Cadangan harian</li><li><i class="fas fa-check"></i>Tanggap 2 hari</li></ul></div>
+  <div class="plan hot"><span class="tag">PALING DIPILIH</span><h3>Teratur</h3><div class="price">Rp 3.500.000<small>per bulan</small></div>
+    <ul><li><i class="fas fa-check"></i>10 jam kerja</li><li><i class="fas fa-check"></i>Cadangan harian + uji pulih</li><li><i class="fas fa-check"></i>Tanggap 12 jam</li><li><i class="fas fa-check"></i>Laporan bulanan</li></ul></div>
+  <div class="plan"><h3>Penuh</h3><div class="price">Rp 7.000.000<small>per bulan</small></div>
+    <ul><li><i class="fas fa-check"></i>24 jam kerja</li><li><i class="fas fa-check"></i>Pemantauan aktif</li><li><i class="fas fa-check"></i>Tanggap 4 jam</li><li><i class="fas fa-check"></i>Prioritas antrean</li></ul></div>
+</div>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim)">Jam yang tidak terpakai hangus di akhir bulan, kecuali disepakati lain. Bisa dihentikan dengan pemberitahuan 14 hari.</p>
+</div></section>
+"""
+
+B["/anggaran"] = r"""
+<div class="wrap pghead"><div class="kick">47 · Anggaran</div>
+<h1>Susun angka <em>sebelum menghubungi</em>.</h1>
+<p class="lead">Anggaran yang jelas mempersempit pilihan dan mempercepat penawaran. Ini cara menyusunnya.</p></div>
+<section><div class="wrap"><div class="steps">
+  <div class="step rv"><h3>Pisahkan wajib dan tambahan</h3><p>Fitur wajib menentukan paket. Sisanya masuk tahap dua.</p></div>
+  <div class="step rv"><h3>Sisakan biaya pihak ketiga</h3><p>Domain, hosting, akun store, dan kunci API dibayar terpisah.</p></div>
+  <div class="step rv"><h3>Sisakan perawatan</h3><p>Perkirakan 15 sampai 25 persen nilai proyek per tahun untuk rawat.</p></div>
+</div>
+<table class="tbl rv" style="margin-top:24px"><tr><th>Kisaran</th><th>Yang realistis didapat</th></tr>
+  <tr><td>di bawah Rp 3 juta</td><td>satu halaman landing</td></tr>
+  <tr><td>Rp 5–10 juta</td><td>situs profil atau toko ringkas</td></tr>
+  <tr><td>Rp 15–30 juta</td><td>aplikasi mobile satu platform</td></tr>
+  <tr><td>di atas Rp 30 juta</td><td>sistem custom atau lintas platform</td></tr>
+</table>
+</div></section>
+"""
+
+B["/risiko"] = r"""
+<div class="wrap pghead"><div class="kick">48 · Risiko</div>
+<h1>Yang bisa gagal, <em>dan cara menutupnya</em>.</h1>
+<p class="lead">Daftar ini dibuka supaya tidak jadi kejutan. Setiap risiko punya penanganan yang disepakati di brief.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Risiko</th><th>Dampak</th><th>Penanganan</th></tr>
+  <tr><td>Materi klien terlambat</td><td>tanggal mundur</td><td>tenggat materi per tahap</td></tr>
+  <tr><td>Lingkup melebar</td><td>biaya naik</td><td>surat pesanan baru</td></tr>
+  <tr><td>Akun store ditolak</td><td>rilis tertunda</td><td>pendampingan review</td></tr>
+  <tr><td>Kunci API bocor</td><td>biaya membengkak</td><td>rotasi dan batas pemakaian</td></tr>
+  <tr><td>Kode diubah pihak lain</td><td>garansi batal</td><td>pemberitahuan sebelum ubah</td></tr>
+  <tr><td>Penyedia layanan berhenti</td><td>fitur mati</td><td>jalur pindah disiapkan</td></tr>
+</table>
+</div></section>
+"""
+
+B["/kepatuhan"] = r"""
+<div class="wrap pghead"><div class="kick">49 · Kepatuhan</div>
+<h1>Kewajiban saat <em>menyimpan data pribadi</em>.</h1>
+<p class="lead">Bila proyek mengumpulkan data pengguna, UU 27/2022 berlaku. Ini yang harus disiapkan sebelum rilis.</p></div>
+<section><div class="wrap"><table class="tbl rv">
+  <tr><th>Kewajiban</th><th>Penerapan</th></tr>
+  <tr><td>Dasar pemrosesan</td><td>persetujuan eksplisit, dicatat</td></tr>
+  <tr><td>Hak subjek data</td><td>akses, koreksi, hapus, portabilitas</td></tr>
+  <tr><td>Pemberitahuan kebocoran</td><td>tertulis, maksimal 3×24 jam</td></tr>
+  <tr><td>Bukti pemrosesan</td><td>log dan catatan persetujuan</td></tr>
+  <tr><td>Petugas pelindungan data</td><td>untuk pengendali tertentu</td></tr>
+</table>
+<p class="rv" style="margin-top:18px;font-size:12px;color:var(--dim);border-left:1px solid var(--gold);padding-left:16px">Rujukan: UU Nomor 27 Tahun 2022, Pasal 46. Bukan nasihat hukum; untuk kasus khusus tetap perlu penasihat.</p>
+<div class="cta rv" style="margin-top:24px"><h2>Minta daftar periksa kepatuhan</h2>
+<p>Disusun mengikuti jenis data yang benar-benar dikumpulkan proyek Anda.</p>
+<div class="row"><a href="__WA__?text=Halo__soal__kepatuhan" class="btn solid" target="_blank" rel="noopener">Minta</a></div></div>
+</div></section>
+"""
+
 B["/cari"] = """
 <div class="wrap pghead"><div class="kick">31 \u00b7 Cari</div>
 <h1>Temukan <em>ruang</em>.</h1>
@@ -1959,6 +2270,29 @@ B["/admin"] = r"""
 </script>
 
 """
+def _page80(slug, num, title, desc, rows):
+    if isinstance(rows, str):
+        rows = [tuple(r.split("|", 1)) for r in rows.split("\n") if "|" in r]
+    if rows:
+        body = ('<table class="tbl rv">'
+                + "".join("<tr><td>%s</td><td>%s</td></tr>" % (a, b) for a, b in rows)
+                + "</table>")
+    else:
+        body = ""
+    return ('<div class="wrap pghead"><div class="kick">%s &middot; %s</div>'
+            '<h1>%s</h1><p class="lead">%s</p></div>'
+            '<section><div class="wrap">%s'
+            '<div class="cta rv" style="margin-top:26px"><h2>Bahas %s</h2>'
+            '<p>Sertakan konteks singkat; balasan berisi estimasi, durasi, dan cakupan.</p>'
+            '<div class="row"><a href="__WA__?text=Halo__soal__%s" class="btn solid" '
+            'target="_blank" rel="noopener">Kirim Brief</a>'
+            '<a href="/kontak" class="btn ghost">Kanal Lain</a></div></div>'
+            '</div></section>') % (num, title, title, desc, body, title, slug.strip("/"))
+
+for _s, _n, _t, _d, _rows in _EXT:
+    if _s not in B:
+        B[_s] = _page80(_s, _n, _t, _d, _rows)
+
 PAGES = {u: (t, d, B[u]) for u, _n, t, d in ROOMS}
 BUILT = {u: page(u, t, d, B[u]) for u, (t, d, _b) in PAGES.items()}
 
