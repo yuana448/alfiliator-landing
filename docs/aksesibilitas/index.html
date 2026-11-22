@@ -623,6 +623,76 @@ html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-even
 .noteitem button{background:none;border:1px solid var(--line2);color:var(--dim);cursor:pointer;padding:3px 8px;font-size:10px}
 #ntext{width:100%;min-height:88px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:12px;font:inherit;font-size:12.6px;border-radius:var(--rad)}
 @media print{#rp,#rpp{display:none!important}}
+
+/* ================= LAPIS GERAK v2 ================= */
+#veil{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 50% 46%,var(--panel2),var(--bg) 68%);
+  transition:opacity .3s var(--ease)}
+#veil::after{content:"";position:absolute;left:50%;top:50%;width:42px;height:42px;margin:-21px;
+  border:1px solid var(--gold);border-top-color:transparent;border-radius:50%;
+  animation:sp .75s linear infinite;opacity:0;transition:opacity .2s}
+body.leaving #veil{opacity:1}
+body.leaving #veil::after{opacity:1}
+main{transition:transform .32s var(--ease),opacity .32s}
+body.leaving main{transform:scale(.986);opacity:.55}
+
+.rip{position:absolute;border-radius:50%;pointer-events:none;z-index:2;
+  transform:translate(-50%,-50%) scale(0);animation:rip .66s cubic-bezier(.2,.7,.3,1) forwards;
+  background:radial-gradient(circle,var(--glow),transparent 68%)}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+
+.tr-dot{position:fixed;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;
+  z-index:6;pointer-events:none;background:var(--gold);opacity:.55;
+  transition:transform .62s var(--ease),opacity .62s}
+.tr-dot.go{transform:scale(.15) translateY(10px);opacity:0}
+
+.rv{transition:opacity .85s var(--ease),transform .85s var(--ease),filter .85s var(--ease),clip-path .95s var(--ease)}
+.rv:not(.on){filter:blur(5px)}
+h1.rv:not(.on),h2.rv:not(.on){clip-path:inset(0 100% 0 0);filter:blur(8px)}
+h1.rv.on,h2.rv.on{clip-path:inset(0 -2% 0 0)}
+
+.cell,.room,.plan,.quote,.stat{transition:transform .5s var(--ease),background .35s,border-color .35s,box-shadow .5s}
+.cell:hover,.plan:hover,.quote:hover{box-shadow:0 24px 48px -30px #000,0 0 0 1px var(--line)}
+.plans .plan{position:relative;overflow:hidden}
+.plans .plan::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),var(--line),transparent 72%)}
+.plans .plan:hover::after{opacity:1}
+
+.hr{position:relative;overflow:hidden}
+.hr::after{content:"";position:absolute;top:0;left:-45%;width:45%;height:100%;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
+  animation:sweep 5s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes sweep{0%{left:-45%}60%,100%{left:108%}}
+.kick::before{animation:kickw 4.2s ease-in-out infinite}
+@keyframes kickw{50%{width:54px}}
+
+.hero{position:relative;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-14% -22% auto;height:126%;z-index:-1;
+  pointer-events:none;opacity:.5;filter:blur(34px);
+  background:conic-gradient(from 0deg at 32% 38%,transparent,var(--line),transparent 34%);
+  animation:sp 22s linear infinite}
+.hero h1,.pghead h1{transform:translate3d(0,calc(var(--sy,0) * .028px),0)}
+.hero .lead{transform:translate3d(0,calc(var(--sy,0) * .014px),0)}
+
+.cell:hover .ic{animation:flt 1.9s ease-in-out infinite}
+@keyframes flt{50%{transform:translateY(-6px)}}
+
+#prog{overflow:hidden}
+#prog::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);
+  animation:sweep 2.2s linear infinite}
+
+::selection{background:var(--gold);color:#0a0a0e}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+
+@media(prefers-reduced-motion:reduce){
+  .rip,.tr-dot,.hero::before,.hr::after,.kick::before,#prog::after,.cell:hover .ic{animation:none}
+  .hero h1,.pghead h1,.hero .lead{transform:none}
+  .rv:not(.on),h1.rv:not(.on),h2.rv:not(.on){filter:none;clip-path:none}
+}
 </style>
 <meta property="og:url" content="https://yuana448.github.io/alfiliator-landing/aksesibilitas/">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "ALFILIATOR", "url": "https://yuana448.github.io/alfiliator-landing/", "image": "https://yuana448.github.io/alfiliator-landing/og.png", "description": "Atelier digital: web, Android, iOS, sistem internal, bot automation, dan audit keamanan.", "areaServed": "ID", "priceRange": "Rp 1.500.000+", "availableLanguage": ["id", "en", "ms", "zh", "ja", "ar"]}</script>
@@ -641,7 +711,7 @@ html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-even
     <button class="iconbtn burger" id="burger" aria-label="Menu"><i class="fas fa-bars"></i></button>
   </div>
 </div></header>
-<div id="drawer"><div class="dhead">34 Ruang</div><a href=".././"><span>01</span>Beranda</a><a href="../layanan/"><span>02</span>Layanan</a><a href="../harga/"><span>03</span>Harga</a><a href="../portofolio/"><span>04</span>Portofolio</a><a href="../proses/"><span>05</span>Proses</a><a href="../stack/"><span>06</span>Stack</a><a href="../keamanan/"><span>07</span>Keamanan</a><a href="../sla/"><span>08</span>Ketentuan</a><a href="../faq/"><span>09</span>Tanya</a><a href="../kontak/"><span>10</span>Kontak</a><a href="../mulai/"><span>11</span>Mulai</a><a href="../matriks/"><span>12</span>Matriks</a><a href="../web/"><span>13</span>Teknologi Web</a><a href="../mobile/"><span>14</span>Teknologi Mobile</a><a href="../integrasi/"><span>15</span>Integrasi</a><a href="../hosting/"><span>16</span>Infrastruktur</a><a href="../maintenance/"><span>17</span>Perawatan</a><a href="../garansi/"><span>18</span>Garansi</a><a href="../legal/"><span>19</span>Legal</a><a href="../privasi/"><span>20</span>Privasi</a><a href="../syarat/"><span>21</span>Syarat</a><a href="../catatan/"><span>22</span>Catatan</a><a href="../glosarium/"><span>23</span>Glosarium</a><a href="../checklist/"><span>24</span>Checklist</a><a href="../roadmap/"><span>25</span>Roadmap Celah</a><a href="../kapasitas/"><span>26</span>Kapasitas</a><a href="../mitra/"><span>27</span>Mitra</a><a href="../kolaborasi/"><span>28</span>Kolaborasi</a><a href="../status/"><span>29</span>Status</a><a href="../dokumentasi/"><span>30</span>Dokumentasi</a><a href="../struktur/"><span>31</span>Struktur</a><a href="../reaper/"><span>32</span>REAPER</a><a href="../admin/"><span>33</span>Admin</a><a href="../kualitas/"><span>35</span>Kualitas</a><a href="../pengujian/"><span>36</span>Pengujian</a><a href="../aksesibilitas/"><span>37</span>Aksesibilitas</a><a href="../performa/"><span>38</span>Performa</a><a href="../seo/"><span>39</span>SEO</a><a href="../analitik/"><span>40</span>Analitik</a><a href="../konten/"><span>41</span>Konten</a><a href="../merek/"><span>42</span>Merek</a><a href="../handover/"><span>43</span>Serah Terima</a><a href="../pelatihan/"><span>44</span>Pelatihan</a><a href="../eskalasi/"><span>45</span>Eskalasi</a><a href="../retainer/"><span>46</span>Retainer</a><a href="../anggaran/"><span>47</span>Anggaran</a><a href="../risiko/"><span>48</span>Risiko</a><a href="../kepatuhan/"><span>49</span>Kepatuhan</a><a href="../retail-fashion/"><span>51</span>Retail Fashion</a><a href="../retail-elektronik/"><span>52</span>Retail Elektronik</a><a href="../klinik/"><span>53</span>Klinik</a><a href="../apotek/"><span>54</span>Apotek</a><a href="../rumah-sakit/"><span>55</span>Rumah Sakit</a><a href="../sekolah/"><span>56</span>Sekolah</a><a href="../kampus/"><span>57</span>Kampus</a><a href="../kursus/"><span>58</span>Kursus</a><a href="../logistik/"><span>59</span>Logistik</a><a href="../ekspedisi/"><span>60</span>Ekspedisi</a><a href="../properti/"><span>61</span>Properti</a><a href="../kontraktor/"><span>62</span>Kontraktor</a><a href="../restoran/"><span>63</span>Restoran</a><a href="../kafe/"><span>64</span>Kafe</a><a href="../katering/"><span>65</span>Katering</a><a href="../otomotif/"><span>66</span>Otomotif</a><a href="../bengkel/"><span>67</span>Bengkel</a><a href="../keuangan/"><span>68</span>Keuangan</a><a href="../koperasi/"><span>69</span>Koperasi</a><a href="../pertanian/"><span>70</span>Pertanian</a><a href="../pariwisata/"><span>71</span>Pariwisata</a><a href="../hotel/"><span>72</span>Hotel</a><a href="../travel/"><span>73</span>Travel</a><a href="../event/"><span>74</span>Event</a><a href="../media/"><span>75</span>Media</a><a href="../penerbit/"><span>76</span>Penerbit</a><a href="../ngo/"><span>77</span>NGO</a><a href="../komunitas/"><span>78</span>Komunitas</a><a href="../manufaktur/"><span>79</span>Manufaktur</a><a href="../gudang/"><span>80</span>Gudang</a><a href="../farmasi/"><span>81</span>Farmasi</a><a href="../kosmetik/"><span>82</span>Kosmetik</a><a href="../fashion-brand/"><span>83</span>Merek Fashion</a><a href="../mainan/"><span>84</span>Mainan</a><a href="../olahraga/"><span>85</span>Olahraga</a><a href="../kebugaran/"><span>86</span>Kebugaran</a><a href="../salon/"><span>87</span>Salon</a><a href="../laundry/"><span>88</span>Laundry</a><a href="../jasa-hukum/"><span>89</span>Jasa Hukum</a><a href="../konsultan/"><span>90</span>Konsultan</a><a href="../mvp/"><span>91</span>MVP</a><a href="../portal-berita/"><span>92</span>Portal Berita</a><a href="../dashboard-operator/"><span>93</span>Dashboard Operator</a><a href="../kiosk/"><span>94</span>Kiosk</a><a href="../pwa/"><span>95</span>PWA</a><a href="../marketplace/"><span>96</span>Marketplace</a><a href="../aggregator/"><span>97</span>Aggregator</a><a href="../booking/"><span>98</span>Booking</a><a href="../langganan/"><span>99</span>Langganan</a><a href="../katalog/"><span>100</span>Katalog</a><a href="../crm-ringan/"><span>101</span>CRM Ringan</a><a href="../erp-ringan/"><span>102</span>ERP Ringan</a><a href="../pos-kasir/"><span>103</span>Kasir</a><a href="../absensi/"><span>104</span>Absensi</a><a href="../inventaris/"><span>105</span>Inventaris</a><a href="../websocket/"><span>106</span>Realtime</a><a href="../graphql/"><span>107</span>GraphQL</a><a href="../ocr/"><span>108</span>OCR</a><a href="../gis-peta/"><span>109</span>Peta</a><a href="../iot/"><span>110</span>IoT</a><a href="../ar/"><span>111</span>AR</a><a href="../antrean-job/"><span>112</span>Antrean Tugas</a><a href="../pencarian-teks/"><span>113</span>Pencarian Teks</a><a href="../cache-cdn/"><span>114</span>Cache dan CDN</a><a href="../migrasi/"><span>115</span>Migrasi</a><a href="../cari/"><span>115</span>Cari</a></div>
+<div id="drawer"><div class="dhead">114 Ruang</div><a href=".././"><span>01</span>Beranda</a><a href="../layanan/"><span>02</span>Layanan</a><a href="../harga/"><span>03</span>Harga</a><a href="../portofolio/"><span>04</span>Portofolio</a><a href="../proses/"><span>05</span>Proses</a><a href="../stack/"><span>06</span>Stack</a><a href="../keamanan/"><span>07</span>Keamanan</a><a href="../sla/"><span>08</span>Ketentuan</a><a href="../faq/"><span>09</span>Tanya</a><a href="../kontak/"><span>10</span>Kontak</a><a href="../mulai/"><span>11</span>Mulai</a><a href="../matriks/"><span>12</span>Matriks</a><a href="../web/"><span>13</span>Teknologi Web</a><a href="../mobile/"><span>14</span>Teknologi Mobile</a><a href="../integrasi/"><span>15</span>Integrasi</a><a href="../hosting/"><span>16</span>Infrastruktur</a><a href="../maintenance/"><span>17</span>Perawatan</a><a href="../garansi/"><span>18</span>Garansi</a><a href="../legal/"><span>19</span>Legal</a><a href="../privasi/"><span>20</span>Privasi</a><a href="../syarat/"><span>21</span>Syarat</a><a href="../catatan/"><span>22</span>Catatan</a><a href="../glosarium/"><span>23</span>Glosarium</a><a href="../checklist/"><span>24</span>Checklist</a><a href="../roadmap/"><span>25</span>Roadmap Celah</a><a href="../kapasitas/"><span>26</span>Kapasitas</a><a href="../mitra/"><span>27</span>Mitra</a><a href="../kolaborasi/"><span>28</span>Kolaborasi</a><a href="../status/"><span>29</span>Status</a><a href="../dokumentasi/"><span>30</span>Dokumentasi</a><a href="../struktur/"><span>31</span>Struktur</a><a href="../reaper/"><span>32</span>REAPER</a><a href="../admin/"><span>33</span>Admin</a><a href="../kualitas/"><span>35</span>Kualitas</a><a href="../pengujian/"><span>36</span>Pengujian</a><a href="../aksesibilitas/"><span>37</span>Aksesibilitas</a><a href="../performa/"><span>38</span>Performa</a><a href="../seo/"><span>39</span>SEO</a><a href="../analitik/"><span>40</span>Analitik</a><a href="../konten/"><span>41</span>Konten</a><a href="../merek/"><span>42</span>Merek</a><a href="../handover/"><span>43</span>Serah Terima</a><a href="../pelatihan/"><span>44</span>Pelatihan</a><a href="../eskalasi/"><span>45</span>Eskalasi</a><a href="../retainer/"><span>46</span>Retainer</a><a href="../anggaran/"><span>47</span>Anggaran</a><a href="../risiko/"><span>48</span>Risiko</a><a href="../kepatuhan/"><span>49</span>Kepatuhan</a><a href="../retail-fashion/"><span>51</span>Retail Fashion</a><a href="../retail-elektronik/"><span>52</span>Retail Elektronik</a><a href="../klinik/"><span>53</span>Klinik</a><a href="../apotek/"><span>54</span>Apotek</a><a href="../rumah-sakit/"><span>55</span>Rumah Sakit</a><a href="../sekolah/"><span>56</span>Sekolah</a><a href="../kampus/"><span>57</span>Kampus</a><a href="../kursus/"><span>58</span>Kursus</a><a href="../logistik/"><span>59</span>Logistik</a><a href="../ekspedisi/"><span>60</span>Ekspedisi</a><a href="../properti/"><span>61</span>Properti</a><a href="../kontraktor/"><span>62</span>Kontraktor</a><a href="../restoran/"><span>63</span>Restoran</a><a href="../kafe/"><span>64</span>Kafe</a><a href="../katering/"><span>65</span>Katering</a><a href="../otomotif/"><span>66</span>Otomotif</a><a href="../bengkel/"><span>67</span>Bengkel</a><a href="../keuangan/"><span>68</span>Keuangan</a><a href="../koperasi/"><span>69</span>Koperasi</a><a href="../pertanian/"><span>70</span>Pertanian</a><a href="../pariwisata/"><span>71</span>Pariwisata</a><a href="../hotel/"><span>72</span>Hotel</a><a href="../travel/"><span>73</span>Travel</a><a href="../event/"><span>74</span>Event</a><a href="../media/"><span>75</span>Media</a><a href="../penerbit/"><span>76</span>Penerbit</a><a href="../ngo/"><span>77</span>NGO</a><a href="../komunitas/"><span>78</span>Komunitas</a><a href="../manufaktur/"><span>79</span>Manufaktur</a><a href="../gudang/"><span>80</span>Gudang</a><a href="../farmasi/"><span>81</span>Farmasi</a><a href="../kosmetik/"><span>82</span>Kosmetik</a><a href="../fashion-brand/"><span>83</span>Merek Fashion</a><a href="../mainan/"><span>84</span>Mainan</a><a href="../olahraga/"><span>85</span>Olahraga</a><a href="../kebugaran/"><span>86</span>Kebugaran</a><a href="../salon/"><span>87</span>Salon</a><a href="../laundry/"><span>88</span>Laundry</a><a href="../jasa-hukum/"><span>89</span>Jasa Hukum</a><a href="../konsultan/"><span>90</span>Konsultan</a><a href="../mvp/"><span>91</span>MVP</a><a href="../portal-berita/"><span>92</span>Portal Berita</a><a href="../dashboard-operator/"><span>93</span>Dashboard Operator</a><a href="../kiosk/"><span>94</span>Kiosk</a><a href="../pwa/"><span>95</span>PWA</a><a href="../marketplace/"><span>96</span>Marketplace</a><a href="../aggregator/"><span>97</span>Aggregator</a><a href="../booking/"><span>98</span>Booking</a><a href="../langganan/"><span>99</span>Langganan</a><a href="../katalog/"><span>100</span>Katalog</a><a href="../crm-ringan/"><span>101</span>CRM Ringan</a><a href="../erp-ringan/"><span>102</span>ERP Ringan</a><a href="../pos-kasir/"><span>103</span>Kasir</a><a href="../absensi/"><span>104</span>Absensi</a><a href="../inventaris/"><span>105</span>Inventaris</a><a href="../websocket/"><span>106</span>Realtime</a><a href="../graphql/"><span>107</span>GraphQL</a><a href="../ocr/"><span>108</span>OCR</a><a href="../gis-peta/"><span>109</span>Peta</a><a href="../iot/"><span>110</span>IoT</a><a href="../ar/"><span>111</span>AR</a><a href="../antrean-job/"><span>112</span>Antrean Tugas</a><a href="../pencarian-teks/"><span>113</span>Pencarian Teks</a><a href="../cache-cdn/"><span>114</span>Cache dan CDN</a><a href="../migrasi/"><span>115</span>Migrasi</a><a href="../cari/"><span>115</span>Cari</a></div>
 
 <aside id="panel" aria-label="Setelan tampilan">
   <button class="iconbtn close" id="pclose" aria-label="Tutup"><i class="fas fa-xmark"></i></button>
@@ -743,7 +813,7 @@ html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-even
 </main>
 <footer><div class="wrap fg">
   <div>&copy; 2026 ALFILIATOR — Atelier Digital</div>
-  <div class="mono">NODE v6 · 34 RUANG</div>
+  <div class="mono">NODE v6 · 114 RUANG</div>
 </div></footer>
 <a class="fab" href="https://wa.me/6281292442362?text=Halo%20ALFILIATOR" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 <button id="top" aria-label="Atas"><i class="fas fa-arrow-up"></i></button>
@@ -964,6 +1034,80 @@ html[data-grid="on"] body::before{content:"";position:fixed;inset:0;pointer-even
 
   var ds=document.querySelectorAll('details');
   ds.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ds.forEach(function(o){if(o!==d)o.close()})})});
+
+  /* ================= lapis gerak v2 ================= */
+  (function(){
+    var RR=document.documentElement;
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var fine=matchMedia('(pointer:fine)').matches;
+    function on(){ return RR.getAttribute('data-motion')!=='off'; }
+
+    var veil=document.createElement('div'); veil.id='veil'; document.body.appendChild(veil);
+    document.addEventListener('click',function(e){
+      var a=e.target.closest?e.target.closest('a'):null; if(!a) return;
+      if(a.target==='_blank'||a.hasAttribute('download')) return;
+      if(e.metaKey||e.ctrlKey||e.shiftKey) return;
+      var h=a.getAttribute('href')||'';
+      if(!h||h.charAt(0)==='#'||/^(https?:|mailto:|tel:)/i.test(h)) return;
+      if(!on()) return;
+      e.preventDefault();
+      document.body.classList.add('leaving');
+      setTimeout(function(){location.href=h},300);
+    });
+    addEventListener('pageshow',function(){ document.body.classList.remove('leaving'); });
+
+    document.addEventListener('pointerdown',function(e){
+      if(!on()) return;
+      var t=e.target.closest?e.target.closest('.btn,.iconbtn,.cell,.room,.plan,.clink,.chip,.fab,.m14-item'):null;
+      if(!t) return;
+      var r=t.getBoundingClientRect(), d=Math.max(r.width,r.height)*1.8;
+      if(getComputedStyle(t).position==='static') t.style.position='relative';
+      var sp=document.createElement('span'); sp.className='rip';
+      sp.style.cssText='width:'+d+'px;height:'+d+'px;left:'+(e.clientX-r.left)+'px;top:'+(e.clientY-r.top)+'px';
+      t.appendChild(sp); setTimeout(function(){sp.remove()},680);
+    },{passive:true});
+
+    document.querySelectorAll('.grid,.rooms,.plans,.steps,.cgrid,.weeks,.m14-ledger').forEach(function(p){
+      Array.prototype.forEach.call(p.children,function(c,i){
+        if(c.style) c.style.transitionDelay=(i*55)+'ms';
+      });
+    });
+
+    if(fine){
+      document.querySelectorAll('.cell,.plan,.quote,.stat').forEach(function(el){
+        el.addEventListener('pointermove',function(e){
+          if(!on()) return;
+          var r=el.getBoundingClientRect();
+          var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+          el.style.transform='perspective(760px) rotateY('+(px*7).toFixed(2)+'deg) rotateX='.replace('=','(')+(-py*7).toFixed(2)+'deg) translateY(-3px)';
+        });
+        el.addEventListener('pointerleave',function(){ el.style.transform=''; });
+      });
+      document.querySelectorAll('.iconbtn,.fab,.chip').forEach(function(b){
+        b.addEventListener('pointermove',function(e){
+          var r=b.getBoundingClientRect();
+          b.style.transform='translate('+((e.clientX-r.left-r.width/2)/r.width*7).toFixed(2)+'px,'+((e.clientY-r.top-r.height/2)/r.height*7).toFixed(2)+'px)';
+        });
+        b.addEventListener('pointerleave',function(){ b.style.transform=''; });
+      });
+      var last=0;
+      addEventListener('pointermove',function(e){
+        if(!on()) return; var n=performance.now(); if(n-last<42) return; last=n;
+        var d=document.createElement('i'); d.className='tr-dot';
+        d.style.cssText='left:'+e.clientX+'px;top:'+e.clientY+'px';
+        document.body.appendChild(d);
+        requestAnimationFrame(function(){ d.classList.add('go'); });
+        setTimeout(function(){ d.remove(); },700);
+      },{passive:true});
+    }
+
+    var rq=0;
+    addEventListener('scroll',function(){
+      if(rq) return;
+      rq=requestAnimationFrame(function(){ RR.style.setProperty('--sy',scrollY); rq=0; });
+    },{passive:true});
+  })();
+
 })();
 </script>
 
