@@ -1275,6 +1275,10 @@ _EXT.sort(key=lambda x: int(x[1]))
 for _s, _n, _t, _d, _rows in _EXT:
     ROOMS.append((_s, _n, _t, _d))
 ROOMS.append(("/cari", "115", "Cari", "Pencarian cepat antar ruang."))
+import lab116 as _l116, lab117 as _l117, lab118 as _l118, lab119 as _l119, lab120 as _l120
+for _m in (_l116, _l117, _l118, _l119, _l120):
+    ROOMS.append(_m.META)
+
 
 PRIMARY = ["/","/layanan","/harga","/keamanan","/roadmap","/kontak"]
 
@@ -1561,6 +1565,12 @@ def page(active, title, desc, body):
 
 # ============================================================ halaman
 B = {}
+
+for _m in (_l116, _l117, _l118, _l119, _l120):
+    B[_m.META[0]] = _m.BODY
+import lab121 as _l121
+ROOMS.append(_l121.META)
+B[_l121.META[0]] = _l121.BODY
 B["/"] = """
 <div class="wrap hero">
   <div class="kick">Atelier Digital · Est. 2021</div>
@@ -3010,7 +3020,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https:; "
-            "connect-src 'self' https://api.venice.ai; manifest-src 'self'; "
+            "connect-src 'self' https://api.venice.ai https://api.pwnedpasswords.com https://api.github.com; manifest-src 'self'; "
             "form-action 'self'; base-uri 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
             % getattr(self, "nonce", ""))
         if extra:
