@@ -792,6 +792,21 @@ html[data-sel="emas"] ::selection{background:var(--gold);color:#0a0a0e}
 html[data-sel="invers"] ::selection{background:var(--ink);color:var(--bg)}
 html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):not(.room){
   text-decoration:underline;text-underline-offset:3px}
+
+#cmdk{position:fixed;inset:0;z-index:120;display:none;background:rgba(4,4,7,.72);
+  backdrop-filter:blur(9px);padding:14vh 16px 16px}
+#cmdk.on{display:block}
+#cmdk .box{max-width:560px;margin:0 auto;border:1px solid var(--gold);background:var(--panel);
+  box-shadow:0 40px 90px -30px #000}
+#cmdk input{width:100%;padding:15px 17px;background:none;border:0;border-bottom:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:14px;outline:none}
+#cmdk .res{max-height:52vh;overflow:auto}
+#cmdk a{display:flex;gap:11px;padding:11px 17px;font-size:12.6px;color:var(--muted);
+  border-bottom:1px solid var(--line2)}
+#cmdk a:hover,#cmdk a.sel{background:var(--panel2);color:var(--gold2)}
+#cmdk a b{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);min-width:34px}
+#cmdk .ft{padding:9px 17px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between}
 </style>
 <meta property="og:url" content="https://yuana448.github.io/alfiliator-landing/phishcatcher/">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "ALFILIATOR", "url": "https://yuana448.github.io/alfiliator-landing/", "image": "https://yuana448.github.io/alfiliator-landing/og.png", "description": "Atelier digital: web, Android, iOS, sistem internal, bot automation, dan audit keamanan.", "areaServed": "ID", "priceRange": "Rp 1.500.000+", "availableLanguage": ["id", "en", "ms", "zh", "ja", "ar"]}</script>
@@ -1000,7 +1015,55 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
     });
   }
   n.addEventListener('input', hit); q.addEventListener('input', hit); hit();
+  var QZ=[
+    ['https://bca-verifikasi.akun-aman.xyz','Verifikasi Akun BCA',1,'TLD .xyz plus dua kata pemicu.'],
+    ['https://www.bca.co.id','BCA',0,'Domain resmi, dua lapis, .co.id.'],
+    ['http://jne-resi.klik-here.top','Lacak Resi',1,'HTTP tanpa S dan .top.'],
+    ['https://github.com/login','Sign in to GitHub',0,'Domain tunggal, HTTPS.'],
+    ['https://tokopedia-promo.hadiah-klaim.click','Klaim Hadiah',1,'.click dan kata hadiah.'],
+    ['https://mail.google.com','Gmail',0,'Subdomain resmi Google, HTTPS.']
+  ];
+  var qi=0, qsc=0;
+  var qq=document.getElementById('qq'), qz=document.getElementById('qz'),
+      qs=document.getElementById('qs'), qx=document.getElementById('qx');
+  function show(){
+    if(qi>=QZ.length){
+      qq.innerHTML='<b>Selesai.</b> Skor '+qsc+' dari '+QZ.length+'.';
+      qz.textContent=qsc; qs.textContent='Kuis berakhir';
+      return;
+    }
+    qq.innerHTML='<b class="mono">'+QZ[qi][0]+'</b><br>'+QZ[qi][1];
+    qs.textContent='Soal '+(qi+1)+' dari '+QZ.length;
+  }
+  function jawab(v){
+    if(qi>=QZ.length) return;
+    var it=QZ[qi], ok=(v===it[2]);
+    if(ok) qsc++;
+    qz.textContent=qsc;
+    var d=document.createElement('div');
+    d.className='lab-item '+(ok?'ok':'bad');
+    d.innerHTML='<b>'+(ok?'BENAR':'SALAH')+'</b> '+(it[2]?'Ini phish. ':'Ini asli. ')+it[3];
+    qx.appendChild(d);
+    qi++; show();
+  }
+  document.getElementById('qf').onclick=function(){ jawab(1); };
+  document.getElementById('qr').onclick=function(){ jawab(0); };
+  show();
+
 })();
+<section><div class="wrap">
+<h2 style="margin-top:34px">Kuis: phish atau asli</h2><div class="hr"></div>
+<div class="lab-card">
+  <div class="lab-row"><b id="qz">&mdash;</b><span id="qs">Soal 1 dari 6</span></div>
+  <div id="qq" class="lab-item" style="margin-top:12px;font-size:13px"></div>
+  <div class="lab-in" style="margin-top:12px">
+    <button id="qf" class="btn solid" type="button">Phish</button>
+    <button id="qr" class="btn ghost" type="button">Asli</button>
+  </div>
+  <div id="qx" class="lab-list"></div>
+</div>
+<p class="lab-note">Jawaban benar diberi alasan. Skor disimpan selama halaman terbuka.</p>
+</div></section>
 </script>
 </main>
 <footer><div class="wrap fg">
@@ -1423,6 +1486,67 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
       ly=y;
     }, {passive:true});
   })();
+
+  /* palet perintah */
+  (function(){
+    var box=document.createElement('div'); box.id='cmdk';
+    box.innerHTML='<div class="box"><input id="ckq" placeholder="Cari ruang atau alat\u2026" autocomplete="off">'
+      +'<div class="res" id="ckr"></div>'
+      +'<div class="ft"><span>enter buka</span><span>esc tutup</span></div></div>';
+    document.body.appendChild(box);
+    var q=box.querySelector('#ckq'), r=box.querySelector('#ckr'), idx=[], sel=0;
+    function open(){ box.classList.add('on'); q.value=''; r.innerHTML=''; q.focus(); load(); }
+    function close(){ box.classList.remove('on'); }
+    function load(){
+      if(idx.length) return;
+      fetch('/index.json').then(function(x){ return x.json(); }).then(function(d){
+        idx=d.concat([
+          {u:'/lab',t:'Lab',d:'Kumpulan alat'},
+          {u:'/securescan',t:'SecureScan',d:'Skor URL dan DNS'},
+          {u:'/passguard',t:'PassGuard',d:'Sandi dan brankas'},
+          {u:'/netguard',t:'NetGuard',d:'Jaringan lokal'},
+          {u:'/phishcatcher',t:'PhishCatcher',d:'Simulasi phish'},
+          {u:'/osint-track',t:'OSINT-Track',d:'Jejak publik'}
+        ]);
+      }).catch(function(){});
+    }
+    function paint(){
+      var t=q.value.toLowerCase().trim(); r.innerHTML=''; sel=0;
+      if(!t) return;
+      idx.filter(function(x){ return (x.t+' '+x.d+' '+x.u).toLowerCase().indexOf(t)>-1; })
+        .slice(0,9).forEach(function(x){
+          var a=document.createElement('a'); a.href=x.u;
+          a.innerHTML='<b>'+x.u+'</b><span>'+x.t+'</span>';
+          r.appendChild(a);
+        });
+      var f=r.querySelector('a'); if(f) f.classList.add('sel');
+    }
+    q.addEventListener('input', paint);
+    q.addEventListener('keydown', function(e){
+      var items=[].slice.call(r.querySelectorAll('a'));
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+        e.preventDefault(); if(!items.length) return;
+        items[sel].classList.remove('sel');
+        sel=(sel+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;
+        items[sel].classList.add('sel');
+      }
+      if(e.key==='Enter' && items[sel]) location.href=items[sel].getAttribute('href');
+    });
+    box.addEventListener('click', function(e){ if(e.target===box) close(); });
+    document.addEventListener('keydown', function(e){
+      var tag=(e.target.tagName||'').toLowerCase();
+      var typing=tag==='input'||tag==='textarea'||tag==='select';
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){
+        e.preventDefault(); box.classList.contains('on')?close():open();
+      } else if(e.key==='/' && !typing){ e.preventDefault(); open(); }
+    });
+  })();
+
+
+  if('serviceWorker' in navigator && location.protocol==='https:'){
+    addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+  }
 
 })();
 </script>

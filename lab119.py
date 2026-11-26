@@ -114,6 +114,54 @@ BODY = r'''
     });
   }
   n.addEventListener('input', hit); q.addEventListener('input', hit); hit();
+  var QZ=[
+    ['https://bca-verifikasi.akun-aman.xyz','Verifikasi Akun BCA',1,'TLD .xyz plus dua kata pemicu.'],
+    ['https://www.bca.co.id','BCA',0,'Domain resmi, dua lapis, .co.id.'],
+    ['http://jne-resi.klik-here.top','Lacak Resi',1,'HTTP tanpa S dan .top.'],
+    ['https://github.com/login','Sign in to GitHub',0,'Domain tunggal, HTTPS.'],
+    ['https://tokopedia-promo.hadiah-klaim.click','Klaim Hadiah',1,'.click dan kata hadiah.'],
+    ['https://mail.google.com','Gmail',0,'Subdomain resmi Google, HTTPS.']
+  ];
+  var qi=0, qsc=0;
+  var qq=document.getElementById('qq'), qz=document.getElementById('qz'),
+      qs=document.getElementById('qs'), qx=document.getElementById('qx');
+  function show(){
+    if(qi>=QZ.length){
+      qq.innerHTML='<b>Selesai.</b> Skor '+qsc+' dari '+QZ.length+'.';
+      qz.textContent=qsc; qs.textContent='Kuis berakhir';
+      return;
+    }
+    qq.innerHTML='<b class="mono">'+QZ[qi][0]+'</b><br>'+QZ[qi][1];
+    qs.textContent='Soal '+(qi+1)+' dari '+QZ.length;
+  }
+  function jawab(v){
+    if(qi>=QZ.length) return;
+    var it=QZ[qi], ok=(v===it[2]);
+    if(ok) qsc++;
+    qz.textContent=qsc;
+    var d=document.createElement('div');
+    d.className='lab-item '+(ok?'ok':'bad');
+    d.innerHTML='<b>'+(ok?'BENAR':'SALAH')+'</b> '+(it[2]?'Ini phish. ':'Ini asli. ')+it[3];
+    qx.appendChild(d);
+    qi++; show();
+  }
+  document.getElementById('qf').onclick=function(){ jawab(1); };
+  document.getElementById('qr').onclick=function(){ jawab(0); };
+  show();
+
 })();
+<section><div class="wrap">
+<h2 style="margin-top:34px">Kuis: phish atau asli</h2><div class="hr"></div>
+<div class="lab-card">
+  <div class="lab-row"><b id="qz">&mdash;</b><span id="qs">Soal 1 dari 6</span></div>
+  <div id="qq" class="lab-item" style="margin-top:12px;font-size:13px"></div>
+  <div class="lab-in" style="margin-top:12px">
+    <button id="qf" class="btn solid" type="button">Phish</button>
+    <button id="qr" class="btn ghost" type="button">Asli</button>
+  </div>
+  <div id="qx" class="lab-list"></div>
+</div>
+<p class="lab-note">Jawaban benar diberi alasan. Skor disimpan selama halaman terbuka.</p>
+</div></section>
 </script>
 '''

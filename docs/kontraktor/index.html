@@ -792,6 +792,21 @@ html[data-sel="emas"] ::selection{background:var(--gold);color:#0a0a0e}
 html[data-sel="invers"] ::selection{background:var(--ink);color:var(--bg)}
 html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):not(.room){
   text-decoration:underline;text-underline-offset:3px}
+
+#cmdk{position:fixed;inset:0;z-index:120;display:none;background:rgba(4,4,7,.72);
+  backdrop-filter:blur(9px);padding:14vh 16px 16px}
+#cmdk.on{display:block}
+#cmdk .box{max-width:560px;margin:0 auto;border:1px solid var(--gold);background:var(--panel);
+  box-shadow:0 40px 90px -30px #000}
+#cmdk input{width:100%;padding:15px 17px;background:none;border:0;border-bottom:1px solid var(--line2);
+  color:var(--ink);font:inherit;font-size:14px;outline:none}
+#cmdk .res{max-height:52vh;overflow:auto}
+#cmdk a{display:flex;gap:11px;padding:11px 17px;font-size:12.6px;color:var(--muted);
+  border-bottom:1px solid var(--line2)}
+#cmdk a:hover,#cmdk a.sel{background:var(--panel2);color:var(--gold2)}
+#cmdk a b{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);min-width:34px}
+#cmdk .ft{padding:9px 17px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
+  letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between}
 </style>
 <meta property="og:url" content="https://yuana448.github.io/alfiliator-landing/kontraktor/">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "ALFILIATOR", "url": "https://yuana448.github.io/alfiliator-landing/", "image": "https://yuana448.github.io/alfiliator-landing/og.png", "description": "Atelier digital: web, Android, iOS, sistem internal, bot automation, dan audit keamanan.", "areaServed": "ID", "priceRange": "Rp 1.500.000+", "availableLanguage": ["id", "en", "ms", "zh", "ja", "ar"]}</script>
@@ -1308,6 +1323,67 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
       ly=y;
     }, {passive:true});
   })();
+
+  /* palet perintah */
+  (function(){
+    var box=document.createElement('div'); box.id='cmdk';
+    box.innerHTML='<div class="box"><input id="ckq" placeholder="Cari ruang atau alat\u2026" autocomplete="off">'
+      +'<div class="res" id="ckr"></div>'
+      +'<div class="ft"><span>enter buka</span><span>esc tutup</span></div></div>';
+    document.body.appendChild(box);
+    var q=box.querySelector('#ckq'), r=box.querySelector('#ckr'), idx=[], sel=0;
+    function open(){ box.classList.add('on'); q.value=''; r.innerHTML=''; q.focus(); load(); }
+    function close(){ box.classList.remove('on'); }
+    function load(){
+      if(idx.length) return;
+      fetch('/index.json').then(function(x){ return x.json(); }).then(function(d){
+        idx=d.concat([
+          {u:'/lab',t:'Lab',d:'Kumpulan alat'},
+          {u:'/securescan',t:'SecureScan',d:'Skor URL dan DNS'},
+          {u:'/passguard',t:'PassGuard',d:'Sandi dan brankas'},
+          {u:'/netguard',t:'NetGuard',d:'Jaringan lokal'},
+          {u:'/phishcatcher',t:'PhishCatcher',d:'Simulasi phish'},
+          {u:'/osint-track',t:'OSINT-Track',d:'Jejak publik'}
+        ]);
+      }).catch(function(){});
+    }
+    function paint(){
+      var t=q.value.toLowerCase().trim(); r.innerHTML=''; sel=0;
+      if(!t) return;
+      idx.filter(function(x){ return (x.t+' '+x.d+' '+x.u).toLowerCase().indexOf(t)>-1; })
+        .slice(0,9).forEach(function(x){
+          var a=document.createElement('a'); a.href=x.u;
+          a.innerHTML='<b>'+x.u+'</b><span>'+x.t+'</span>';
+          r.appendChild(a);
+        });
+      var f=r.querySelector('a'); if(f) f.classList.add('sel');
+    }
+    q.addEventListener('input', paint);
+    q.addEventListener('keydown', function(e){
+      var items=[].slice.call(r.querySelectorAll('a'));
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+        e.preventDefault(); if(!items.length) return;
+        items[sel].classList.remove('sel');
+        sel=(sel+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;
+        items[sel].classList.add('sel');
+      }
+      if(e.key==='Enter' && items[sel]) location.href=items[sel].getAttribute('href');
+    });
+    box.addEventListener('click', function(e){ if(e.target===box) close(); });
+    document.addEventListener('keydown', function(e){
+      var tag=(e.target.tagName||'').toLowerCase();
+      var typing=tag==='input'||tag==='textarea'||tag==='select';
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){
+        e.preventDefault(); box.classList.contains('on')?close():open();
+      } else if(e.key==='/' && !typing){ e.preventDefault(); open(); }
+    });
+  })();
+
+
+  if('serviceWorker' in navigator && location.protocol==='https:'){
+    addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
+  }
 
 })();
 </script>
