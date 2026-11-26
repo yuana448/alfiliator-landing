@@ -808,21 +808,24 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
 #cmdk .ft{padding:9px 17px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
   letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between}
 
-.lab-card{position:relative;overflow:hidden}
+.lab-card{position:relative;overflow:hidden;contain:paint}
 .lab-card::after{content:"";position:absolute;left:0;right:0;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4;
-  animation:labscan 6s linear infinite}
-@keyframes labscan{0%{top:-2px}100%{top:100%}}
-.lab-item{animation:labin .32s var(--ease) both}
-@keyframes labin{from{opacity:0;transform:translateX(-6px)}}
-.gfill{position:relative}
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.32;
+  transform:translate3d(0,0,0);animation:labscan 7s linear infinite;will-change:top}
+@keyframes labscan{0%{top:0}100%{top:100%}}
+.lab-item{animation:labin .3s var(--ease) both}
+@keyframes labin{from{opacity:0;transform:translate3d(-6px,0,0)}to{opacity:1;transform:none}}
+.gfill{position:relative;overflow:hidden}
 .gfill::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
-  animation:labsheen 2.4s linear infinite}
-@keyframes labsheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-#cmdk .box{animation:cmdin .28s var(--ease) both}
-@keyframes cmdin{from{opacity:0;transform:translateY(-10px) scale(.985)}}
-.lab-card:hover .lab-tbl tr{background:var(--panel2)}
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  animation:labsheen 2.6s linear infinite;will-change:transform}
+@keyframes labsheen{from{transform:translate3d(-100%,0,0)}to{transform:translate3d(100%,0,0)}}
+#cmdk .box{animation:cmdin .26s var(--ease) both}
+@keyframes cmdin{from{opacity:0;transform:translate3d(0,-10px,0)}to{opacity:1;transform:none}}
+@media(hover:none){
+  .lab-card::after{opacity:.2;animation-duration:9s}
+  .lab-item{animation-duration:.22s}
+}
 @media(prefers-reduced-motion:reduce){
   .lab-card::after,.gfill::after,.lab-item,#cmdk .box{animation:none}
 }
@@ -935,7 +938,7 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
   <div class="lab-row"><b id="ni">&mdash;</b><span id="ns">Belum dipindai</span></div>
   <div id="nl" class="lab-list"></div>
 </div>
-<p class="lab-note">Sisir memakai fetch no-cors ke 254 alamat, 20 sekaligus, batas 1,2 detik per alamat. Host yang menolak CORS tetap terhitung menjawab bila koneksi tidak langsung gagal.</p>
+<p class="lab-note">Di halaman HTTPS, http lokal bisa diblokir peramban; probe mencoba https lalu http.  fetch no-cors ke 254 alamat, 20 sekaligus, batas 1,2 detik per alamat. Host yang menolak CORS tetap terhitung menjawab bila koneksi tidak langsung gagal.</p>
 </div></section>
 <section><div class="wrap">
 <h2 style="margin-top:34px">Host ditemukan</h2><div class="hr"></div>
@@ -965,11 +968,14 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
       td.appendChild(btn); tr.appendChild(td); tb.appendChild(tr);
     });
   }
-  function probe(ip, ms){
+  function once(url, ms){
     var ctl=new AbortController(), to=setTimeout(function(){ ctl.abort(); }, ms||1200);
-    return fetch('http://'+ip, {mode:'no-cors', signal:ctl.signal})
+    return fetch(url, {mode:'no-cors', signal:ctl.signal})
       .then(function(){ clearTimeout(to); return true; })
       .catch(function(){ clearTimeout(to); return false; });
+  }
+  function probe(ip, ms){
+    return once('https://'+ip, ms).then(function(ok){ return ok ? true : once('http://'+ip, ms); });
   }
   document.getElementById('ng').onclick=function(){
     l.innerHTML=''; i.textContent='\u2026'; s.textContent='Meminta izin';

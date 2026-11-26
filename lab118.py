@@ -13,7 +13,7 @@ BODY = r'''
   <div class="lab-row"><b id="ni">&mdash;</b><span id="ns">Belum dipindai</span></div>
   <div id="nl" class="lab-list"></div>
 </div>
-<p class="lab-note">Sisir memakai fetch no-cors ke 254 alamat, 20 sekaligus, batas 1,2 detik per alamat. Host yang menolak CORS tetap terhitung menjawab bila koneksi tidak langsung gagal.</p>
+<p class="lab-note">Di halaman HTTPS, http lokal bisa diblokir peramban; probe mencoba https lalu http.  fetch no-cors ke 254 alamat, 20 sekaligus, batas 1,2 detik per alamat. Host yang menolak CORS tetap terhitung menjawab bila koneksi tidak langsung gagal.</p>
 </div></section>
 <section><div class="wrap">
 <h2 style="margin-top:34px">Host ditemukan</h2><div class="hr"></div>
@@ -43,11 +43,14 @@ BODY = r'''
       td.appendChild(btn); tr.appendChild(td); tb.appendChild(tr);
     });
   }
-  function probe(ip, ms){
+  function once(url, ms){
     var ctl=new AbortController(), to=setTimeout(function(){ ctl.abort(); }, ms||1200);
-    return fetch('http://'+ip, {mode:'no-cors', signal:ctl.signal})
+    return fetch(url, {mode:'no-cors', signal:ctl.signal})
       .then(function(){ clearTimeout(to); return true; })
       .catch(function(){ clearTimeout(to); return false; });
+  }
+  function probe(ip, ms){
+    return once('https://'+ip, ms).then(function(ok){ return ok ? true : once('http://'+ip, ms); });
   }
   document.getElementById('ng').onclick=function(){
     l.innerHTML=''; i.textContent='\u2026'; s.textContent='Meminta izin';

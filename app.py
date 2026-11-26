@@ -1303,25 +1303,29 @@ EXTRA_CSS += r'''
 '''
 
 EXTRA_CSS += r'''
-.lab-card{position:relative;overflow:hidden}
+.lab-card{position:relative;overflow:hidden;contain:paint}
 .lab-card::after{content:"";position:absolute;left:0;right:0;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4;
-  animation:labscan 6s linear infinite}
-@keyframes labscan{0%{top:-2px}100%{top:100%}}
-.lab-item{animation:labin .32s var(--ease) both}
-@keyframes labin{from{opacity:0;transform:translateX(-6px)}}
-.gfill{position:relative}
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.32;
+  transform:translate3d(0,0,0);animation:labscan 7s linear infinite;will-change:top}
+@keyframes labscan{0%{top:0}100%{top:100%}}
+.lab-item{animation:labin .3s var(--ease) both}
+@keyframes labin{from{opacity:0;transform:translate3d(-6px,0,0)}to{opacity:1;transform:none}}
+.gfill{position:relative;overflow:hidden}
 .gfill::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
-  animation:labsheen 2.4s linear infinite}
-@keyframes labsheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-#cmdk .box{animation:cmdin .28s var(--ease) both}
-@keyframes cmdin{from{opacity:0;transform:translateY(-10px) scale(.985)}}
-.lab-card:hover .lab-tbl tr{background:var(--panel2)}
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+  animation:labsheen 2.6s linear infinite;will-change:transform}
+@keyframes labsheen{from{transform:translate3d(-100%,0,0)}to{transform:translate3d(100%,0,0)}}
+#cmdk .box{animation:cmdin .26s var(--ease) both}
+@keyframes cmdin{from{opacity:0;transform:translate3d(0,-10px,0)}to{opacity:1;transform:none}}
+@media(hover:none){
+  .lab-card::after{opacity:.2;animation-duration:9s}
+  .lab-item{animation-duration:.22s}
+}
 @media(prefers-reduced-motion:reduce){
   .lab-card::after,.gfill::after,.lab-item,#cmdk .box{animation:none}
 }
 '''
+
 
 HEADBOOT = r"""
 (function(){var R=document.documentElement,L=localStorage;
