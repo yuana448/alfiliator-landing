@@ -19,7 +19,7 @@
  R.setAttribute('data-theme',L.getItem('alf.theme')||'emas');
  R.setAttribute('data-fs',L.getItem('alf.fs')||'m');
  R.setAttribute('data-motion',L.getItem('alf.motion')||'on');
- R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');R.setAttribute('data-pk',L.getItem('alf.pk')||'atelier');R.setAttribute('data-font',L.getItem('alf.font')||'sora');R.setAttribute('data-head',L.getItem('alf.head')||'normal');R.setAttribute('data-lh',L.getItem('alf.lh')||'n');R.setAttribute('data-ls',L.getItem('alf.ls')||'n');R.setAttribute('data-bw',L.getItem('alf.bw')||'1');R.setAttribute('data-tbl',L.getItem('alf.tbl')||'garis');R.setAttribute('data-btn',L.getItem('alf.btn')||'kotak');R.setAttribute('data-nav',L.getItem('alf.nav')||'menempel');R.setAttribute('data-pat',L.getItem('alf.pat')||'mati');R.setAttribute('data-sh',L.getItem('alf.sh')||'lembut');R.setAttribute('data-blur',L.getItem('alf.blur')||'nyala');R.setAttribute('data-cur',L.getItem('alf.cur')||'cincin');R.setAttribute('data-par',L.getItem('alf.par')||'lembut');R.setAttribute('data-acc',L.getItem('alf.acc')||'bawaan');R.setAttribute('data-sel',L.getItem('alf.sel')||'bawaan');R.setAttribute('data-link',L.getItem('alf.link')||'biasa');R.setAttribute('data-focus',L.getItem('alf.focus')||'mati');var _cc=L.getItem('alf.custom');if(_cc){R.style.setProperty('--gold',_cc);R.style.setProperty('--gold2',_cc);R.style.setProperty('--glow','color-mix(in srgb,'+_cc+' 40%, transparent)');R.style.setProperty('--line','color-mix(in srgb,'+_cc+' 18%, transparent)');}})();
+ R.setAttribute('data-grain',L.getItem('alf.grain')||'on'); R.setAttribute('data-wide',L.getItem('alf.wide')||'n'); R.setAttribute('data-rad',L.getItem('alf.rad')||'k'); R.setAttribute('data-dense',L.getItem('alf.dense')||'n'); R.setAttribute('data-con',L.getItem('alf.con')||'n'); R.setAttribute('data-tr',L.getItem('alf.tr')||'s');R.setAttribute('data-pk',L.getItem('alf.pk')||'atelier');R.setAttribute('data-font',L.getItem('alf.font')||'sora');R.setAttribute('data-head',L.getItem('alf.head')||'normal');R.setAttribute('data-lh',L.getItem('alf.lh')||'n');R.setAttribute('data-ls',L.getItem('alf.ls')||'n');R.setAttribute('data-bw',L.getItem('alf.bw')||'1');R.setAttribute('data-tbl',L.getItem('alf.tbl')||'garis');R.setAttribute('data-btn',L.getItem('alf.btn')||'kotak');R.setAttribute('data-nav',L.getItem('alf.nav')||'menempel');R.setAttribute('data-pat',L.getItem('alf.pat')||'mati');R.setAttribute('data-sh',L.getItem('alf.sh')||'lembut');R.setAttribute('data-blur',L.getItem('alf.blur')||'nyala');R.setAttribute('data-cur',L.getItem('alf.cur')||'cincin');R.setAttribute('data-par',L.getItem('alf.par')||'lembut');R.setAttribute('data-acc',L.getItem('alf.acc')||'bawaan');R.setAttribute('data-sel',L.getItem('alf.sel')||'bawaan');R.setAttribute('data-link',L.getItem('alf.link')||'biasa');R.setAttribute('data-focus',L.getItem('alf.focus')||'mati');R.setAttribute('data-efek',L.getItem('alf.efek')||'mati');var _cc=L.getItem('alf.custom');if(_cc){R.style.setProperty('--gold',_cc);R.style.setProperty('--gold2',_cc);R.style.setProperty('--glow','color-mix(in srgb,'+_cc+' 40%, transparent)');R.style.setProperty('--line','color-mix(in srgb,'+_cc+' 18%, transparent)');}})();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -829,6 +829,31 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
 @media(prefers-reduced-motion:reduce){
   .lab-card::after,.gfill::after,.lab-item,#cmdk .box{animation:none}
 }
+
+#fx{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .5s}
+html[data-efek]:not([data-efek="mati"]) #fx{opacity:1}
+#fx canvas{width:100%;height:100%;display:block}
+html[data-efek="radar"] #fx::before{content:"";position:absolute;left:50%;top:50%;
+  width:150vmax;height:150vmax;margin:-75vmax;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0deg,var(--line) 26deg,transparent 60deg);
+  animation:fxspin 5.5s linear infinite;opacity:.55}
+html[data-efek="radar"] #fx::after{content:"";position:absolute;left:50%;top:50%;
+  width:min(70vmin,520px);height:min(70vmin,520px);margin:calc(min(70vmin,520px) / -2);
+  border-radius:50%;border:1px solid var(--line);box-shadow:inset 0 0 0 1px var(--line2)}
+@keyframes fxspin{to{transform:rotate(360deg)}}
+html[data-efek="terminal"] #fx{background:
+  repeating-linear-gradient(var(--line2) 0 1px,transparent 1px 26px)}
+html[data-efek="terminal"] #fx::after{content:"";position:absolute;left:0;right:0;height:120px;
+  background:linear-gradient(180deg,transparent,var(--line),transparent);
+  animation:fxdown 6s linear infinite}
+@keyframes fxdown{0%{top:-140px}100%{top:100%}}
+html[data-efek="partikel"] .fxdot{position:absolute;width:3px;height:3px;border-radius:50%;
+  background:var(--gold);opacity:.5;animation:fxup linear infinite}
+@keyframes fxup{0%{transform:translate3d(0,20px,0);opacity:0}
+  20%{opacity:.6}100%{transform:translate3d(0,-120px,0);opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  html[data-efek="radar"] #fx::before,html[data-efek="terminal"] #fx::after,.fxdot{animation:none}
+}
 </style>
 <meta property="og:url" content="https://yuana448.github.io/alfiliator-landing/crm-ringan/">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "ALFILIATOR", "url": "https://yuana448.github.io/alfiliator-landing/", "image": "https://yuana448.github.io/alfiliator-landing/og.png", "description": "Atelier digital: web, Android, iOS, sistem internal, bot automation, dan audit keamanan.", "areaServed": "ID", "priceRange": "Rp 1.500.000+", "availableLanguage": ["id", "en", "ms", "zh", "ja", "ar"]}</script>
@@ -898,12 +923,13 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
       <div class="prow"><h3>Buram kaca</h3><div class="seg"><button data-blur="nyala" aria-pressed="true">Aktif</button><button data-blur="off">Mati</button></div></div>
       <div class="prow"><h3>Kursor</h3><div class="seg"><button data-cur="cincin" aria-pressed="true">Cincin</button><button data-cur="titik">Titik</button><button data-cur="mati">Mati</button></div></div>
       <div class="prow"><h3>Mode fokus</h3><div class="seg"><button data-focus="mati" aria-pressed="true">Mati</button><button data-focus="on">Aktif</button></div></div>
-      <div class="prow"><h3>Gaya tautan</h3><div class="seg"><button data-link="biasa" aria-pressed="true">Biasa</button><button data-link="garis">Garis bawah</button></div></div>
+      <div class="prow"><h3>Efek latar</h3><div class="seg"><button data-efek="mati" aria-pressed="true">Mati</button><button data-efek="matriks">Matriks</button><button data-efek="radar">Radar</button><button data-efek="terminal">Terminal</button><button data-efek="partikel">Partikel</button></div></div>
+    <div class="prow"><h3>Gaya tautan</h3><div class="seg"><button data-link="biasa" aria-pressed="true">Biasa</button><button data-link="garis">Garis bawah</button></div></div>
     </section>
     <section class="pgrp" data-g="suara">
       <div class="prow"><h3>Bunyi antarmuka</h3><div class="seg"><button data-sd="on" aria-pressed="true">Aktif</button><button data-sd="off">Mati</button></div></div>
       <div class="prow"><h3>Volume</h3><input id="pvol" class="range" type="range" min="0" max="100" step="5" value="45" aria-label="Volume bunyi"></div>
-      <div class="prow"><h3>Nada</h3><div class="seg"><button data-pk2="lembut" aria-pressed="true">Lembut</button><button data-pk2="tajam">Tajam</button><button data-pk2="rendah">Rendah</button></div></div>
+      <div class="prow"><h3>Nada</h3><div class="seg"><button data-pk2="lembut" aria-pressed="true">Lembut</button><button data-pk2="tajam">Tajam</button><button data-pk2="rendah">Rendah</button><button data-pk2="mesin">Mesin</button></div></div>
     </section>
     <section class="pgrp" data-g="bahasa">
       <div class="prow"><h3>Bahasa</h3><div class="seg"><select id="lang" class="sel"></select></div>
@@ -1039,6 +1065,7 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
   function PKT(){ return localStorage.getItem('alf.pack')||'lembut'; }
   function sHover(){ var p=PKT(); tone(p==='tajam'?1720:p==='rendah'?720:1180, 0.06, 'triangle', 0.022); }
   function sClick(){ var p=PKT(), f=p==='tajam'?820:p==='rendah'?340:520;
+    if(p==='mesin'){ tone(180,0.05,'square',0.05); setTimeout(function(){ tone(120,0.06,'square',0.04); },55); return; }
     tone(f, 0.09, 'sine', 0.05); setTimeout(function(){ tone(f*1.5, 0.1, 'sine', 0.04); }, 70); }
   function sGood(){ var p=PKT(), f=p==='tajam'?980:p==='rendah'?420:660;
     tone(f, 0.12, 'sine', 0.05); setTimeout(function(){ tone(f*1.5, 0.16, 'sine', 0.045); }, 90); }
@@ -1261,7 +1288,7 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
     wire('bw','bw'); wire('tbl','tbl'); wire('btn','btn'); wire('nav','nav');
     wire('pat','pat'); wire('sh','sh'); wire('blur','blur'); wire('cur','cur');
     wire('par','par'); wire('acc','acc'); wire('sel','sel'); wire('link','link');
-    wire('focus','focus'); wire('pk2','pack');
+    wire('focus','focus'); wire('pk2','pack'); wire('efek','efek');
 
     var vol=document.getElementById('pvol');
     if(vol){ vol.value=localStorage.getItem('alf.vol')||45;
@@ -1406,6 +1433,46 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
   if('serviceWorker' in navigator && location.protocol==='https:'){
     addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(){}); });
   }
+
+  (function(){
+    var fx=document.createElement('div'); fx.id='fx'; document.body.appendChild(fx);
+    var cv=null, raf=0;
+    function stop(){ if(raf) cancelAnimationFrame(raf); raf=0; fx.innerHTML=''; }
+    function dots(){ fx.innerHTML='';
+      for(var i=0;i<26;i++){ var d=document.createElement('i'); d.className='fxdot';
+        d.style.left=(Math.random()*100)+'%'; d.style.top=(Math.random()*100)+'%';
+        d.style.animationDuration=(3+Math.random()*4).toFixed(1)+'s';
+        d.style.animationDelay=(-Math.random()*5).toFixed(1)+'s'; fx.appendChild(d); } }
+    function matrix(){
+      fx.innerHTML=''; cv=document.createElement('canvas'); fx.appendChild(cv);
+      var c=cv.getContext('2d'), W=0, H=0, col=[], CH=15, G='01ABCDEF<>{}[]#$%&*';
+      function size(){ W=cv.width=innerWidth; H=cv.height=innerHeight; col=[];
+        for(var i=0;i<Math.floor(W/CH);i++) col.push(Math.random()*H); }
+      size(); addEventListener('resize', size);
+      function tick(){
+        c.fillStyle='rgba(0,0,0,.07)'; c.fillRect(0,0,W,H);
+        c.font='13px monospace'; c.fillStyle='rgba(212,175,122,.85)';
+        for(var i=0;i<col.length;i++){
+          c.fillText(G.charAt(Math.floor(Math.random()*G.length)), i*CH, col[i]);
+          col[i]+=CH; if(col[i]>H && Math.random()>.975) col[i]=0;
+        }
+        raf=requestAnimationFrame(tick);
+      }
+      tick();
+    }
+    function apply(){ stop(); var k=document.documentElement.getAttribute('data-efek');
+      if(k==='matriks') matrix(); else if(k==='partikel') dots(); }
+    document.querySelectorAll('#panel [data-efek]').forEach(function(b){
+      b.addEventListener('click', function(){
+        document.documentElement.setAttribute('data-efek', b.dataset.efek);
+        localStorage.setItem('alf.efek', b.dataset.efek);
+        document.querySelectorAll('#panel [data-efek]').forEach(function(x){
+          x.setAttribute('aria-pressed', String(x === b)); });
+        apply();
+      });
+    });
+    apply();
+  })();
 
 })();
 </script>
