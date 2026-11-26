@@ -30,18 +30,16 @@ BODY = r'''
       v=document.getElementById('ov'), s=document.getElementById('os'), l=document.getElementById('ol');
   var PLAT=[
     ['GitHub','https://github.com/','api'],
-    ['GitLab','https://gitlab.com/',''],
+    ['GitLab','https://gitlab.com/','gitlab'],
+    ['Reddit','https://reddit.com/user/','reddit'],
+    ['Dev.to','https://dev.to/','devto'],
+    ['Hacker News','https://news.ycombinator.com/user?id=','hn'],
+    ['npm','https://www.npmjs.com/~','npm'],
+    ['PyPI','https://pypi.org/user/','pypi'],
     ['Instagram','https://instagram.com/',''],
     ['Twitter / X','https://x.com/',''],
-    ['Facebook','https://facebook.com/',''],
     ['TikTok','https://tiktok.com/@',''],
-    ['Reddit','https://reddit.com/user/',''],
-    ['Pinterest','https://pinterest.com/',''],
     ['Medium','https://medium.com/@',''],
-    ['Dev.to','https://dev.to/',''],
-    ['Behance','https://behance.net/',''],
-    ['SoundCloud','https://soundcloud.com/',''],
-    ['Steam','https://steamcommunity.com/id/',''],
     ['Telegram','https://t.me/','']
   ];
   function row(name, url, cls, txt){
@@ -53,26 +51,28 @@ BODY = r'''
   function run(){
     l.innerHTML=''; var n=u.value.trim().replace(/^@/,'').replace(/[^A-Za-z0-9._-]/g,'');
     if(!n){ s.textContent='Nama kosong'; v.textContent='\u2014'; return; }
-    u.value=n; v.textContent='\u2026'; s.textContent='Melacak '+n;
-    var found=0, guessed=0, done=0;
+    u.value=n; v.textContent='\u2026'; s.textContent='Memeriksa '+n;
+    var found=0, guess=0, done=0, total=0;
+    function tally(){ done++; v.textContent=found;
+      s.textContent=found+' ada &middot; '+guess+' tautan dugaan';
+      if(done===total) s.textContent='Selesai: '+found+' profil publik'; }
     PLAT.forEach(function(p){
-      var url=p[1]+n;
-      if(p[2]==='api'){
-        fetch('https://api.github.com/users/'+encodeURIComponent(n)).then(function(r){
-          done++; if(r.status===200){ found++; row(p[0], url, 'ok', 'ADA'); }
-          else { row(p[0], url, 'bad', 'KOSONG'); }
-          tally();
-        }).catch(function(){ done++; row(p[0], url, '', 'GAGAL'); tally(); });
-      } else {
-        guessed++; row(p[0], url, '', 'DUGAAN');
-      }
+      var url=p[1]+(p[2]==='hn'?'?id=':'')+n, k=p[2];
+      if(!k){ guess++; row(p[0], url, '', 'DUGAAN'); return; }
+      total++;
+      var job;
+      if(k==='api') job=fetch('https://api.github.com/users/'+n).then(function(r){ return r.status===200; });
+      else if(k==='gitlab') job=fetch('https://gitlab.com/api/v4/users?username='+n).then(function(r){ return r.json(); }).then(function(a){ return a.length>0; });
+      else if(k==='reddit') job=fetch('https://www.reddit.com/user/'+n+'/about.json').then(function(r){ return r.status===200; });
+      else if(k==='devto') job=fetch('https://dev.to/api/users/by_username?url='+n).then(function(r){ return r.status===200; });
+      else if(k==='hn') job=fetch('https://hn.algolia.com/api/v1/search?tags=author_'+n+'&hitsPerPage=1').then(function(r){ return r.json(); }).then(function(d){ return d.hits.length>0; });
+      else if(k==='npm') job=fetch('https://registry.npmjs.org/-/v1/search?text=maintainer:'+n+'&size=1').then(function(r){ return r.json(); }).then(function(d){ return d.total>0; });
+      else job=fetch('https://pypi.org/pypi/'+n+'/json').then(function(r){ return r.status===200; });
+      job.then(function(ok){
+        if(ok){ found++; row(p[0], url, 'ok', 'ADA'); } else row(p[0], url, 'bad', 'KOSONG');
+        tally();
+      }).catch(function(){ row(p[0], url, '', 'GAGAL'); tally(); });
     });
-    function tally(){
-      v.textContent=found;
-      s.textContent=found+' ditemukan &middot; '+guessed+' tautan dugaan';
-      if(done===1){ /* satu-satunya pemeriksaan langsung */ }
-    }
-    v.textContent='0';
   }
   b.addEventListener('click', run);
   u.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); run(); } });

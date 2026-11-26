@@ -39,6 +39,7 @@ BODY = r'''
     <button data-k="sosial">Media Sosial</button>
   </div>
   <div class="pc-prev" id="pp"></div>
+  <div class="lab-in" style="margin-top:10px"><button id="popen" class="btn ghost" type="button">Buka di tab baru</button></div>
   <p class="lab-note" id="pnote"></p>
 </div>
 </div></section>
@@ -91,6 +92,21 @@ BODY = r'''
       paint(b.dataset.k);
     });
   });
+  document.getElementById('popen').onclick=function(){
+    var d=T[cur], w=window.open('', '_blank');
+    if(!w) return;
+    w.document.write('<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1">'
+      +'<title>'+d.h+'</title><style>body{font-family:system-ui,sans-serif;margin:0;background:#f1f3f6}'
+      +'.pc-bar{background:#fff;border-bottom:1px solid #dfe3e8;padding:9px 13px;font:11px monospace;color:#5b636e}'
+      +'.pc-in{padding:34px 20px;text-align:center;background:#fff;max-width:420px;margin:24px auto;border-radius:9px;box-shadow:0 14px 40px -22px #000}'
+      +'.pc-in h4{margin:0 0 5px;font-size:17px}.pc-in p{font-size:12px;color:#5b636e;margin:0 0 16px}'
+      +'.pc-in label{display:block;text-align:left;font-size:10px;color:#5b636e;margin-bottom:4px}'
+      +'.pc-in input{width:100%;padding:10px;border:1px solid #d6dbe2;border-radius:6px;margin-bottom:10px;font-size:12px;box-sizing:border-box}'
+      +'.pc-in button{width:100%;padding:11px;border:0;border-radius:6px;background:#1b5fd0;color:#fff;font-size:12px;font-weight:600}'
+      +'.pc-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#d0d5dc;margin-right:5px}'
+      +'</style></head><body>'+pv.innerHTML+'</body></html>');
+    w.document.close();
+  };
   paint('bank');
 
   var n=document.getElementById('pn'), q=document.getElementById('pq');

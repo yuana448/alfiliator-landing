@@ -807,6 +807,25 @@ html[data-link="garis"] main a:not(.btn):not(.iconbtn):not(.brand):not(.clink):n
 #cmdk a b{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--gold);min-width:34px}
 #cmdk .ft{padding:9px 17px;font-family:'JetBrains Mono',monospace;font-size:9.5px;
   letter-spacing:.14em;color:var(--dim);display:flex;justify-content:space-between}
+
+.lab-card{position:relative;overflow:hidden}
+.lab-card::after{content:"";position:absolute;left:0;right:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4;
+  animation:labscan 6s linear infinite}
+@keyframes labscan{0%{top:-2px}100%{top:100%}}
+.lab-item{animation:labin .32s var(--ease) both}
+@keyframes labin{from{opacity:0;transform:translateX(-6px)}}
+.gfill{position:relative}
+.gfill::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:labsheen 2.4s linear infinite}
+@keyframes labsheen{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+#cmdk .box{animation:cmdin .28s var(--ease) both}
+@keyframes cmdin{from{opacity:0;transform:translateY(-10px) scale(.985)}}
+.lab-card:hover .lab-tbl tr{background:var(--panel2)}
+@media(prefers-reduced-motion:reduce){
+  .lab-card::after,.gfill::after,.lab-item,#cmdk .box{animation:none}
+}
 </style>
 <meta property="og:url" content="https://yuana448.github.io/alfiliator-landing/proses/">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ProfessionalService", "name": "ALFILIATOR", "url": "https://yuana448.github.io/alfiliator-landing/", "image": "https://yuana448.github.io/alfiliator-landing/og.png", "description": "Atelier digital: web, Android, iOS, sistem internal, bot automation, dan audit keamanan.", "areaServed": "ID", "priceRange": "Rp 1.500.000+", "availableLanguage": ["id", "en", "ms", "zh", "ja", "ar"]}</script>
